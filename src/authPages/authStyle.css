@@ -1,0 +1,91 @@
+.auth-page {
+    color: white;
+    background-color: black;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.auth-page a {
+    color: var(--main-color);
+    text-decoration: none;
+}
+
+.auth-page > section {
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-page > section > h1 {
+    font-size: 3rem;
+    margin-bottom: 3rem;
+}
+
+.auth-page > section > form {
+    display: flex;
+    width: 100%;
+    max-width: 500px;
+    flex-direction: column;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    margin: 10px;
+}
+
+.account-form > .input-container {
+    display: flex;
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 15px;
+    height: 100%;
+    flex-direction: row;
+    border-radius: 20px;
+    border: 1px solid darkgray;
+}
+
+.account-form > .input-container > svg {
+   width: 40px;
+   aspect-ratio: 1 / 1;
+}
+
+.input {
+  margin-left: 20px;
+  color: white;
+  background-color: transparent;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.button {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--main-color);
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--secondary-color);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: var(--main-color);
+  filter: brightness(90%);
+}
+
