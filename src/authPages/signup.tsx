@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useRef, useState } from "react";
+import { ClipLoader } from "react-spinners";
 
 export default function SignUp() {
     
@@ -11,12 +12,18 @@ export default function SignUp() {
     
     const [submitLoading, setSubmitLoading] = useState(false);
     const [error, setError] = useState('');
+    
+    const navigate = useNavigate();
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        
         setSubmitLoading(true);
+        setError('')
+
         if (passwordRef.current && confirmPasswordRef.current) {
             if (passwordRef.current.value !== confirmPasswordRef.current.value) {
+                setSubmitLoading(false);
                 setError('Passwords do not match');
                 return;
             } 
@@ -24,23 +31,27 @@ export default function SignUp() {
         
         if (usernameRef.current) { 
             if (usernameRef.current.value.trim().length > 30) {
+                setSubmitLoading(false);
                 setError('Your username is bigger than 30 characters');
             }
         }
 
         try {
             console.log('hello');
+            navigate("/dashboard")
         } catch (e) {
+            setSubmitLoading(false)
             setError('Error signing up. Please try again');
             return;
         }
 
-        setError('');
+        setSubmitLoading(false);
     }
 
     return (
 
         <AuthPage>
+            { submitLoading ? <div style={{ width: "100svw", height: "100svh", display: "flex", justifyContent: "center", alignItems: "center" }}><ClipLoader color="#DD2616" loading={submitLoading} size={150} /> </div> : 
             <section className="signup-card">
                 {error && error}
                 <h1>Sign Up</h1>
@@ -64,8 +75,9 @@ export default function SignUp() {
 
                     <button className="button" type="submit">Sign Up</button>
                 </form>
-                <h3>Already have an account? <Link to="/dashboard">Log In</Link></h3>
+                <h3>Already have an account? <Link to="/login">Log In</Link></h3>
             </section>
+            }
         </AuthPage>
     )
 

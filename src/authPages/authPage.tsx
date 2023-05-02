@@ -6,7 +6,6 @@ export default function AuthPage({ children } : any ) {
             {children}
             <div className="auth-page-block"></div>
             <div className="auth-page-block"></div>
-            <div className="auth-page-block"></div>
         </section>
     )
 }
