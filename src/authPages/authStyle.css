@@ -6,6 +6,7 @@
     width: 100%;
     margin: 0 auto;
     padding: 1rem;
+    overflow: hidden;
 }
 
 .auth-page a {
@@ -95,36 +96,53 @@
     width: 20%;
     position: absolute;
     aspect-ratio: 1 / 1;
-    animation: blurringBlock1 5s ease-in-out infinite alternate;
     transition: all 0.2s ease-in-out;
+    overflow: hidden;
 }
+
 
 @keyframes blurringBlock1 {
     from {
-        filter: blur(300px);
+        filter: blur(250px);
+    }
+
+    50% {
+        translate: 100px;
     }
 
     to {
+        translate: 0;
         filter: blur(600px);
     }
 }
 
-.auth-page-block:nth-child(2):hover {
-    bottom: 0;
-    transition: all 0.2s ease-in-out;
-    filter: blur(500px);
-    border-bottom-right-radius: 100%;
-    left: 0;
+@keyframes blurringBlock2 {
+    from {
+        filter: blur(250px);
+    }
+
+    50% {
+        translate: -100px;
+    }
+
+    to {
+        translate: 0;
+        filter: blur(600px);
+    }
 }
+
 
 .auth-page-block:nth-child(2) {
     bottom: 0;
     border-top-right-radius: 100%;
     left: 0;
+    animation: blurringBlock1 5s ease-in-out infinite alternate;
 }
+
 
 .auth-page-block:nth-child(3) {
     border-top-left-radius: 100%;
     top: 0;
     right: 0;
+    animation: blurringBlock2 5s ease-in-out infinite alternate;
 }
