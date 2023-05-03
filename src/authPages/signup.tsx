@@ -38,7 +38,7 @@ export default function SignUp() {
 
         try {
             console.log('hello');
-            navigate("/dashboard")
+            navigate("/todo")
         } catch (e) {
             setSubmitLoading(false)
             setError('Error signing up. Please try again');

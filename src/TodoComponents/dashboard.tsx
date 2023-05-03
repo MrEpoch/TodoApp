@@ -1,5 +1,6 @@
 import "./dashboard.css"
-import React ,{ useContext, useState } from "react";
+import React ,{ LinkHTMLAttributes, useContext, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const listOfCollections = ["personal", "school", "social", "programming"];
 
@@ -10,6 +11,8 @@ type ChildrenProp = {
 type TodoContextType = {
     hiddenSidebar: boolean,
     setHiddenSidebar: React.Dispatch<React.SetStateAction<boolean>>
+    currentMain: string,
+    setCurrentMain: React.Dispatch<React.SetStateAction<string>>
 }
 
 const TodoContext = React.createContext<TodoContextType | null>(null);
@@ -21,9 +24,10 @@ export function useTodo() {
 export default function TodoApp({ children }: ChildrenProp) {
     
     const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(false);
+    const [currentMain, setCurrentMain] = useState<string>("dashboard");
 
     return (
-        <TodoContext.Provider value={{ setHiddenSidebar, hiddenSidebar }}>
+        <TodoContext.Provider value={{ setHiddenSidebar, hiddenSidebar, currentMain, setCurrentMain }}>
             <section className="dashboard-page">
                 <DashboardHeader />
                 <DashboardSideBar />
@@ -35,19 +39,38 @@ export default function TodoApp({ children }: ChildrenProp) {
 
 function DashboardHeader() {
     
-    const { setHiddenSidebar } = useTodo() as TodoContextType;
+    const headerCollection = useRef<HTMLDivElement>(null);
+    const headerDashboard = useRef<HTMLDivElement>(null);
+
+    const { setHiddenSidebar, currentMain } = useTodo() as TodoContextType;
+
+    useEffect(() => {
+            if (currentMain === "dashboard") {
+                headerDashboard.current?.style.setProperty("color", "white"); 
+                headerCollection.current?.style.setProperty("color", "darkgray")        
+            } else if (currentMain === "collections") {
+                headerDashboard.current?.style.setProperty("color", "darkgray")
+                headerCollection.current?.style.setProperty("color", "white")        
+            }
+
+    }, [currentMain]);
+
 
     return (
             <header className="dashboard-page-header">
                 <div className="dashboard-page-header-TodosControls">
                   <svg onClick={() => setHiddenSidebar(prev => !prev)}  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu</title><path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg> 
-                  <div className="dashboard-page-header-TodoControls-Dashboard">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>view-dashboard</title><path fill="currentColor" d="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z" /></svg>
-                    Dashboard
+                  <div ref={headerDashboard} className="dashboard-page-header-TodoControls-Dashboard">
+                    <Link to="/todo">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>view-dashboard</title><path fill="currentColor" d="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z" /></svg>
+                        Dashboard
+                    </Link>
                   </div>
-                  <div className="dashboard-page-header-TodoControls-Collections">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>folder</title><path fill="currentColor"d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" /></svg>
-                    Collections
+                  <div ref={headerCollection} className="dashboard-page-header-TodoControls-Collections">
+                    <Link to="/todo/collections">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>folder</title><path fill="currentColor"d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" /></svg>
+                        Collections
+                    </Link>
                   </div>
                 </div>
                 <div className="dashboard-page-header-UserControls">
@@ -86,8 +109,15 @@ function DashboardSideBar() {
 }
 
 export function DashboardMain() {
+   
+    const { hiddenSidebar, setCurrentMain } = useTodo() as TodoContextType;
+    
+    useEffect(() => {
+        setCurrentMain("dashboard");
+    })
+
     return (
-        <main className="dashboard-page-main">
+        <main style={{ gridColumn: hiddenSidebar ? "1/3" : "2/3" }}  className="dashboard-page-main">
             <div className="dashboard-page-main-TodoList">
                 <div className="dashboard-page-main-TodoList-Header"> 
                     <button className="dashboard-page-main-TodoList-Header-ReturnButton">
@@ -102,6 +132,21 @@ export function DashboardMain() {
                     <input className="dashboard-page-main-TodoList-TodoAdd-input" type="text" placeholder="Add a new todo" />
                 </div>
             </div>
+        </main>
+    )
+}
+
+export function DashboardCollectionMain() {
+    
+    const { setCurrentMain } = useTodo() as TodoContextType;
+
+    useEffect(() => {
+        setCurrentMain('collections');
+    })
+
+    return (
+        <main className="dashboard-page-collection">
+
         </main>
     )
 }

@@ -26,7 +26,7 @@ export default function Login() {
         
         try {
             console.log('hello');
-            navigate("/dashboard");
+            navigate("/todo");
         } catch (e) {
             setSubmitLoading(false);
             setError('Error Logging In. Please try again');

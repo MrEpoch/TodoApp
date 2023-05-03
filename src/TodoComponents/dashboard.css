@@ -1,18 +1,33 @@
 .dashboard-page {
+    overflow-x: hidden;
     display: grid;
     grid-template-columns: 15% 85%;
     grid-template-rows: 8% 92%;
     height: 100%;
     width: 100%;
-    background-color: black;
+    background-color: var(--system-black-color);
 }
 
 .hidden {
-    display: none;
-    visibility: hidden;
+    position: absolute;
+    width: 0;
+    height: 0;
+    display: none!important;
+    visibility: hidden!important;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    transition: all 0.5s ease;
 }
 
 .dashboard-page-header {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+
     display: grid;
     z-index: 5;
     box-shadow: 0px 1px 10px 0px black;
@@ -25,6 +40,11 @@
     font-size: 1rem;
     width: 100%;
     height: 100%;
+}
+
+.dashboard-page-header a {
+    text-decoration: none;
+    color: inherit;
 }
 
 .dashboard-page-header > .dashboard-page-header-TodosControls {
@@ -41,22 +61,34 @@
     transform: scale(1.3);
 }
 
-.dashboard-page-header-TodosControls > .dashboard-page-header-TodoControls-Dashboard {
+.dashboard-page-header-TodosControls  .dashboard-page-header-TodoControls-Dashboard {
     display: flex;
     width: 30%;
+    cursor: pointer;
     height: 100%;
+    color: darkgray;
     font-size: 1.5rem;
     align-items: center;
     justify-content: space-around;
 }
 
-.dashboard-page-header-TodosControls > .dashboard-page-header-TodoControls-Collections {
+.dashboard-page-header-TodosControls  .dashboard-page-header-TodoControls-Collections {
     display: flex;
     cursor: pointer;
     width: 30%;
+    color: darkgray;
     font-size: 1.5rem;
     align-items: center;
     justify-content: space-around;
+}
+
+.dashboard-page-header-TodosControls .dashboard-page-header-TodoControls-Collections > a,
+.dashboard-page-header-TodosControls .dashboard-page-header-TodoControls-Dashboard > a{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -83,8 +115,21 @@
     cursor: pointer;
 }
 
+.dashboard-page-header-UserControls > div:nth-child(1) > svg {
+    background: linear-gradient(45deg, red, var(--main-color), pink);
+    border-radius: 50%;
+    color: white;
+    transition: all 0.5s ease;
+}
+
+.dashboard-page-header-UserControls > div:nth-child(1) > svg:hover {
+    transform: scale(1.1) rotate(360deg);
+    transition: all 0.5s ease;
+}
+
 .dashboard-page-sidebar {
     height: 100%;
+    transition: all 0.5s ease;
     width: 100%;
     grid-column: 1 / 2;
     grid-row: 2 / 3;
@@ -93,6 +138,18 @@
     font-size: 1rem;
     display: flex;
     flex-direction: column;
+    animation: sidebar-animation 1s ease;
+}
+
+@keyframes sidebar-animation {
+    0% {
+        opacity: 0;
+        width: 0%;
+    }
+    100% {
+        opacity: 1;
+        width: 100%;
+    }
 }
 
 .dashboard-page-sidebar .dashboard-page-sidebar-container {
@@ -144,15 +201,13 @@
 .dashboard-page-main {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
     background-color: var(--system-black-color);
     color: white;
     font-size: 2rem;
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    transition: all 0.5s ease;
+    display: grid;
 }
 
 .dashboard-page-main button {
@@ -164,10 +219,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid white;
     border-radius: 5px;
     font-size: 1.5rem;
+    border: none;
 }
+
 
 .dashboard-page-main svg {
     width: 2rem;
@@ -175,7 +231,7 @@
 }
 
 .dashboard-page-main input {
-    width: 10rem;
+    width: 100%;
     height: 3rem;
     outline: none;
     background-color: #1a1a1a;
