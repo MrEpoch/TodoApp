@@ -1,6 +1,11 @@
 import "./authStyle.css";
+import React from "react";
 
-export default function AuthPage({ children } : any ) { 
+type ChildrenProp = {
+    children: React.ReactNode
+}
+
+export default function AuthPage({ children } :ChildrenProp ) { 
     return (
         <section className="auth-page">
             {children}

@@ -1,22 +1,50 @@
 import "./dashboard.css"
+import React ,{ useContext, useState } from "react";
 
 const listOfCollections = ["personal", "school", "social", "programming"];
 
-export default function Dashboard() {
+type ChildrenProp = {
+    children: React.ReactNode
+}
+
+type TodoContextType = {
+    hiddenSidebar: boolean,
+    setHiddenSidebar: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const TodoContext = React.createContext<TodoContextType | null>(null);
+
+export function useTodo() {
+    return useContext(TodoContext);
+}
+
+export default function TodoApp({ children }: ChildrenProp) {
+    
+    const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(false);
+
     return (
-        <section className="dashboard-page">
-            <DashboardHeader />
-            <DashboardSideBar />
-            <DashboardMain />
-        </section> 
+        <TodoContext.Provider value={{ setHiddenSidebar, hiddenSidebar }}>
+            <section className="dashboard-page">
+                <DashboardHeader />
+                <DashboardSideBar />
+                {children}
+            </section> 
+        </TodoContext.Provider>
     )
 }
 
 function DashboardHeader() {
+    
+    const { setHiddenSidebar } = useTodo() as TodoContextType;
+
     return (
             <header className="dashboard-page-header">
                 <div className="dashboard-page-header-TodosControls">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu</title><path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg> 
+                  <svg onClick={() => setHiddenSidebar(prev => !prev)}  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu</title><path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg> 
+                  <div className="dashboard-page-header-TodoControls-Dashboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>view-dashboard</title><path fill="currentColor" d="M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z" /></svg>
+                    Dashboard
+                  </div>
                   <div className="dashboard-page-header-TodoControls-Collections">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>folder</title><path fill="currentColor"d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" /></svg>
                     Collections
@@ -38,9 +66,14 @@ function DashboardHeader() {
 }
 
 function DashboardSideBar() {
+
+    const { hiddenSidebar } = useTodo() as TodoContextType;
+    
+    const cssSidebar = hiddenSidebar ? "dashboard-page-sidebar hidden" : "dashboard-page-sidebar";
+
     return (
-        <section className="dashboard-page-sidebar">
-            <div className="dashboard-collections-container">
+        <section className={cssSidebar}>
+            <div className="dashboard-page-sidebar-container">
                 <h3 className="dashboard-collections-container-header">Collections</h3>
                 <div className="dashboard-collections-container-list">
                     {listOfCollections.map((collection, index) => {
@@ -52,7 +85,7 @@ function DashboardSideBar() {
     )
 }
 
-function DashboardMain() {
+export function DashboardMain() {
     return (
         <main className="dashboard-page-main">
             <div className="dashboard-page-main-TodoList">
