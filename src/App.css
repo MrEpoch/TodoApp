@@ -100,6 +100,7 @@
     position: absolute;
     left: 10px;
     border-top-left-radius: 40%;
+    border-bottom-left-radius: 100%;
 }
 
 .landing-page > .moving-shape {
