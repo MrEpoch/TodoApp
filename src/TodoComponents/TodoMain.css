@@ -1,0 +1,48 @@
+.todo-page-main-collection-template {
+    width: 100%;
+    height: 100%;
+    background-color: var(--system-black-color);
+    color: white;
+    font-size: 2rem;
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    transition: all 0.5s ease;
+    display: grid;
+}
+
+.todo-page-main-collection-template-top {
+  width: 100%;
+  height: 100%;
+}
+
+.todo-page-main-collection-template button {
+    width: 3rem;
+    height: 3rem;
+    background-color: #1a1a1a;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    border: none;
+}
+
+
+.todo-page-main-collection-template svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.dashboard-page-main-collection input {
+    width: 100%;
+    height: 3rem;
+    outline: none;
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+}
+
