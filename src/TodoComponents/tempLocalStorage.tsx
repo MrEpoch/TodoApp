@@ -4,10 +4,11 @@ type ChildrenProp = {
     children: React.ReactNode
 }
 
-type StorageContextType = {
+export type StorageContextType = {
     createLocalStorage: (folderName: string, folder: []) => void,
     readLocalStorage: (folderName: string) => object | void,
-    updateLocalStorage: (folderName: string, folder: []) => void,
+    addNewCollection: (folderName: string, folder: object) => void,
+    insertIntoCollection: (folderName: string, collection: object, index: number) => void,
     deleteLocalStorage: (folderName: string) => void
 }
 
@@ -21,6 +22,7 @@ export function useStorage() {
 export default function StorageProvider({ children }: ChildrenProp) {
 
     const createLocalStorage = (folderName: string, folder: []) => {
+         console.log("used")
          localStorage.setItem(folderName, JSON.stringify(folder));
          return;
     }
@@ -31,9 +33,17 @@ export default function StorageProvider({ children }: ChildrenProp) {
          return JSON.parse(item);
     }
 
-    const updateLocalStorage = (folderName: string, folder: []) => {
-         localStorage.setItem(folderName, JSON.stringify(folder));
+    const addNewCollection = (folderName: string, collection: object) => {
+         const mainFolder = readLocalStorage(folderName);
+         mainFolder.push(collection);
+         localStorage.setItem(folderName, JSON.stringify(mainFolder));
          return;
+    }
+
+    const insertIntoCollection = ( folderName: string, collection: object, index: number) => {
+        const mainFolder = readLocalStorage(folderName);
+        mainFolder[index].content.push(collection);
+        return;
     }
 
     const deleteLocalStorage = (folderName: string) => {
@@ -45,8 +55,9 @@ export default function StorageProvider({ children }: ChildrenProp) {
     const storageMethods = {
         createLocalStorage,
         readLocalStorage,
-        updateLocalStorage,
-        deleteLocalStorage
+        deleteLocalStorage,
+        addNewCollection,
+        insertIntoCollection
     }
     
     return (

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
+import { StorageContextType, useStorage } from "../TodoComponents/tempLocalStorage";
 
 export default function SignUp() {
     
@@ -13,6 +14,8 @@ export default function SignUp() {
     const [submitLoading, setSubmitLoading] = useState(false);
     const [error, setError] = useState('');
     
+    const { createLocalStorage } = useStorage() as StorageContextType;
+
     const navigate = useNavigate();
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -37,7 +40,7 @@ export default function SignUp() {
         }
 
         try {
-            console.log('hello');
+            createLocalStorage("Temp-testing-localstorage", []);
             navigate("/todo")
         } catch (e) {
             setSubmitLoading(false)
