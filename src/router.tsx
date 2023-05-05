@@ -1,8 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './authPages/login';
 import SignUp from './authPages/signup';
-import Dashboard, { DashboardCollectionMain, DashboardMain, TemplateTodoList } from "./TodoComponents/dashboard";
+import Dashboard, { DashboardCollectionMain, TemplateTodoList } from "./TodoComponents/TodoPage";
 import LandingPage from './landingPage';
+import DashboardMain from "./TodoComponents/dashboard"
 
 export default function Router() {
     return (
@@ -18,4 +19,5 @@ export default function Router() {
         </>
     )
 }
+
 
