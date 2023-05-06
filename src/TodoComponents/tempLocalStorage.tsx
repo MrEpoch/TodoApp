@@ -1,16 +1,6 @@
 import React, { useContext } from "react";
-
-type ChildrenProp = {
-    children: React.ReactNode
-}
-
-export type StorageContextType = {
-    createLocalStorage: (folderName: string, folder: []) => void,
-    readLocalStorage: (folderName: string) => [],
-    addNewCollection: (folderName: string, folder: object) => void,
-    insertIntoCollection: (folderName: string, collection: object, collectionName: string | undefined) => void,
-    deleteLocalStorage: (folderName: string) => void,
-}
+import { ChildrenProp } from "../@types/todo";
+import { StorageContextType } from "../@types/todo";
 
 const StorageContext = React.createContext<StorageContextType | null>(null);
 
@@ -24,7 +14,6 @@ export default function StorageProvider({ children }: ChildrenProp) {
 
 
     const createLocalStorage = (folderName: string, folder: []) => {
-         console.log("used")
          localStorage.setItem(folderName, JSON.stringify(folder));
          return;
     }
@@ -33,6 +22,12 @@ export default function StorageProvider({ children }: ChildrenProp) {
          const item = localStorage.getItem(folderName);
          if (!item) return;
          return JSON.parse(item);
+    }
+
+    const getCollection = (collectionName: string | undefined, folderName: string) => {
+        const mainFolder = readLocalStorage(folderName);
+        const collection = mainFolder.find((item: any) => item.title === collectionName);
+        return collection;
     }
 
     const addNewCollection = (folderName: string, collection: object) => {
@@ -46,7 +41,6 @@ export default function StorageProvider({ children }: ChildrenProp) {
         const mainFolder = readLocalStorage(folderName);
         const index = mainFolder.findIndex((item: any) => item.title === collectionName);
         mainFolder[index].content.push(collection);
-        console.log(mainFolder);
         localStorage.setItem(folderName, JSON.stringify(mainFolder));
         return;
     }
@@ -62,6 +56,7 @@ export default function StorageProvider({ children }: ChildrenProp) {
         deleteLocalStorage,
         addNewCollection,
         insertIntoCollection,
+        getCollection
     }
     
     return (

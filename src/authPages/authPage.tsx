@@ -1,9 +1,5 @@
 import "./authStyle.css";
-import React from "react";
-
-type ChildrenProp = {
-    children: React.ReactNode
-}
+import { ChildrenProp } from "../@types/todo";
 
 export default function AuthPage({ children } :ChildrenProp ) { 
     return (
