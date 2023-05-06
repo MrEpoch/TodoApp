@@ -2,7 +2,7 @@ import "./dashboard.css"
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./TodoMain.css";
-import StorageProvider, { StorageContextType, useStorage } from "./tempLocalStorage";
+import { StorageContextType, useStorage } from "./tempLocalStorage";
 import DateTimePicker from "react-datetime-picker";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
@@ -19,11 +19,15 @@ type ChildrenProp = {
     children: React.ReactNode
 }
 
-type TodoContextType = {
+export type TodoContextType = {
     hiddenSidebar: boolean,
     setHiddenSidebar: React.Dispatch<React.SetStateAction<boolean>>
     currentMain: string,
     setCurrentMain: React.Dispatch<React.SetStateAction<string>>
+    hiddenCreateItem: boolean,
+    setHiddenCreateItem: React.Dispatch<React.SetStateAction<boolean>>
+    hiddenCreateCollection: boolean,
+    setHiddenCreateCollection: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const TodoContext = React.createContext<TodoContextType | null>(null);
@@ -36,12 +40,17 @@ export default function TodoApp({ children }: ChildrenProp) {
 
     const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(false);
     const [currentMain, setCurrentMain] = useState<string>("dashboard");
+    const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);
+    const [hiddenCreateCollection, setHiddenCreateCollection] = useState<boolean>(true);
 
     return (
-        <TodoContext.Provider value={{ setHiddenSidebar, hiddenSidebar, currentMain, setCurrentMain }}>
+        <TodoContext.Provider value={{ setHiddenSidebar, hiddenSidebar, currentMain, setCurrentMain, setHiddenCreateCollection, setHiddenCreateItem, 
+                                    hiddenCreateCollection, hiddenCreateItem }}>
                 <section className="dashboard-page">
                     <DashboardHeader />
                     <DashboardSideBar />
+                    { hiddenCreateItem ? "" : <AddItem /> }
+                    { hiddenCreateCollection ? "" : <AddCollection /> }
                     {children}
                 </section>
         </TodoContext.Provider>
@@ -53,9 +62,8 @@ function DashboardHeader() {
     const headerCollection = useRef<HTMLDivElement>(null);
     const headerDashboard = useRef<HTMLDivElement>(null);
     const addReference = useRef<SVGSVGElement>(null);
-    const [display, setDisplay] = useState<boolean>(false)
 
-    const { setHiddenSidebar, currentMain } = useTodo() as TodoContextType;
+    const { setHiddenSidebar, currentMain, setHiddenCreateCollection } = useTodo() as TodoContextType;
 
     useEffect(() => {
         if (currentMain === "dashboard") {
@@ -74,7 +82,6 @@ function DashboardHeader() {
 
     return (
         <header className="dashboard-page-header">
-            {display ? <AddItem /> : null}
             <div className="dashboard-page-header-TodosControls">
                 <svg onClick={() => setHiddenSidebar(prev => !prev)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>menu</title><path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" /></svg>
                 <div ref={headerDashboard} className="dashboard-page-header-TodoControls-Dashboard">
@@ -92,7 +99,7 @@ function DashboardHeader() {
             </div>
             <div className="dashboard-page-header-UserControls">
                 <div className="dashboard-page-header-UserControls-addNew">
-                    <svg ref={addReference} onClick={() => { setDisplay(prev => !prev) }} xmlns="http://www.w4.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path fill="currentColor" d="M20,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
+                    <svg ref={addReference} onClick={() => { setHiddenCreateCollection(prev => !prev) }} xmlns="http://www.w4.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path fill="currentColor" d="M20,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
                 </div>
                 <div className="dashboard-page-header-UserControls-Search">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>magnify</title><path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
@@ -143,7 +150,7 @@ export function DashboardCollectionMain() {
 
 export function TemplateTodoList() {
 
-    const { setCurrentMain } = useTodo() as TodoContextType;
+    const { setCurrentMain, setHiddenCreateItem } = useTodo() as TodoContextType;
 
     setCurrentMain("none")
 
@@ -158,7 +165,7 @@ export function TemplateTodoList() {
                 </div>
                 <div className="collection-template-top-TodoAdd">
                     <button className="collection-template-top-TodoAdd-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path fill="currentColor" d="M21,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
+                        <svg onClick={() => {setHiddenCreateItem(prev => !prev)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path fill="currentColor" d="M21,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
                     </button>
                     <input className="collection-template-top-TodoAdd-input" type="text" placeholder="Add a new todo" />
                 </div>
@@ -170,7 +177,7 @@ export function TemplateTodoList() {
 
 export function AddCollection() {
 
-    const { setCurrentMain } = useTodo() as TodoContextType;
+    const { setCurrentMain, setHiddenCreateCollection } = useTodo() as TodoContextType;
 
     const { addNewCollection } = useStorage() as StorageContextType;
 
@@ -187,8 +194,10 @@ export function AddCollection() {
 
         try {
             addNewCollection("Temp-testing-localstorage", {title: titleRef.current.value, createdAt: new Date(), content: []})
+            setHiddenCreateCollection(prev => !prev)
         } catch (e) {
             console.log(e)
+            return;
         }
     }
 
@@ -201,7 +210,7 @@ export function AddCollection() {
                 <label className="todo-page-addCollection-popUp-container-label">Collection name</label>
                 <input ref={titleRef} className="todo-page-addCollection-popUp-container-input" type="text" placeholder="Collection name" />
                 <div className="todo-page-addCollection-popUp-container-buttons">
-                    <button className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
+                    <button onClick={() => { setHiddenCreateItem(prev => !prev) }} className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
                     <button className="todo-page-addCollection-popUp-container-buttons-create">Create</button>
                 </div>
             </form>
@@ -211,12 +220,15 @@ export function AddCollection() {
 
 export function AddItem() {
 
+    const { setHiddenCreateItem } = useTodo() as TodoContextType;
+
     const { insertIntoCollection } = useStorage() as StorageContextType;
 
     const [onChangeVal, setOnChange] = useState(new Date());
 
     const titleRef = useRef<HTMLInputElement>(null);
 
+    const collectionName = "temp";
 
     function todoItemSubmitHandler() {
         const datePicker = document.querySelector(".addItem-popUp-DatePicker");
@@ -229,9 +241,8 @@ export function AddItem() {
                 title: titleRef.current.value,
                 date: datePicker
             }
-            insertIntoCollection("Temp-testing-localstorage", todoItem)
-
-
+            insertIntoCollection("Temp-testing-localstorage", todoItem, collectionName)
+            setHiddenCreateItem(prev => !prev)
         } catch (e) {
             console.log(e)
         }
@@ -245,7 +256,7 @@ export function AddItem() {
                 <label className="todo-page-addItem-popUp-container-label">Todo title</label>
                 <input className="todo-page-addItem-popUp-container-input" type="text" placeholder="Todo title" />
                 <DateTimePicker className="addItem-popUp-DatePicker" onChange={(e: any) => { setOnChange(e) }} value={onChangeVal} />
-                <button className="todo-page-addItem-popUp-container-buttons-cancel">Cancel</button>
+                <button onClick={() => { setHiddenCreateItem(prev => !prev)}} className="todo-page-addItem-popUp-container-buttons-cancel">Cancel</button>
                 <button className="todo-page-addItem-popUp-container-buttons-create" type="submit">Create</button>
             </form>
         </section>

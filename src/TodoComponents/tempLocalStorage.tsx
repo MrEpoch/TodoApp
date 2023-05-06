@@ -8,7 +8,7 @@ export type StorageContextType = {
     createLocalStorage: (folderName: string, folder: []) => void,
     readLocalStorage: (folderName: string) => object | void,
     addNewCollection: (folderName: string, folder: object) => void,
-    insertIntoCollection: (folderName: string, collection: object, index: number) => void,
+    insertIntoCollection: (folderName: string, collection: object, collectionName: string) => void,
     deleteLocalStorage: (folderName: string) => void
 }
 
@@ -40,9 +40,11 @@ export default function StorageProvider({ children }: ChildrenProp) {
          return;
     }
 
-    const insertIntoCollection = ( folderName: string, collection: object, index: number) => {
+    const insertIntoCollection = (folderName: string, collection: object, collectionName: string) => {
         const mainFolder = readLocalStorage(folderName);
+        const index = mainFolder.findIndex((item: any) => item.content === collectionName);
         mainFolder[index].content.push(collection);
+        localStorage.setItem(folderName, JSON.stringify(mainFolder));
         return;
     }
 
@@ -51,7 +53,6 @@ export default function StorageProvider({ children }: ChildrenProp) {
          return;
     }
 
-    
     const storageMethods = {
         createLocalStorage,
         readLocalStorage,

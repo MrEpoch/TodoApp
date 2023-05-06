@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import  { useTodo, listOfCollectionsSchema } from "./TodoPage";
- 
+import { useEffect, useRef } from "react";
+import  { useTodo, listOfCollectionsSchema, TodoContextType } from "./TodoPage";
+
 export default function DashboardMain() {
 
     const { hiddenSidebar, setCurrentMain } = useTodo() as TodoContextType;
