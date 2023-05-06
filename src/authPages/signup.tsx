@@ -3,6 +3,7 @@ import AuthPage from "./authPage";
 import { useRef, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { StorageContextType, useStorage } from "../TodoComponents/tempLocalStorage";
+import { mainFolderName } from "../TodoComponents/tempLocalStorage";
 
 export default function SignUp() {
     
@@ -40,7 +41,7 @@ export default function SignUp() {
         }
 
         try {
-            createLocalStorage("Temp-testing-localstorage", []);
+            createLocalStorage(mainFolderName, []);
             navigate("/todo")
         } catch (e) {
             setSubmitLoading(false)

@@ -1,15 +1,28 @@
 import { useEffect, useRef } from "react";
-import  { useTodo, listOfCollectionsSchema, TodoContextType } from "./TodoPage";
+import  { useTodo, TodoContextType } from "./TodoPage";
 
 export default function DashboardMain() {
 
-    const { hiddenSidebar, setCurrentMain } = useTodo() as TodoContextType;
+    const { hiddenSidebar, setCurrentMain, userFolder } = useTodo() as TodoContextType;
     const dotRef = useRef<SVGSVGElement>(null);
     const arrRef = useRef<SVGSVGElement>(null);
 
     useEffect(() => {
         setCurrentMain("dashboard");
     })
+
+    type collection = {
+        content: [],
+        id: string,
+        title: string,
+    }
+
+    type item = {
+        title: string,
+        createdAt: string,
+        id: string,
+        date: string
+    }
 
     return (
         <main style={{ gridColumn: hiddenSidebar ? "1/3" : "2/3" }} className="todo-page-dashboard-main">
@@ -25,7 +38,7 @@ export default function DashboardMain() {
                         <button className="todo-page-dashboard-main-todosOverview-filter-longTerm">Long-term tasks</button>
                     </div>
                     <div className="todo-page-dashboard-main-todosContainer">
-                        {listOfCollectionsSchema.map((collection, index) => {
+                        {userFolder.map((collection: collection, index) => {
                             if (collection.content.length === 0) {
                                 return
                             }
@@ -36,12 +49,12 @@ export default function DashboardMain() {
                                             <svg ref={arrRef} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-down</title><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
                                         </div>
                                         <div className="dashboard-main-todos-item-body">
-                                            {collection.content.map((item, index) => {
+                                            {collection.content.map((item: item, index) => {
                                                 return (
                                                     <div key={index} className="dashboard-main-todos-item-body-todoContainer">
                                                         <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
-                                                        <h3>{item.task}</h3>
-                                                        <p>{item.createdAt}</p>
+                                                        <h3>{item.title}</h3>
+                                                        <p>{item.date}</p>
                                                     </div>
                                                 )
                                             })}

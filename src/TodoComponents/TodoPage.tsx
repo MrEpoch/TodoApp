@@ -1,19 +1,14 @@
 import "./dashboard.css"
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./TodoMain.css";
 import { StorageContextType, useStorage } from "./tempLocalStorage";
 import DateTimePicker from "react-datetime-picker";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
-
-export const listOfCollectionsSchema = [
-    { title: "home", createdAt: new Date(), content: [{ task: "take thrash out", createdAt: new Date().toString()}]},
-    { title: "school", createdAt: new Date(), content: [] },
-    { title: "personal", createdAt: new Date(), content: [] },
-    { title: "programming", createdAt: new Date(), content: [] }
-]
+import { mainFolderName } from "./tempLocalStorage";
+import { uid } from "uid";
 
 type ChildrenProp = {
     children: React.ReactNode
@@ -28,6 +23,8 @@ export type TodoContextType = {
     setHiddenCreateItem: React.Dispatch<React.SetStateAction<boolean>>
     hiddenCreateCollection: boolean,
     setHiddenCreateCollection: React.Dispatch<React.SetStateAction<boolean>>
+    userFolder: [],
+    setUserFolder: React.Dispatch<React.SetStateAction<[]>>
 }
 
 const TodoContext = React.createContext<TodoContextType | null>(null);
@@ -37,15 +34,28 @@ export function useTodo() {
 }
 
 export default function TodoApp({ children }: ChildrenProp) {
+    
+    const { readLocalStorage } = useStorage() as StorageContextType;
 
+    const [userFolder, setUserFolder] = useState<[]>(readLocalStorage(mainFolderName));
     const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(false);
     const [currentMain, setCurrentMain] = useState<string>("dashboard");
     const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);
     const [hiddenCreateCollection, setHiddenCreateCollection] = useState<boolean>(true);
 
+    const todoValue = { setHiddenSidebar,
+                        hiddenSidebar,
+                        currentMain,
+                        setCurrentMain,
+                        setHiddenCreateCollection,
+                        setHiddenCreateItem,
+                        hiddenCreateCollection,
+                        hiddenCreateItem,
+                        userFolder,
+                        setUserFolder
+                    }
     return (
-        <TodoContext.Provider value={{ setHiddenSidebar, hiddenSidebar, currentMain, setCurrentMain, setHiddenCreateCollection, setHiddenCreateItem, 
-                                    hiddenCreateCollection, hiddenCreateItem }}>
+        <TodoContext.Provider value={todoValue}>
                 <section className="dashboard-page">
                     <DashboardHeader />
                     <DashboardSideBar />
@@ -114,16 +124,20 @@ function DashboardHeader() {
 
 function DashboardSideBar() {
 
-    const { hiddenSidebar } = useTodo() as TodoContextType;
+    const { hiddenSidebar, userFolder } = useTodo() as TodoContextType;
 
     const cssSidebar = hiddenSidebar ? "dashboard-page-sidebar hidden" : "dashboard-page-sidebar";
+
+    type collection = {
+        title: string,
+    }
 
     return (
         <section className={cssSidebar}>
             <div className="dashboard-page-sidebar-container">
                 <h3 className="dashboard-collections-container-header">Collections</h3>
                 <div className="dashboard-collections-container-list">
-                    {listOfCollectionsSchema.map((collection, index) => {
+                    {userFolder.map((collection: collection, index) => {
                         const location = `/todo/${collection.title}`
                         return <Link to={location} className="dashboard-collections-container-list-item" key={index}>{collection.title}</Link>
                     }, [])}
@@ -152,7 +166,6 @@ export function TemplateTodoList() {
 
     const { setCurrentMain, setHiddenCreateItem } = useTodo() as TodoContextType;
 
-    setCurrentMain("none")
 
     return (
         <section className="todo-page-main-collection-template">
@@ -177,9 +190,9 @@ export function TemplateTodoList() {
 
 export function AddCollection() {
 
-    const { setCurrentMain, setHiddenCreateCollection } = useTodo() as TodoContextType;
+    const { setCurrentMain, setHiddenCreateCollection, setUserFolder } = useTodo() as TodoContextType;
 
-    const { addNewCollection } = useStorage() as StorageContextType;
+    const { addNewCollection, readLocalStorage } = useStorage() as StorageContextType;
 
     const collectionRef = useRef<HTMLInputElement>(null);
 
@@ -193,15 +206,19 @@ export function AddCollection() {
         if (!titleRef.current) return;
 
         try {
-            addNewCollection("Temp-testing-localstorage", {title: titleRef.current.value, createdAt: new Date(), content: []})
-            setHiddenCreateCollection(prev => !prev)
+            addNewCollection(mainFolderName, {
+                    title: titleRef.current.value,
+                    createdAt: new Date(),
+                    id: uid(),
+                    content: []
+                })
+            setHiddenCreateCollection(prev => !prev);
+            setUserFolder(readLocalStorage(mainFolderName))
         } catch (e) {
             console.log(e)
             return;
         }
     }
-
-    setCurrentMain("plus")
 
     return (
         <section className="todo-page-addCollection-popUp">
@@ -210,7 +227,7 @@ export function AddCollection() {
                 <label className="todo-page-addCollection-popUp-container-label">Collection name</label>
                 <input ref={titleRef} className="todo-page-addCollection-popUp-container-input" type="text" placeholder="Collection name" />
                 <div className="todo-page-addCollection-popUp-container-buttons">
-                    <button onClick={() => { setHiddenCreateItem(prev => !prev) }} className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
+                    <button onClick={() => { setHiddenCreateCollection(prev => !prev) }} className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
                     <button className="todo-page-addCollection-popUp-container-buttons-create">Create</button>
                 </div>
             </form>
@@ -220,29 +237,30 @@ export function AddCollection() {
 
 export function AddItem() {
 
-    const { setHiddenCreateItem } = useTodo() as TodoContextType;
+    const { setHiddenCreateItem, setUserFolder } = useTodo() as TodoContextType;
 
-    const { insertIntoCollection } = useStorage() as StorageContextType;
+    const { insertIntoCollection, readLocalStorage } = useStorage() as StorageContextType;
 
     const [onChangeVal, setOnChange] = useState(new Date());
 
     const titleRef = useRef<HTMLInputElement>(null);
 
-    const collectionName = "temp";
+    const { id } = useParams<string>();
 
     function todoItemSubmitHandler() {
-        const datePicker = document.querySelector(".addItem-popUp-DatePicker");
         if (!titleRef.current) return;
         if (titleRef.current.value.length > 40) return;
-        
+       
         try {
             const todoItem = {
                 createdAt: new Date(),
                 title: titleRef.current.value,
-                date: datePicker
+                date: onChangeVal,
+                id: uid()
             }
-            insertIntoCollection("Temp-testing-localstorage", todoItem, collectionName)
+            insertIntoCollection(mainFolderName, todoItem, id)
             setHiddenCreateItem(prev => !prev)
+            setUserFolder(readLocalStorage(mainFolderName))
         } catch (e) {
             console.log(e)
         }
@@ -253,8 +271,7 @@ export function AddItem() {
         <section className="todo-page-addItem-popUp">
            <form onSubmit={(e) => { e.preventDefault(); todoItemSubmitHandler()}} className="todo-page-addItem-popUp-container"> 
                 <h2 className="todo-page-addItem-popUp-container-header">Add new todo</h2>
-                <label className="todo-page-addItem-popUp-container-label">Todo title</label>
-                <input className="todo-page-addItem-popUp-container-input" type="text" placeholder="Todo title" />
+                <input ref={titleRef} className="todo-page-addItem-popUp-container-input" type="text" placeholder="Todo title" />
                 <DateTimePicker className="addItem-popUp-DatePicker" onChange={(e: any) => { setOnChange(e) }} value={onChangeVal} />
                 <button onClick={() => { setHiddenCreateItem(prev => !prev)}} className="todo-page-addItem-popUp-container-buttons-cancel">Cancel</button>
                 <button className="todo-page-addItem-popUp-container-buttons-create" type="submit">Create</button>
