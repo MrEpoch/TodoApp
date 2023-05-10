@@ -32,8 +32,11 @@ export type CollectionType = {
 }
 
 export type itemType = {
+    createdAt: string,
     title: string,
     date: string,
+    year: string,
     id: string,
     date: string,
+    completed: boolean,
 }

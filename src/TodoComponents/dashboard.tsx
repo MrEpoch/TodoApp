@@ -24,8 +24,10 @@ export default function DashboardMain() {
         date: string
     }
 
+    const styleCSS = hiddenSidebar ? "todo-page-dashboard-main full-page" : "todo-page-dashboard-main";
+
     return (
-        <main style={{ gridColumn: hiddenSidebar ? "1/3" : "2/3" }} className="todo-page-dashboard-main">
+        <main className={styleCSS}>
            <div className="todo-page-dashboard-main-container"> 
                 <div className="todo-page-dashboard-main-heading">
                     <h3>Dashboard</h3>
@@ -38,7 +40,7 @@ export default function DashboardMain() {
                         <button className="todo-page-dashboard-main-todosOverview-filter-longTerm">Long-term tasks</button>
                     </div>
                     <div className="todo-page-dashboard-main-todosContainer">
-                        {userFolder.map((collection: collection, index) => {
+                        {userFolder.map((collection: collection, index: any) => {
                             if (collection.content.length === 0) {
                                 return
                             }

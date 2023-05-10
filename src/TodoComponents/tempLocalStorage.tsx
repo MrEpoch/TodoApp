@@ -5,7 +5,7 @@ import { StorageContextType } from "../@types/todo";
 const StorageContext = React.createContext<StorageContextType | null>(null);
 
 export function useStorage() {
-    return useContext(StorageContext)
+   return useContext(StorageContext)
 }
 
 export const mainFolderName = "Temp-testing-localstorage";

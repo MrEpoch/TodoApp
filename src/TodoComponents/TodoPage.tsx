@@ -36,7 +36,7 @@ export default function TodoApp({ children }: ChildrenProp) {
                         hiddenCreateCollection,
                         hiddenCreateItem,
                         userFolder,
-                        setUserFolder
+                        setUserFolder,
                     }
     return (
         <TodoContext.Provider value={todoValue}>
@@ -113,7 +113,7 @@ function DashboardSideBar() {
     const cssSidebar = hiddenSidebar ? "dashboard-page-sidebar hidden" : "dashboard-page-sidebar";
 
     return (
-        <section className={cssSidebar}>
+        <section  className={cssSidebar}>
             <div className="dashboard-page-sidebar-container">
                 <h3 className="dashboard-collections-container-header">Collections</h3>
                 <div className="dashboard-collections-container-list">
@@ -135,8 +135,10 @@ export function DashboardCollectionMain() {
         setCurrentMain('collections');
     })
 
+    const styleCSS = hiddenSidebar ? "dashboard-page-main-collection full-page" : "dashboard-page-main-collection";
+
     return (
-        <main style={{ gridColumn: hiddenSidebar ? "1/3" : "2/3" }} className="dashboard-page-main-collection">
+        <main className={styleCSS}>
             This is Collection
         </main>
     )
@@ -144,15 +146,15 @@ export function DashboardCollectionMain() {
 
 export function TemplateTodoList() {
 
-    const { setHiddenCreateItem, setCurrentMain } = useTodo() as TodoContextType;
+    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar } = useTodo() as TodoContextType;
     const { getCollection } = useStorage() as StorageContextType;
-
+    const [completedTodos, setCompletedTodos] = useState<number>(0);
+    const [numTodos, setNumTodos] = useState<number>(0);
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     if (id === undefined) {
         navigate("/error");
     }
-
     const collection: CollectionType = getCollection(id, mainFolderName);
 
     if (!collection) {
@@ -163,8 +165,19 @@ export function TemplateTodoList() {
         setCurrentMain("none");
     });
 
+    const styleCSS = hiddenSidebar ? "todo-page-main-collection-template full-page" : "todo-page-main-collection-template";
+
+    useEffect(() => {
+        let num:number;
+        if (collection) {
+            num = collection.content.filter((todo: itemType) => todo.completed).length;
+            setCompletedTodos(num);
+            setNumTodos(collection.content.length - num);
+        }
+    }, [collection])
+
     return (
-        <section className="todo-page-main-collection-template">
+        <section className={styleCSS}>
             <div className="todo-page-main-collection-template-top">
                 <div className="collection-template-top-Header">
                     <button className="collection-template-top-Header-ReturnButton">
@@ -176,21 +189,26 @@ export function TemplateTodoList() {
                     <button className="collection-template-top-TodoAdd-button">
                         <svg onClick={() => {setHiddenCreateItem(prev => !prev)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path fill="currentColor" d="M21,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
                     </button>
-                    <input className="collection-template-top-TodoAdd-input" type="text" placeholder="Add a new todo" />
                 </div>
             </div>
             <div className="todo-page-main-collection-template-todos">
-                <h5 className="todo-page-main-collection-template-todos-header">Tasks - {collection.content.length - 1}</h5>
-                {collection.content.map((todo: itemType, index) => {
-                    return ( 
-                        <div className="todo-page-main-collection-template-todos-todo-container" key={index}>
-                            <div className="todo-page-main-collection-template-todos-todo-container-checkbox"></div>
-                            <div className="todo-page-main-collection-template-todos-todo-container-text">{todo.title}</div>
-                            <div className="todo-page-main-collection-template-todos-todo-container-delete"></div>
-                            <div className="todo-page-main-collection-template-todos-todo-container-open">{todo.date}</div>
-                        </div>
-                    )
-                })}
+                <div className="todo-page-main-collection-template-todos-incomplete">
+                    <h5 className="todo-page-main-collection-template-todos-header">Tasks - {numTodos}</h5>
+                    {collection.content.map((todo: itemType, index) => {
+                        
+                        return ( 
+                            <div className="todo-page-main-collection-template-todos-todo-container" key={index}>
+                                <div className="todo-page-main-collection-template-todos-todo-container-checkbox"></div>
+                                <div className="todo-page-main-collection-template-todos-todo-container-text">{todo.title}</div>
+                                <div className="todo-page-main-collection-template-todos-todo-container-delete"></div>
+                                <div className="todo-page-main-collection-template-todos-todo-container-open">{todo.date}</div>
+                            </div>
+                        )
+                    })}
+                </div>
+                <div className="todo-page-main-collection-template-todos-complete">
+                    <h5 className="todo-page-main-collection-template-todos-header">Completed - {completedTodos}</h5>
+                </div> 
             </div>
         </section>
     )
@@ -277,12 +295,18 @@ export function AddItem() {
             return;
         }
        
+        const [date,] = onChangeVal.toString().split("T");
+        const [, month, dayInMonth, year, timeExact,] = date.split(" ")
+        const [hourTime, minuteTime,] = timeExact.split(":");
+
         try {
-            const todoItem = {
-                createdAt: new Date(),
+            const todoItem: itemType = {
+                createdAt: new Date().toString(),
                 title: titleRef.current.value,
-                date: onChangeVal,
-                id: uid()
+                date: `${month} ${dayInMonth} ${hourTime}:${minuteTime}`,
+                year: year,
+                id: uid(),
+                completed: false
             }
             insertIntoCollection(mainFolderName, todoItem, id)
             setHiddenCreateItem(prev => !prev)
