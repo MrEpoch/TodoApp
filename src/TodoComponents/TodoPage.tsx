@@ -180,7 +180,7 @@ export function TemplateTodoList() {
         <section className={styleCSS}>
             <div className="todo-page-main-collection-template-top">
                 <div className="collection-template-top-Header">
-                    <button className="collection-template-top-Header-ReturnButton">
+                    <button onClick={() => {navigate("/todo")}} className="collection-template-top-Header-ReturnButton">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-left</title><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" /></svg>
                     </button>
                     <h2 className="collection-template-top-Header-h2">{collection.title}</h2>
@@ -195,7 +195,6 @@ export function TemplateTodoList() {
                 <div className="todo-page-main-collection-template-todos-incomplete">
                     <h5 className="todo-page-main-collection-template-todos-header">Tasks - {numTodos}</h5>
                     {collection.content.map((todo: itemType, index) => {
-                        
                         return ( 
                             <div className="todo-page-main-collection-template-todos-todo-container" key={index}>
                                 <div className="todo-page-main-collection-template-todos-todo-container-checkbox"></div>
@@ -258,7 +257,7 @@ export function AddCollection() {
                 {error.length !== 0 ? <p className="todo-page-addCollection-popUp-container-error">{error}</p> : "" }
                 <h2 className="todo-page-addCollection-popUp-container-header">Create new collection</h2>
                 <label className="todo-page-addCollection-popUp-container-label">Collection name</label>
-                <input ref={titleRef} className="todo-page-addCollection-popUp-container-input" type="text" placeholder="Collection name" />
+                <input maxLength={12} ref={titleRef} className="todo-page-addCollection-popUp-container-input" type="text" placeholder="Collection name" />
                 <div className="todo-page-addCollection-popUp-container-buttons">
                     <button onClick={() => { setHiddenCreateCollection(prev => !prev) }} className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
                     <button className="todo-page-addCollection-popUp-container-buttons-create">Create</button>
@@ -290,8 +289,8 @@ export function AddItem() {
     function todoItemSubmitHandler() {
         setError('');
         if (!titleRef.current) return;
-        if (titleRef.current.value.length > 40) {
-            setError('Todo cannot be longer than 40 characters');
+        if (titleRef.current.value.length > 35) {
+            setError('Todo cannot be longer than 35 characters');
             return;
         }
        
@@ -323,7 +322,7 @@ export function AddItem() {
            <form onSubmit={(e) => { e.preventDefault(); todoItemSubmitHandler()}} className="todo-page-addItem-popUp-container"> 
                 {error.length !== 0 ? <p className="todo-page-addItem-popUp-container-error">{error}</p> : ""}
                 <h2 className="todo-page-addItem-popUp-container-header">Add new todo</h2>
-                <input ref={titleRef} className="todo-page-addItem-popUp-container-input" type="text" placeholder="Todo title" />
+                <input maxLength={35} ref={titleRef} className="todo-page-addItem-popUp-container-input" type="text" placeholder="Todo title" />
                 <DateTimePicker className="addItem-popUp-DatePicker" onChange={(e: any) => { setOnChange(e) }} value={onChangeVal} />
                 <button onClick={() => { setHiddenCreateItem(prev => !prev)}} className="todo-page-addItem-popUp-container-buttons-cancel">Cancel</button>
                 <button className="todo-page-addItem-popUp-container-buttons-create" type="submit">Create</button>
