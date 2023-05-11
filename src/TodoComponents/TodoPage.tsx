@@ -293,10 +293,27 @@ export function AddItem() {
             setError('Todo cannot be longer than 35 characters');
             return;
         }
+        
+        const fullDate = new Date();
+
+        let date:string = fullDate.toString();
+        let month:string = fullDate.getMonth().toString();
+        let dayInMonth:string = fullDate.getDay().toString();
+        let hourTime:string = fullDate.getHours().toString();
+        let minuteTime:string = fullDate.getMinutes().toString();
+        let year:string = fullDate.getFullYear().toString();
+        let timeExact = fullDate.getHours().toString();
+
+        if (onChangeVal.toString().includes("T")) {
+            console.log(onChangeVal);
+            [date] = onChangeVal.toString().split("T");
+            [,month, dayInMonth, year, timeExact] = date.split(" ");
+            console.log(timeExact);
+            [hourTime, minuteTime,] = timeExact.split(":");
+        } else {
+            console.log(onChangeVal.toString());
+        }
        
-        const [date,] = onChangeVal.toString().split("T");
-        const [, month, dayInMonth, year, timeExact,] = date.split(" ")
-        const [hourTime, minuteTime,] = timeExact.split(":");
 
         try {
             const todoItem: itemType = {
