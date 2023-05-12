@@ -22,6 +22,7 @@ export type StorageContextType = {
     insertIntoCollection: (folderName: string, collection: object, collectionName: string | undefined) => void,
     deleteLocalStorage: (folderName: string) => void,
     getCollection: (collectionName: string | undefined, folderName: string) => CollectionType,
+    updateTodo: (folderName: string, todo: object, collectionName: string, id: string) => void
 }
 
 export type CollectionType = {
@@ -40,3 +41,5 @@ export type itemType = {
     date: string,
     completed: boolean,
 }
+
+
