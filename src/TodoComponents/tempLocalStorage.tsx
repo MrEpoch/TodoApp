@@ -49,6 +49,7 @@ export default function StorageProvider({ children }: ChildrenProp) {
         const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
         const todoIndex = mainFolder[index].content.findIndex((item: itemType) => item.id === id);
         mainFolder[index].content[todoIndex] = todo;
+        localStorage.setItem(folderName, JSON.stringify(mainFolder));
         return;
     }
 

@@ -9,7 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 import { mainFolderName } from "./tempLocalStorage";
 import { uid } from "uid";
-import { ChildrenProp, TodoContextType, StorageContextType, CollectionType, itemType } from "../@types/todo";
+import { ChildrenProp, TodoContextType, StorageContextType, CollectionType, itemType, dateVerifyType } from "../@types/todo";
 
 const TodoContext = React.createContext<TodoContextType | null>(null);
 
@@ -113,7 +113,7 @@ function DashboardSideBar() {
     const cssSidebar = hiddenSidebar ? "dashboard-page-sidebar hidden" : "dashboard-page-sidebar";
 
     return (
-        <section  className={cssSidebar}>
+       <section  className={cssSidebar}>
             <div className="dashboard-page-sidebar-container">
                 <h3 className="dashboard-collections-container-header">Collections</h3>
                 <div className="dashboard-collections-container-list">
@@ -146,42 +146,47 @@ export function DashboardCollectionMain() {
 
 export function TemplateTodoList() {
 
-    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar } = useTodo() as TodoContextType;
+    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar, hiddenCreateItem } = useTodo() as TodoContextType;
     const { getCollection, updateTodo } = useStorage() as StorageContextType;
-    const [completedTodos, setCompletedTodos] = useState<number>(0);
-    const [numTodos, setNumTodos] = useState<number>(0);
+
+    const [todos, setTodos] = useState<itemType[]>([]);
+    const [completedTodos, setCompleteTodos] = useState<itemType[]>([]);
+
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     if (id === undefined) {
         navigate("/error");
     }
-    const collection: CollectionType = getCollection(id, mainFolderName);
+    const [collection, setCollection] = useState<CollectionType>(getCollection(id, mainFolderName));
 
     if (!collection) {
         navigate("/todo")
     }
 
     useEffect(() => {
-        setCurrentMain("none");
-    });
+        try {
+            setCurrentMain("none");
+            setTodos(collection.content.filter((todo: itemType) => !todo.completed));
+            setCompleteTodos(collection.content.filter((todo: itemType) => todo.completed))
+        } catch (e) {
+            console.log(e)
+        }
+    }, [setCurrentMain, collection.content]);
+
+    
 
     const styleCSS = hiddenSidebar ? "todo-page-main-collection-template full-page" : "todo-page-main-collection-template";
 
-    useEffect(() => {
-        let num:number;
-        if (collection) {
-            num = collection.content.filter((todo: itemType) => todo.completed).length;
-            setCompletedTodos(num);
-            setNumTodos(collection.content.length - num);
-        }
-    }, [collection])
-
     function changeTodoStatus(todo: itemType) {
-        console.log(todo)
+        todo.completed = !todo.completed;
         updateTodo(mainFolderName, todo, collection.title, todo.id)
-        console.log(todo)
+        setCollection(getCollection(id, mainFolderName));
         return;
     }
+
+
+    const warning = <svg xmlns="http://www.w3.org/2000/svg" className="late-todo" viewBox="0 0 24 24"><title>alert</title><path fill="currentColor" d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>;
+    const currentTime = new Date();
 
     return (
         <section className={styleCSS}>
@@ -200,26 +205,27 @@ export function TemplateTodoList() {
             </div>
             <div className="todo-page-main-collection-template-todos">
                 <div className="todo-page-main-collection-template-todos-incomplete">
-                    <h5 className="todo-page-main-collection-template-todos-header">Tasks - {numTodos}</h5>
+                    <h5 className="todo-page-main-collection-template-todos-header">Tasks - {todos && todos.length}</h5>
                     {collection.content.filter((todo: itemType) => todo.completed === false).map((todo: itemType, index) => {
                         return (
                             <div className={todo.completed ?  "todo-page-main-collection-template-todos-todo-container line-through" : "todo-page-main-collection-template-todos-todo-container"} key={index}>
-                                <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox">
-                                    {todo.completed ? <svg className="todo-container-checkbox-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-mark</title><path fill="currentColor" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" /></svg> : ""}
-                                </div>
+                                <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox"></div>
                                 <div className="todo-page-main-collection-template-todos-todo-container-text">{todo.title}</div>
-                                <div className="todo-page-main-collection-template-todos-todo-container-delete"></div>
-                                <div className="todo-page-main-collection-template-todos-todo-container-open">{todo.date}</div>
+                                <div className="todo-page-main-collection-template-todos-todo-container-date">{todo.date}</div>
+                                <div className="todo-page-main-collection-template-todos-todo-container-control">
+                                    {todo.dateVerify < currentTime.getTime() ? warning : ""}
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close</title><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+                                </div>
                             </div>
                         )
                     })}
                 </div>
                 <div className="todo-page-main-collection-template-todos-complete">
-                    <h5 className="todo-page-main-collection-template-todos-header">Completed - {completedTodos}</h5>
+                    <h5 className="todo-page-main-collection-template-todos-header">Completed - {completedTodos && completedTodos.length}</h5>
                      {collection.content.filter((todo: itemType) => todo.completed === true).map((todo: itemType, index) => {
                         return ( 
                             <div className="todo-page-main-collection-template-todos-todo-container line-through" key={index}>
-                                <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox">
+                                <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox completed-checkbox">
                                     {todo.completed ? <svg className="todo-container-checkbox-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-mark</title><path fill="currentColor" d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" /></svg> : ""}
                                 </div>
                                 <div className="todo-page-main-collection-template-todos-todo-container-text">{todo.title}</div>
@@ -277,7 +283,6 @@ export function AddCollection() {
            <form onSubmit={(e) => { todoCollectionSubmitHandler(e) }} className="todo-page-addCollection-popUp-container"> 
                 {error.length !== 0 ? <p className="todo-page-addCollection-popUp-container-error">{error}</p> : "" }
                 <h2 className="todo-page-addCollection-popUp-container-header">Create new collection</h2>
-                <label className="todo-page-addCollection-popUp-container-label">Collection name</label>
                 <input maxLength={12} ref={titleRef} className="todo-page-addCollection-popUp-container-input" type="text" placeholder="Collection name" />
                 <div className="todo-page-addCollection-popUp-container-buttons">
                     <button onClick={() => { setHiddenCreateCollection(prev => !prev) }} className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
@@ -320,16 +325,17 @@ export function AddItem() {
         if (onChangeVal === null) {
             setOnChange(new Date())
         }
-
-        const [,month, dayInMonth, year, time,] = onChangeVal.toString().split(" ");
+        
+        const [,month, dayInMonth,,time,] = onChangeVal.toString().split(" ");
         const [hourTime, minuteTime,] = time.split(":");
+
 
         try {
             const todoItem: itemType = {
                 createdAt: new Date().toString(),
                 title: titleRef.current.value,
                 date: `${month} ${dayInMonth} ${hourTime}:${minuteTime}`,
-                year: year,
+                dateVerify: onChangeVal.getTime(),
                 id: uid(),
                 completed: false
             }

@@ -36,7 +36,7 @@ export type itemType = {
     createdAt: string,
     title: string,
     date: string,
-    year: string,
+    dateVerify: number,
     id: string,
     date: string,
     completed: boolean,
