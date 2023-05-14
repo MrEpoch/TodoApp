@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import  { useTodo, TodoContextType } from "./TodoPage";
+import  { useTodo } from "./TodoPage";
+import { TodoContextType } from "../@types/todo";
 
 export default function DashboardMain() {
 

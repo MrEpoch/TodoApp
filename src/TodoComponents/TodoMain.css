@@ -193,8 +193,22 @@
     border: 2px solid var(--main-color);
 }
 
+.todo-page-main-collection-template-todos-todo-container-control {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 7%;
+    aspect-ratio: 5 / 9;
+    border-radius: 20px;
+}
+
+.delete-todo-svg {
+    color: var(--main-color);
+}
+
 .late-todo {
-    color: yellow;
+    color: var(--main-color);
 }
 
 .line-through {

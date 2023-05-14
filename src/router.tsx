@@ -1,9 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './authPages/login';
 import SignUp from './authPages/signup';
-import Dashboard, { DashboardCollectionMain, TemplateTodoList } from "./TodoComponents/TodoPage";
+import Dashboard from "./TodoComponents/TodoPage";
+import TemplateTodoList from './TodoComponents/TodoTemplate'
 import LandingPage from './landingPage';
-import DashboardMain from "./TodoComponents/dashboard"
+import DashboardMain from "./TodoComponents/dashboard";
+import DashboardCollectionMain from "./TodoComponents/TodoCollection";
 
 export default function Router() {
     return (

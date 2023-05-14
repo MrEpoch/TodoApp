@@ -36,6 +36,14 @@ export default function StorageProvider({ children }: ChildrenProp) {
          return;
     }
 
+    const updateStarred = (folderName: string, collectionName: string) => {
+        const mainFolder = readLocalStorage(folderName);
+        const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
+        mainFolder[index].favourites = !mainFolder[index].favourites;
+        localStorage.setItem(folderName, JSON.stringify(mainFolder));
+        return;
+    }
+
     const insertIntoCollection = (folderName: string, collection: object, collectionName: string | undefined) => {
         const mainFolder = readLocalStorage(folderName);
         const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
@@ -53,6 +61,15 @@ export default function StorageProvider({ children }: ChildrenProp) {
         return;
     }
 
+    const deleteTodo = (folderName: string, collectionName: string, id: string) => {
+        const mainFolder = readLocalStorage(folderName);
+        const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
+        const todoIndex = mainFolder[index].content.findIndex((item: itemType) => item.id === id);
+        mainFolder[index].content.splice(todoIndex, 1);
+        localStorage.setItem(folderName, JSON.stringify(mainFolder));
+        return;
+    }
+
     const deleteLocalStorage = (folderName: string) => {
          localStorage.removeItem(folderName);
          return;
@@ -65,7 +82,9 @@ export default function StorageProvider({ children }: ChildrenProp) {
         addNewCollection,
         insertIntoCollection,
         getCollection,
-        updateTodo
+        updateTodo,
+        deleteTodo,
+        updateStarred
     }
     
     return (
