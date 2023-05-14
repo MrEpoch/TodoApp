@@ -9,7 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 import { mainFolderName } from "./tempLocalStorage";
 import { uid } from "uid";
-import { ChildrenProp, TodoContextType, StorageContextType, CollectionType, itemType, dateVerifyType } from "../@types/todo";
+import { ChildrenProp, TodoContextType, StorageContextType, CollectionType, itemType } from "../@types/todo";
 
 const TodoContext = React.createContext<TodoContextType | null>(null);
 
@@ -118,7 +118,7 @@ function DashboardSideBar() {
                 <h3 className="dashboard-collections-container-header">Collections</h3>
                 <div className="dashboard-collections-container-list">
                     {userFolder.map((collection: CollectionType, index) => {
-                        const location = `/todo/${collection.title}`
+                        const location = `/todo/${collection.id}`
                         return <Link to={location} className="dashboard-collections-container-list-item" key={index}>{collection.title}</Link>
                     }, [])}
                 </div>
@@ -146,7 +146,7 @@ export function AddCollection() {
         collectionRef.current;
         
         if (!titleRef.current) return;
-
+        if (titleRef.current.value.trim().length === 0) return;
         if (titleRef.current.value.length > 12) {
             setError("Collection max size is 12 characters");
             return;

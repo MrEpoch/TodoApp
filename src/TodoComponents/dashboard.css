@@ -115,7 +115,7 @@
 }
 
 .dashboard-page-header-UserControls > div:nth-child(1) > svg {
-    background: linear-gradient(45deg, red, var(--main-color), pink);
+    background-color: var(--main-color);
     border-radius: 50%;
     color: white;
     transition: all 0.5s ease;

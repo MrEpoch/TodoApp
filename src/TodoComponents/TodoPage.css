@@ -1,0 +1,129 @@
+
+.todo-page-main-collection {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template: 30% 70% / 20% 60% 20%;
+    overflow-y: scroll;
+}
+
+.todo-page-main-collection::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+.todo-page-main-collection::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+}
+
+.todo-page-main-collection::-webkit-scrollbar-track {
+    background-color: var(--system-color);
+}
+
+.todo-page-main-collection-header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    grid-area: 1 / 2 / 2 / 3;
+    margin: 20px;
+}
+
+.todo-page-main-collection-header > h1 {
+    color: white;
+    font-size: 2rem;
+}
+
+.todo-page-main-collection-header > .todo-page-main-collection-button-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.todo-page-main-collection-button-favourites {
+    color: white;
+    display: flex;
+    font-weight: 700;
+    padding: 20px;
+    font-size: 1.1rem;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: transparent;
+    border: 4px solid var(--system-color);
+    border-radius: 15px;
+    margin-right: 20px
+}
+
+.todo-page-main-collection-button-all {
+    color: white;
+    border: 4px solid var(--system-color);
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 20px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.active-btn {
+    background-color: var(--system-color);
+}
+
+.todo-page-main-collection-content {
+    grid-area: 2 / 2 / 3 / 3; 
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.todo-page-main-collection-content-item {
+    display: flex;
+    color: white;
+    margin: 10px;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+    background-color: var(--system-color);
+    align-items: center;
+    justify-content: center;
+}
+
+.todo-page-main-collection-content-item-info {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.todo-page-main-collection-content-item > svg {
+    width: 50px;
+    height: 50px;
+    color: var(--main-color);
+}
+
+
+.todo-page-main-collection-content-item-starContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 30%;
+    padding: 10px;
+}
+
+.todo-page-main-collection-content-item-starContainer > svg {
+    width: 30px;
+    cursor: pointer;
+    height: 30px;
+    color: var(--main-color);
+}

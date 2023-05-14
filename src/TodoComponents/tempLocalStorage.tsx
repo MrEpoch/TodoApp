@@ -23,10 +23,18 @@ export default function StorageProvider({ children }: ChildrenProp) {
          return JSON.parse(item);
     }
 
-    const getCollection = (collectionName: string | undefined, folderName: string) => {
+    const getCollection = (collectionId: string, folderName: string) => {
         const mainFolder = readLocalStorage(folderName);
-        const collection = mainFolder.find((item: CollectionType) => item.title === collectionName);
+        const collection = mainFolder.find((item: CollectionType) => item.id === collectionId);
         return collection;
+    }
+
+    const deleteCollectionStorage = (folderName: string, collectionId: string) => {
+        const mainFolder = readLocalStorage(folderName);
+        const index = mainFolder.findIndex((item: CollectionType) => item.id === collectionId);
+        mainFolder.splice(index, 1);
+        localStorage.setItem(folderName, JSON.stringify(mainFolder));
+        return;
     }
 
     const addNewCollection = (folderName: string, collection: object) => {
@@ -36,34 +44,34 @@ export default function StorageProvider({ children }: ChildrenProp) {
          return;
     }
 
-    const updateStarred = (folderName: string, collectionName: string) => {
+    const updateStarred = (folderName: string, collectionId: string) => {
         const mainFolder = readLocalStorage(folderName);
-        const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
-        mainFolder[index].favourites = !mainFolder[index].favourites;
+        const index = mainFolder.findIndex((item: CollectionType) => item.id === collectionId);
+        mainFolder[index].favourite = !mainFolder[index].favourite;
         localStorage.setItem(folderName, JSON.stringify(mainFolder));
         return;
     }
 
-    const insertIntoCollection = (folderName: string, collection: object, collectionName: string | undefined) => {
+    const insertIntoCollection = (folderName: string, collection: object, collectionId: string) => {
         const mainFolder = readLocalStorage(folderName);
-        const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
+        const index = mainFolder.findIndex((item: CollectionType) => item.id === collectionId);
         mainFolder[index].content.push(collection);
         localStorage.setItem(folderName, JSON.stringify(mainFolder));
         return;
     }
 
-    const updateTodo = (folderName: string, todo: object, collectionName: string, id: string) => {
+    const updateTodo = (folderName: string, todo: object, collectionId: string, id: string) => {
         const mainFolder = readLocalStorage(folderName);
-        const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
+        const index = mainFolder.findIndex((item: CollectionType) => item.id === collectionId);
         const todoIndex = mainFolder[index].content.findIndex((item: itemType) => item.id === id);
         mainFolder[index].content[todoIndex] = todo;
         localStorage.setItem(folderName, JSON.stringify(mainFolder));
         return;
     }
 
-    const deleteTodo = (folderName: string, collectionName: string, id: string) => {
+    const deleteTodo = (folderName: string, collectionId: string, id: string) => {
         const mainFolder = readLocalStorage(folderName);
-        const index = mainFolder.findIndex((item: CollectionType) => item.title === collectionName);
+        const index = mainFolder.findIndex((item: CollectionType) => item.id === collectionId);
         const todoIndex = mainFolder[index].content.findIndex((item: itemType) => item.id === id);
         mainFolder[index].content.splice(todoIndex, 1);
         localStorage.setItem(folderName, JSON.stringify(mainFolder));
@@ -84,7 +92,8 @@ export default function StorageProvider({ children }: ChildrenProp) {
         getCollection,
         updateTodo,
         deleteTodo,
-        updateStarred
+        updateStarred,
+        deleteCollectionStorage
     }
     
     return (
