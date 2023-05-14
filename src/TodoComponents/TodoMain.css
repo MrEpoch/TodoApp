@@ -378,6 +378,13 @@
     align-items: center;
 }
 
+.todo-page-addCollection-popUp-container-buttons {
+    display: flex;
+    width: 70%;
+    align-items: center;
+    justify-content: space-around;
+}
+
 .todo-page-addCollection-popUp-container input {
     height: 3rem;
     outline: none;

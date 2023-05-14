@@ -175,8 +175,8 @@ export function AddCollection() {
                 <h2 className="todo-page-addCollection-popUp-container-header">Create new collection</h2>
                 <input maxLength={12} ref={titleRef} className="todo-page-addCollection-popUp-container-input" type="text" placeholder="Collection name" />
                 <div className="todo-page-addCollection-popUp-container-buttons">
-                    <button onClick={() => { setHiddenCreateCollection(prev => !prev) }} className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
                     <button className="todo-page-addCollection-popUp-container-buttons-create">Create</button>
+                    <button onClick={() => { setHiddenCreateCollection(prev => !prev) }} className="todo-page-addCollection-popUp-container-buttons-cancel">Cancel</button>
                 </div>
             </form>
         </section>

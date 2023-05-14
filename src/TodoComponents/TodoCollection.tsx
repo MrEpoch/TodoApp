@@ -102,8 +102,8 @@ export default function DashboardCollectionMain() {
                     })
                 : collections.filter((collection: CollectionType) => collection.favourite).map((collection: CollectionType) => {
                     return (
-                        <div onClick={() => { navigateCollection(collection.id) }} key={collection.id} className="todo-page-main-collection-content-item">
-                            <div className="todo-page-main-collection-content-item-info">
+                        <div key={collection.id} className="todo-page-main-collection-content-item">
+                            <div onClick={() => { navigateCollection(collection.id) }} className="todo-page-main-collection-content-item-info">
                                 <h2>{collection.title}</h2>
                                 <p> {collection.content.filter((todo: itemType) => todo.completed).length}/{collection.content.length} done</p>
                             </div>

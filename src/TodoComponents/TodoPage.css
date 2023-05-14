@@ -43,7 +43,6 @@
 .todo-page-main-collection-button-favourites {
     color: white;
     display: flex;
-    font-weight: 700;
     padding: 20px;
     font-size: 1.1rem;
     justify-content: center;
@@ -59,7 +58,6 @@
     color: white;
     border: 4px solid var(--system-color);
     border-radius: 15px;
-    font-weight: 700;
     font-size: 1.1rem;
     padding: 20px;
     background-color: transparent;
@@ -70,6 +68,8 @@
 }
 
 .active-btn {
+    font-weight: 600;
+    color: white;
     background-color: var(--system-color);
 }
 
