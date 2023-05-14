@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 export default function TemplateTodoList() {
 
-    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar } = useTodo() as TodoContextType;
+    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar, hiddenCreateItem } = useTodo() as TodoContextType;
     const { getCollection, updateTodo, deleteTodo } = useStorage() as StorageContextType;
 
     const [todos, setTodos] = useState<itemType[]>([]);
@@ -33,7 +33,9 @@ export default function TemplateTodoList() {
         }
     }, [setCurrentMain, collection.content]);
 
-    
+    useEffect(() => {
+        hiddenCreateItem && setCollection(getCollection(id, mainFolderName));
+    }, [hiddenCreateItem, getCollection, id]);
 
     const styleCSS = hiddenSidebar ? "todo-page-main-collection-template full-page" : "todo-page-main-collection-template";
 
