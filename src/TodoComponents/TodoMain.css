@@ -171,7 +171,6 @@
     height: 10rem;
     border-radius: 10px;
     margin-bottom: 2rem;
-    cursor: pointer;
     transition: all 0.5s ease;
 }
 
@@ -191,6 +190,7 @@
     height: 50px;
     border-radius: 10px;
     border: 2px solid var(--main-color);
+    cursor: pointer;
 }
 
 .todo-page-main-collection-template-todos-todo-container-control {
@@ -204,6 +204,7 @@
 }
 
 .delete-todo-svg {
+    cursor: pointer;
     color: var(--main-color);
 }
 
