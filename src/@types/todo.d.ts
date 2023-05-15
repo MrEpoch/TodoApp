@@ -12,7 +12,7 @@ export type TodoContextType = {
     hiddenCreateCollection: boolean,
     setHiddenCreateCollection: React.Dispatch<React.SetStateAction<boolean>>
     userFolder: [],
-    setUserFolder: React.Dispatch<React.SetStateAction<[]>>
+    setUserFolder: React.Dispatch<React.SetStateAction<[]>>,
 }
 
 export type StorageContextType = {
@@ -25,6 +25,7 @@ export type StorageContextType = {
     updateTodo: (folderName: string, todo: object, collectionName: string, id: string) => void,
     deleteTodo: (folderName: string, collectionName: string, id: string) => void,
     updateStarred: (folderName: string, collectionName: string) => void
+    deleteCollectionStorage: (folderName: string, collectionName: string) => void,
 }
 
 export type CollectionType = {

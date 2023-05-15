@@ -21,7 +21,7 @@ export default function TodoApp({ children }: ChildrenProp) {
     
     const { readLocalStorage } = useStorage() as StorageContextType;
 
-    const [userFolder, setUserFolder] = useState<[]>(readLocalStorage(mainFolderName));
+    const [userFolder, setUserFolder] = useState<CollectionType[]>(readLocalStorage(mainFolderName));
     const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(false);
     const [currentMain, setCurrentMain] = useState<string>("dashboard");
     const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);

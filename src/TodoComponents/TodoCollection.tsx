@@ -63,16 +63,6 @@ export default function DashboardCollectionMain() {
         return;
     }
 
-    function deleteCollection(collectionId: string): void {
-        try {
-            deleteCollectionStorage(mainFolderName, collectionId);
-        } catch (e) {
-            console.log(e)
-            return;
-        } 
-        return;
-    }
-
     return (
         <main className={styleCSS}>
             <div className="todo-page-main-collection-header">

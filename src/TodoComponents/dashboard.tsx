@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import  { useTodo } from "./TodoPage";
-import { TodoContextType } from "../@types/todo";
+import { TodoContextType, itemType, CollectionType } from "../@types/todo";
 
 export default function DashboardMain() {
 
@@ -11,19 +11,6 @@ export default function DashboardMain() {
     useEffect(() => {
         setCurrentMain("dashboard");
     })
-
-    type collection = {
-        content: [],
-        id: string,
-        title: string,
-    }
-
-    type item = {
-        title: string,
-        createdAt: string,
-        id: string,
-        date: string
-    }
 
     const styleCSS = hiddenSidebar ? "todo-page-dashboard-main full-page" : "todo-page-dashboard-main";
 
@@ -41,7 +28,7 @@ export default function DashboardMain() {
                         <button className="todo-page-dashboard-main-todosOverview-filter-longTerm">Long-term tasks</button>
                     </div>
                     <div className="todo-page-dashboard-main-todosContainer">
-                        {userFolder.map((collection: collection, index: any) => {
+                        {userFolder.map((collection: CollectionType, index: any) => {
                             if (collection.content.length === 0) {
                                 return
                             }
@@ -52,7 +39,7 @@ export default function DashboardMain() {
                                             <svg ref={arrRef} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-down</title><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>
                                         </div>
                                         <div className="dashboard-main-todos-item-body">
-                                            {collection.content.map((item: item, index) => {
+                                            {collection.content.map((item: itemType, index) => {
                                                 return (
                                                     <div key={index} className="dashboard-main-todos-item-body-todoContainer">
                                                         <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
