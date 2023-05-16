@@ -23,7 +23,6 @@ export type StorageContextType = {
     addNewCollection: (folderName: string, folder: object) => void,
     insertIntoCollection: (folderName: string, collection: object, collectionName: string | undefined) => void,
     deleteLocalStorage: (folderName: string) => void,
-    getCollection: (collectionName: string | undefined, folderName: string) => CollectionType,
     updateTodo: (folderName: string, todo: object, collectionName: string, id: string) => void,
     deleteTodo: (folderName: string, collectionName: string, id: string) => void,
     updateStarred: (folderName: string, collectionName: string) => void

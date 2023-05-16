@@ -7,10 +7,9 @@ import { useNavigate } from "react-router-dom";
 
 export default function DashboardCollectionMain() {
 
-    const { setCurrentMain, hiddenSidebar, setHiddenCreateCollection, hiddenCreateCollection } = useTodo() as TodoContextType;
-    const { readLocalStorage, updateStarred, deleteCollectionStorage } = useStorage() as StorageContextType;
+    const { setCurrentMain, hiddenSidebar, setHiddenCreateCollection,  userFolder, setUserFolder } = useTodo() as TodoContextType;
+    const { readLocalStorage, updateStarred } = useStorage() as StorageContextType;
 
-    const [collections, setCollections] = useState<CollectionType[]>(readLocalStorage(mainFolderName));
     const [all, setAll] = useState<boolean>(true);
 
     const favouritesRef = useRef<HTMLButtonElement>(null);
@@ -20,16 +19,7 @@ export default function DashboardCollectionMain() {
 
     useEffect(() => {
         setCurrentMain('collections');
-        setCollections(readLocalStorage(mainFolderName));
-    }, [setCollections, readLocalStorage, setCurrentMain])
-
-    useEffect(() => {
-        try {
-            setCollections(readLocalStorage(mainFolderName));
-        } catch (e) {
-            console.log(e);
-        }
-    }, [hiddenCreateCollection, readLocalStorage]);
+    }, [readLocalStorage, setCurrentMain])
 
     useEffect(() => {
         if (all) {
@@ -46,7 +36,7 @@ export default function DashboardCollectionMain() {
     function star(collection: CollectionType): void {
         try {
             updateStarred(mainFolderName, collection.id); 
-            setCollections(readLocalStorage(mainFolderName));
+            setUserFolder(readLocalStorage(mainFolderName));
         } catch (e) {
             console.log(e);
         }
@@ -73,7 +63,7 @@ export default function DashboardCollectionMain() {
                 </div>
             </div>
             <div className="todo-page-main-collection-content">
-                {all && all ? collections.map((collection: CollectionType) => {
+                {all && all ? userFolder.map((collection: CollectionType) => {
                     return (
                         <div key={collection.id} className="todo-page-main-collection-content-item">
                             <div onClick={() => { navigateCollection(collection.id) }} className="todo-page-main-collection-content-item-info">
@@ -90,7 +80,7 @@ export default function DashboardCollectionMain() {
                     )
                     
                     })
-                : collections.filter((collection: CollectionType) => collection.favourite).map((collection: CollectionType) => {
+                : userFolder.filter((collection: CollectionType) => collection.favourite).map((collection: CollectionType) => {
                     return (
                         <div key={collection.id} className="todo-page-main-collection-content-item">
                             <div onClick={() => { navigateCollection(collection.id) }} className="todo-page-main-collection-content-item-info">

@@ -28,6 +28,11 @@ export default function TodoApp({ children }: ChildrenProp) {
     const [hiddenCreateCollection, setHiddenCreateCollection] = useState<boolean>(true);
     const [collectionsId, setCollectionsId] = useState<string[]>(userFolder.map((collection: CollectionType) => collection.id));
 
+    useEffect(() => {
+        setUserFolder(readLocalStorage(mainFolderName));
+        setCollectionsId(userFolder.map((collection: CollectionType) => collection.id));
+    }, [hiddenCreateCollection, setUserFolder, readLocalStorage])
+
     const todoValue = { setHiddenSidebar,
                         hiddenSidebar,
                         currentMain,
@@ -135,7 +140,7 @@ function DashboardSideBar() {
 
 export function AddCollection() {
 
-    const { setHiddenCreateCollection, setUserFolder, setCollectionsId, userFolder, collectionsId } = useTodo() as TodoContextType;
+    const { setHiddenCreateCollection, setUserFolder } = useTodo() as TodoContextType;
     const { addNewCollection, readLocalStorage } = useStorage() as StorageContextType;
 
     const collectionRef = useRef<HTMLInputElement>(null);
@@ -143,7 +148,7 @@ export function AddCollection() {
 
     const [error, setError] = useState<string>("");
 
-    function todoCollectionSubmitHandler(e: React.FormEvent<HTMLFormElement> ) {
+    async function todoCollectionSubmitHandler(e: React.FormEvent<HTMLFormElement> ) {
         e.preventDefault();
 
         collectionRef.current;
@@ -163,14 +168,12 @@ export function AddCollection() {
                     content: [],
                     favourite: false
                 })
-            setHiddenCreateCollection(prev => !prev);
             setUserFolder(readLocalStorage(mainFolderName));
+            setHiddenCreateCollection(prev => !prev);
         } catch (e) {
             setError("Collection creation failed");
             return;
         }
-        setCollectionsId(userFolder.map((collection: CollectionType) => collection.id));
-        console.log(collectionsId);
     }
 
     return (

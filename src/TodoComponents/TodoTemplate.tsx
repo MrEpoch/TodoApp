@@ -7,8 +7,8 @@ import { ClipLoader } from "react-spinners";
 
 export default function TemplateTodoList() {
 
-    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar, hiddenCreateItem, collectionsId, userFolder, setUserFolder, setCollectionsId } = useTodo() as TodoContextType;
-    const { getCollection, updateTodo, readLocalStorage, deleteTodo, deleteCollectionStorage } = useStorage() as StorageContextType;
+    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar, hiddenCreateItem, collectionsId, userFolder, setUserFolder } = useTodo() as TodoContextType;
+    const { updateTodo, readLocalStorage, deleteTodo, deleteCollectionStorage } = useStorage() as StorageContextType;
 
     const [loading, setLoading] = useState<boolean>(true);
     const [todos, setTodos] = useState<itemType[]>([]);
@@ -23,12 +23,11 @@ export default function TemplateTodoList() {
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
-        setCollectionsId(userFolder.map((collection: CollectionType) => collection.id));
         if (id === undefined || !collectionsId.includes(id)) {
             navigate("/error");
         }
         setLoading(false);
-    })
+    }, [id, collectionsId, navigate])
 
     const [collection, setCollection] = useState<CollectionType | any>({});
     
@@ -38,7 +37,7 @@ export default function TemplateTodoList() {
         } catch(e) {
             console.log(e);
         } 
-    }, [id, setCollection]);
+    }, [id, setCollection, userFolder]);
 
     useEffect(() => {
             try {
@@ -48,7 +47,7 @@ export default function TemplateTodoList() {
             } catch (e) {
                 console.log(e)
             }
-    }, [setCurrentMain, collection.content, id, setTodos, setCompleteTodos]);
+    }, [setCurrentMain, collection.content, setTodos, setCompleteTodos]);
 
     useEffect(() => {
         try {
@@ -57,7 +56,7 @@ export default function TemplateTodoList() {
             console.log(e);
             navigate("/todo");
         }
-    }, [hiddenCreateItem, getCollection, id]);
+    }, [hiddenCreateItem, navigate]);
 
     const styleCSS = hiddenSidebar ? "todo-page-main-collection-template full-page" : "todo-page-main-collection-template";
 
@@ -82,6 +81,7 @@ export default function TemplateTodoList() {
         if (confirmDelete) {
             try {
                 deleteCollectionStorage(mainFolderName, collection.id);
+                setUserFolder(readLocalStorage(mainFolderName));
                 navigate("/todo/collections");
             } catch (e) {
                 console.log(e);
@@ -123,7 +123,7 @@ export default function TemplateTodoList() {
             <div className="todo-page-main-collection-template-todos">
                 <div className="todo-page-main-collection-template-todos-incomplete">
                     <h5 className="todo-page-main-collection-template-todos-header">Tasks - {todos && todos.length}</h5>
-                    {collection.content.filter((todo: itemType) => todo.completed === false).map((todo: itemType, index: any) => {
+                    {collection.content.filter((todo: itemType) => todo.completed === false).map((todo: itemType, index: number) => {
                         return (
                             <div className={todo.completed ?  "todo-page-main-collection-template-todos-todo-container line-through" : "todo-page-main-collection-template-todos-todo-container"} key={index}>
                                 <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox"></div>
@@ -139,7 +139,7 @@ export default function TemplateTodoList() {
                 </div>
                 <div className="todo-page-main-collection-template-todos-complete">
                     <h5 className="todo-page-main-collection-template-todos-header">Completed - {completedTodos && completedTodos.length}</h5>
-                     {collection.content.filter((todo: itemType) => todo.completed === true).map((todo: itemType, index: any) => {
+                     {collection.content.filter((todo: itemType) => todo.completed === true).map((todo: itemType, index: number) => {
                         return ( 
                             <div className="todo-page-main-collection-template-todos-todo-container line-through" key={index}>
                                 <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox completed-checkbox">

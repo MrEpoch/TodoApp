@@ -23,12 +23,6 @@ export default function StorageProvider({ children }: ChildrenProp) {
          return JSON.parse(item);
     }
 
-    const getCollection = (collectionId: string, folderName: string) => {
-        const mainFolder = readLocalStorage(folderName);
-        const collection = mainFolder.find((item: CollectionType) => item.id === collectionId);
-        return collection;
-    }
-
     const deleteCollectionStorage = (folderName: string, collectionId: string) => {
         const mainFolder = readLocalStorage(folderName);
         const index = mainFolder.findIndex((item: CollectionType) => item.id === collectionId);
@@ -89,7 +83,6 @@ export default function StorageProvider({ children }: ChildrenProp) {
         deleteLocalStorage,
         addNewCollection,
         insertIntoCollection,
-        getCollection,
         updateTodo,
         deleteTodo,
         updateStarred,
