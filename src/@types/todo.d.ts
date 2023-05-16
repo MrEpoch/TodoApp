@@ -11,8 +11,10 @@ export type TodoContextType = {
     setHiddenCreateItem: React.Dispatch<React.SetStateAction<boolean>>
     hiddenCreateCollection: boolean,
     setHiddenCreateCollection: React.Dispatch<React.SetStateAction<boolean>>
-    userFolder: [],
+    userFolder: CollectionType[],
     setUserFolder: React.Dispatch<React.SetStateAction<[]>>,
+    collectionsId: string[],
+    setCollectionsId: React.Dispatch<React.SetStateAction<string[]>>,
 }
 
 export type StorageContextType = {

@@ -3,46 +3,73 @@ import { useTodo } from './TodoPage';
 import { useStorage, mainFolderName } from './tempLocalStorage';
 import { TodoContextType, itemType, StorageContextType, CollectionType } from '../@types/todo';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ClipLoader } from "react-spinners";
 
 export default function TemplateTodoList() {
 
-    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar, hiddenCreateItem } = useTodo() as TodoContextType;
-    const { getCollection, updateTodo, deleteTodo, deleteCollectionStorage } = useStorage() as StorageContextType;
+    const { setHiddenCreateItem, setCurrentMain, hiddenSidebar, hiddenCreateItem, collectionsId, userFolder, setUserFolder, setCollectionsId } = useTodo() as TodoContextType;
+    const { getCollection, updateTodo, readLocalStorage, deleteTodo, deleteCollectionStorage } = useStorage() as StorageContextType;
 
+    const [loading, setLoading] = useState<boolean>(true);
     const [todos, setTodos] = useState<itemType[]>([]);
     const [completedTodos, setCompleteTodos] = useState<itemType[]>([]);
 
     const navigate = useNavigate();
+ 
+    function filteredCollection() {
+        setUserFolder(readLocalStorage(mainFolderName));
+        return userFolder.find((collection: CollectionType) => collection.id === id);
+    }
     const { id } = useParams<{ id: string }>();
-    if (id === undefined) {
-        navigate("/error");
-    }
-    const [collection, setCollection] = useState<CollectionType>(getCollection(id, mainFolderName));
 
-    if (!collection) {
-        navigate("/todo")
-    }
+    useEffect(() => {
+        setCollectionsId(userFolder.map((collection: CollectionType) => collection.id));
+        if (id === undefined || !collectionsId.includes(id)) {
+            navigate("/error");
+        }
+        setLoading(false);
+    })
+
+    const [collection, setCollection] = useState<CollectionType | any>({});
+    
+    useEffect(() => {
+        try {
+            setCollection(userFolder.find((collection: CollectionType) => collection.id === id));    
+        } catch(e) {
+            console.log(e);
+        } 
+    }, [id, setCollection]);
+
+    useEffect(() => {
+            try {
+                setCurrentMain("none");
+                setTodos(collection.content.filter((todo: itemType) => !todo.completed));
+                setCompleteTodos(collection.content.filter((todo: itemType) => todo.completed))
+            } catch (e) {
+                console.log(e)
+            }
+    }, [setCurrentMain, collection.content, id, setTodos, setCompleteTodos]);
 
     useEffect(() => {
         try {
-            setCurrentMain("none");
-            setTodos(collection.content.filter((todo: itemType) => !todo.completed));
-            setCompleteTodos(collection.content.filter((todo: itemType) => todo.completed))
-        } catch (e) {
-            console.log(e)
+            hiddenCreateItem && setCollection(filteredCollection());
+        } catch(e) {
+            console.log(e);
+            navigate("/todo");
         }
-    }, [setCurrentMain, collection.content]);
-
-    useEffect(() => {
-        hiddenCreateItem && setCollection(getCollection(id, mainFolderName));
     }, [hiddenCreateItem, getCollection, id]);
 
     const styleCSS = hiddenSidebar ? "todo-page-main-collection-template full-page" : "todo-page-main-collection-template";
 
     function changeTodoStatus(todo: itemType) {
         todo.completed = !todo.completed;
-        updateTodo(mainFolderName, todo, collection.id, todo.id)
-        setCollection(getCollection(id, mainFolderName));
+        try {
+            updateTodo(mainFolderName, todo, collection.id, todo.id);
+            setCollection(filteredCollection());
+        } catch (e) {
+            console.log(e);
+            navigate("/todo");
+        }
         return;
     }
 
@@ -50,7 +77,7 @@ export default function TemplateTodoList() {
     const warning = <svg xmlns="http://www.w3.org/2000/svg" className="late-todo" viewBox="0 0 24 24"><title>alert</title><path fill="currentColor" d="M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z" /></svg>;
     const currentTime = new Date();
 
-    function deleteCollectionHandler(collection): void {
+    function deleteCollectionHandler(collection: CollectionType): void {
         const confirmDelete = window.confirm(`Are you sure you want to delete ${collection.title}?`);
         if (confirmDelete) {
             try {
@@ -58,6 +85,7 @@ export default function TemplateTodoList() {
                 navigate("/todo/collections");
             } catch (e) {
                 console.log(e);
+                navigate("/todo");
             }
             return;
         }
@@ -68,7 +96,7 @@ export default function TemplateTodoList() {
         if (confirmDelete) {
             try {
                 deleteTodo(mainFolderName, collection.id, todo.id);
-                setCollection(getCollection(id, mainFolderName));
+                setCollection(filteredCollection());
             } catch (e) {
                 console.log(e);
             }
@@ -76,7 +104,9 @@ export default function TemplateTodoList() {
     }
 
     return (
+
         <section className={styleCSS}>
+                {loading ? <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><ClipLoader color="#DD2616" loading={loading} size={150} /> </div> : <>
             <div className="todo-page-main-collection-template-top">
                 <div className="collection-template-top-Header">
                     <button onClick={() => {navigate("/todo/collections")}} className="collection-template-top-Header-ReturnButton">
@@ -93,7 +123,7 @@ export default function TemplateTodoList() {
             <div className="todo-page-main-collection-template-todos">
                 <div className="todo-page-main-collection-template-todos-incomplete">
                     <h5 className="todo-page-main-collection-template-todos-header">Tasks - {todos && todos.length}</h5>
-                    {collection.content.filter((todo: itemType) => todo.completed === false).map((todo: itemType, index) => {
+                    {collection.content.filter((todo: itemType) => todo.completed === false).map((todo: itemType, index: any) => {
                         return (
                             <div className={todo.completed ?  "todo-page-main-collection-template-todos-todo-container line-through" : "todo-page-main-collection-template-todos-todo-container"} key={index}>
                                 <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox"></div>
@@ -109,7 +139,7 @@ export default function TemplateTodoList() {
                 </div>
                 <div className="todo-page-main-collection-template-todos-complete">
                     <h5 className="todo-page-main-collection-template-todos-header">Completed - {completedTodos && completedTodos.length}</h5>
-                     {collection.content.filter((todo: itemType) => todo.completed === true).map((todo: itemType, index) => {
+                     {collection.content.filter((todo: itemType) => todo.completed === true).map((todo: itemType, index: any) => {
                         return ( 
                             <div className="todo-page-main-collection-template-todos-todo-container line-through" key={index}>
                                 <div onClick={() => {changeTodoStatus(todo)}} className="todo-page-main-collection-template-todos-todo-container-checkbox completed-checkbox">
@@ -125,8 +155,11 @@ export default function TemplateTodoList() {
                     })}
                 </div> 
             </div>
+            <svg className='todo-page-main-collection-template-delete' onClick={() => {deleteCollectionHandler(collection)}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>delete</title><path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg>
+             </>}
         </section>
     )
 }
+
 
 

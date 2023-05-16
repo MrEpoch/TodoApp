@@ -26,6 +26,7 @@ export default function TodoApp({ children }: ChildrenProp) {
     const [currentMain, setCurrentMain] = useState<string>("dashboard");
     const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);
     const [hiddenCreateCollection, setHiddenCreateCollection] = useState<boolean>(true);
+    const [collectionsId, setCollectionsId] = useState<string[]>(userFolder.map((collection: CollectionType) => collection.id));
 
     const todoValue = { setHiddenSidebar,
                         hiddenSidebar,
@@ -37,6 +38,8 @@ export default function TodoApp({ children }: ChildrenProp) {
                         hiddenCreateItem,
                         userFolder,
                         setUserFolder,
+                        collectionsId,
+                        setCollectionsId
                     }
     return (
         <TodoContext.Provider value={todoValue}>
@@ -132,7 +135,7 @@ function DashboardSideBar() {
 
 export function AddCollection() {
 
-    const { setHiddenCreateCollection, setUserFolder } = useTodo() as TodoContextType;
+    const { setHiddenCreateCollection, setUserFolder, setCollectionsId, userFolder, collectionsId } = useTodo() as TodoContextType;
     const { addNewCollection, readLocalStorage } = useStorage() as StorageContextType;
 
     const collectionRef = useRef<HTMLInputElement>(null);
@@ -161,11 +164,13 @@ export function AddCollection() {
                     favourite: false
                 })
             setHiddenCreateCollection(prev => !prev);
-            setUserFolder(readLocalStorage(mainFolderName))
+            setUserFolder(readLocalStorage(mainFolderName));
         } catch (e) {
             setError("Collection creation failed");
             return;
         }
+        setCollectionsId(userFolder.map((collection: CollectionType) => collection.id));
+        console.log(collectionsId);
     }
 
     return (
@@ -230,7 +235,7 @@ export function AddItem() {
                 completed: false
             }
             insertIntoCollection(mainFolderName, todoItem, id)
-            setHiddenCreateItem(prev => !prev)
+            setHiddenCreateItem(prev => !prev);
             setUserFolder(readLocalStorage(mainFolderName))
         } catch (e) {
             setError("Failed to add todo");
