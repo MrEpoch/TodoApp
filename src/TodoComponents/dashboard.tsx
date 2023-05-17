@@ -1,22 +1,40 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import  { useTodo } from "./TodoPage";
 import { TodoContextType, itemType, CollectionType } from "../@types/todo";
+import { ClipLoader } from "react-spinners";
 
 export default function DashboardMain() {
 
     const { hiddenSidebar, setCurrentMain, userFolder } = useTodo() as TodoContextType;
     const dotRef = useRef<SVGSVGElement>(null);
     const arrRef = useRef<SVGSVGElement>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [today, setToday] = useState<CollectionType[] | []>([]);
 
     useEffect(() => {
         setCurrentMain("dashboard");
-    })
+        setLoading(false);
+    }, [setLoading, setCurrentMain]);
+
+    useEffect(() => {
+        try {
+            setToday(userFolder.filter((collection: CollectionType) => {
+                const date = new Date();
+                const today = date.getDate();
+                const month = date.getMonth();
+                const year = date.getFullYear();
+                return today === collectionDay && month === collectionMonth && year === collectionYear;
+        } catch(e) {
+
+        }
+    }, [userFolder]);
 
     const styleCSS = hiddenSidebar ? "todo-page-dashboard-main full-page" : "todo-page-dashboard-main";
 
     return (
         <main className={styleCSS}>
-           <div className="todo-page-dashboard-main-container"> 
+            {loading ? <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}><ClipLoader color="#DD2616" loading={loading} size={150} /> </div> :  
+            <div className="todo-page-dashboard-main-container"> 
                 <div className="todo-page-dashboard-main-heading">
                     <h3>Dashboard</h3>
                     <h1>Good morning, <span>User Name</span></h1>
@@ -57,6 +75,7 @@ export default function DashboardMain() {
                     </div>
                 </div>
             </div>
+            }
         </main>
     )
 }

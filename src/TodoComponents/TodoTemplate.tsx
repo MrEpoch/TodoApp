@@ -40,6 +40,7 @@ export default function TemplateTodoList() {
     }, [id, setCollection, userFolder]);
 
     useEffect(() => {
+        if (collection.content) {
             try {
                 setCurrentMain("none");
                 setTodos(collection.content.filter((todo: itemType) => !todo.completed));
@@ -47,6 +48,7 @@ export default function TemplateTodoList() {
             } catch (e) {
                 console.log(e)
             }
+        }
     }, [setCurrentMain, collection.content, setTodos, setCompleteTodos]);
 
     useEffect(() => {

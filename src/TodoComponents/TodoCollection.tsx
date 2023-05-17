@@ -4,12 +4,14 @@ import { StorageContextType, TodoContextType, CollectionType, itemType } from ".
 import { mainFolderName, useStorage } from "./tempLocalStorage";
 import "./TodoPage.css";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 
 export default function DashboardCollectionMain() {
 
     const { setCurrentMain, hiddenSidebar, setHiddenCreateCollection,  userFolder, setUserFolder } = useTodo() as TodoContextType;
     const { readLocalStorage, updateStarred } = useStorage() as StorageContextType;
-
+    
+    const [loading, setLoading] = useState<boolean>(true);
     const [all, setAll] = useState<boolean>(true);
 
     const favouritesRef = useRef<HTMLButtonElement>(null);
@@ -55,6 +57,7 @@ export default function DashboardCollectionMain() {
 
     return (
         <main className={styleCSS}>
+
             <div className="todo-page-main-collection-header">
                 <h1>Collections</h1>
                 <div className="todo-page-main-collection-button-container">
