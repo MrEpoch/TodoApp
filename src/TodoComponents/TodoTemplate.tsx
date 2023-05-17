@@ -27,7 +27,7 @@ export default function TemplateTodoList() {
             navigate("/error");
         }
         setLoading(false);
-    }, [id, collectionsId, navigate])
+    }, [id, collectionsId, navigate, setLoading])
 
     const [collection, setCollection] = useState<CollectionType | any>({});
     

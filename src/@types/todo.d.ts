@@ -42,6 +42,7 @@ export type itemType = {
     title: string,
     date: string,
     dateVerify: number,
+    year: string,
     id: string,
     date: string,
     completed: boolean,
