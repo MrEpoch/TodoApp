@@ -10,6 +10,8 @@
 
 .todo-page-dashboard-main-todosOverview {
     grid-area: 2 / 2 / 3 / 3;
+    display: flex;
+    flex-direction: column;
 }
 
 .todo-page-dashboard-main-todosOverview-filter {

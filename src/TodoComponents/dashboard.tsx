@@ -22,22 +22,28 @@ export default function DashboardMain() {
             const year = date.getFullYear();
 
             setToday(userFolder.filter((collection: CollectionType) => {
-                    collection.content.filter((item: itemType) => {
+                collection.content.filter((item: itemType) => {
                     const itemDate = item.date.split(" ");
-                    if (parseInt(itemDate[0]) === today && parseInt(itemDate[1]) === month && parseInt(item.year) === year) {
+                    const [monthItem, yearItem] = item.yearMonth.split(" ");
+                    if (parseInt(monthItem) === month && parseInt(itemDate[1]) === today && parseInt(yearItem) === year) {
                         return item;
                     }
                 });
+                console.log(collection);
                 return collection.content.length > 0 ? collection : null;
             }));
             
             setLongTerm(userFolder.filter((collection: CollectionType) => {
                 collection.content.filter((item: itemType) => {
                     const itemDate = item.date.split(" ");
-                    if (parseInt(itemDate[0]) > today && parseInt(itemDate[1]) >= month && parseInt(item.year) >= year) {
+                    const [monthItem, yearItem] = item.yearMonth.split(" ");
+                    if (parseInt(monthItem) >= month && parseInt(itemDate[1]) > today && parseInt(yearItem) >= year) {
                         return item;
                     }
                 });
+                if (collection.content.length > 0) {
+                    return collection;
+                }
             }));
 
         } catch(e) {

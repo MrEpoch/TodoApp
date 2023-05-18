@@ -232,7 +232,7 @@ export function AddItem() {
             const todoItem: itemType = {
                 createdAt: new Date().toString(),
                 title: titleRef.current.value,
-                year: onChangeVal.getFullYear().toString(),
+                yearMonth: `${onChangeVal.getMonth()} ${onChangeVal.getFullYear()}`,
                 date: `${month} ${dayInMonth} ${hourTime}:${minuteTime}`,
                 dateVerify: onChangeVal.getTime(),
                 id: uid(),
