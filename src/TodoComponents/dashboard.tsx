@@ -21,29 +21,23 @@ export default function DashboardMain() {
             const month = date.getMonth();
             const year = date.getFullYear();
 
-            setToday(userFolder.filter((collection: CollectionType) => {
-                collection.content.filter((item: itemType) => {
+            setToday(userFolder.map((collection: CollectionType) => {
+                const filteredItem = collection.content.filter( (item: itemType) => {
                     const itemDate = item.date.split(" ");
                     const [monthItem, yearItem] = item.yearMonth.split(" ");
-                    if (parseInt(monthItem) === month && parseInt(itemDate[1]) === today && parseInt(yearItem) === year) {
-                        return item;
-                    }
+                    return (parseInt(monthItem) === month && parseInt(itemDate[1]) === today && parseInt(yearItem) === year) 
                 });
-                console.log(collection);
-                return collection.content.length > 0 ? collection : null;
+                return { ...collection, content: filteredItem };
             }));
+
             
-            setLongTerm(userFolder.filter((collection: CollectionType) => {
-                collection.content.filter((item: itemType) => {
+            setLongTerm(userFolder.map((collection: CollectionType) => {
+                const filteredItem = collection.content.filter((item: itemType) => {
                     const itemDate = item.date.split(" ");
                     const [monthItem, yearItem] = item.yearMonth.split(" ");
-                    if (parseInt(monthItem) >= month && parseInt(itemDate[1]) > today && parseInt(yearItem) >= year) {
-                        return item;
-                    }
-                });
-                if (collection.content.length > 0) {
-                    return collection;
-                }
+                    return (parseInt(monthItem) >= month && parseInt(itemDate[1]) > today && parseInt(yearItem) >= year) 
+                }); 
+                return { ...collection, content: filteredItem };
             }));
 
         } catch(e) {

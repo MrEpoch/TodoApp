@@ -250,20 +250,23 @@
     flex-direction: column;
     justify-content: space-between;
     color: white;
+    border: none;
     font-size: 1rem;
     margin-bottom: 1rem;
     border-radius: 20px;
-    background-color: var(--system-color);
+    color: black;
+    background-color: white;
 }
 
 .dashboard-main-todos-item-header {
     width: 100%;
     padding: 20px;
-    border-radius: 20px;
+    border: none;
+    border-radius: 20px 20px 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--system-color);
+    background-color: var(--system-color-lighter);
 }
 
 .dashboard-main-todos-item-header > svg {

@@ -9,7 +9,9 @@
     --secondary-color: #fff;
     --system-color: #0B0E13;
     --system-black-color: #040608;
+    --system-color-lighter: #343435;
 }
+
 
 html,
 body {

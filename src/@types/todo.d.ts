@@ -12,7 +12,7 @@ export type TodoContextType = {
     hiddenCreateCollection: boolean,
     setHiddenCreateCollection: React.Dispatch<React.SetStateAction<boolean>>
     userFolder: CollectionType[],
-    setUserFolder: React.Dispatch<React.SetStateAction<[]>>,
+    setUserFolder: React.Dispatch<React.SetStateAction<CollectionType[]>>,
     collectionsId: string[],
     setCollectionsId: React.Dispatch<React.SetStateAction<string[]>>,
 }
@@ -41,8 +41,8 @@ export type itemType = {
     createdAt: string,
     title: string,
     date: string,
+    yearMonth: string,
     dateVerify: number,
-    year: string,
     id: string,
     date: string,
     completed: boolean,
