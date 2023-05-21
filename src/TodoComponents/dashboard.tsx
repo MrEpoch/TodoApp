@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useTodo } from "./TodoPage";
 import { TodoContextType, itemType, CollectionType } from "../@types/todo";
 import { ClipLoader } from "react-spinners";
+import { Link } from "react-router-dom";
+import emptyFolder from "./empty-folder.svg";
 
 export default function DashboardMain() {
   const { hiddenSidebar, setCurrentMain, userFolder } =
@@ -9,8 +11,6 @@ export default function DashboardMain() {
 
   const dotRef = useRef<SVGSVGElement>(null);
   const arrRef = useRef<SVGSVGElement>(null);
-  const todayRef = useRef<HTMLButtonElement>(null);
-  const longTermRef = useRef<HTMLButtonElement>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [longTerm, setLongTerm] = useState<CollectionType[] | []>([]);
@@ -55,23 +55,14 @@ export default function DashboardMain() {
           return { ...collection, content: filteredItem, shown: false };
         })
       );
+
     } catch (e) {
       console.log(e);
     }
-
+      console.log(today, longTerm);
     setCurrentMain("dashboard");
     setLoading(false);
   }, [userFolder, setCurrentMain, setLoading]);
-
-  useEffect(() => {
-    if (btnToday) {
-      todayRef.current?.classList.add("active-btn");
-      longTermRef.current?.classList.remove("active-btn");
-    } else {
-      longTermRef.current?.classList.add("active-btn");
-      todayRef.current?.classList.remove("active-btn");
-    }
-  }, [btnToday]);
 
   const styleCSS = hiddenSidebar
     ? "todo-page-dashboard-main full-page"
@@ -79,16 +70,17 @@ export default function DashboardMain() {
 
   function changeShown(
     id: string,
-    which: React.Dispatch<React.SetStateAction<CollectionType[] | []>>
+    setWhich: React.Dispatch<React.SetStateAction<CollectionType[] | []>>,
+    which: CollectionType[] | []
   ) {
     try {
-      const newToday = today.map((collection: CollectionType) => {
+      const newToday = which.map((collection: CollectionType) => {
         if (collection.id === id) {
           collection = { ...collection, shown: !collection.shown };
         }
         return collection;
       });
-      which(newToday);
+      setWhich(newToday);
     } catch (e) {
       console.log(e);
     }
@@ -134,17 +126,15 @@ export default function DashboardMain() {
                 onClick={() => {
                   setBtnToday(true);
                 }}
-                ref={todayRef}
-                className="todo-page-dashboard-main-todosOverview-filter-daily"
+                className={btnToday ? "todo-page-dashboard-main-todosOverview-filter-daily active-btn" : "todo-page-dashboard-main-todosOverview-filter-daily"}
               >
-                Daily tasks
+                Today todos
               </button>
               <button
                 onClick={() => {
                   setBtnToday(false);
                 }}
-                ref={longTermRef}
-                className="todo-page-dashboard-main-todosOverview-filter-longTerm"
+                className={btnToday ? "todo-page-dashboard-main-todosOverview-filter-longTerm" : "todo-page-dashboard-main-todosOverview-filter-longTerm active-btn" }
               >
                 Long-term tasks
               </button>
@@ -153,7 +143,7 @@ export default function DashboardMain() {
               {btnToday
                 ? today.map((collection: CollectionType, index: number) => {
                     if (collection.content.length === 0) {
-                      return;
+                      return <img style={{width: "80%",height: "80%"}} src={emptyFolder}/>;
                     }
                     return (
                       <div
@@ -161,11 +151,11 @@ export default function DashboardMain() {
                         key={index}
                       >
                         <div className="dashboard-main-todos-item-header">
-                          <h1>{collection.title}</h1>
+                          <Link to={"/todo/" + collection.id}>{collection.title}</Link>
                           <svg
                             ref={arrRef}
                             onClick={() => {
-                              changeShown(collection.id, setToday);
+                              changeShown(collection.id, setToday, today);
                             }}
                             className={collection.shown ? "reverse" : ""}
                             xmlns="http://www.w3.org/2000/svg"
@@ -178,9 +168,10 @@ export default function DashboardMain() {
                             />
                           </svg>
                         </div>
+                        { collection.shown ? (
                         <div className="dashboard-main-todos-item-body">
-                          {collection.shown
-                            ? collection.content.map(
+                          {
+                            collection.content.map(
                                 (item: itemType, index) => {
                                   return (
                                     <div
@@ -194,14 +185,15 @@ export default function DashboardMain() {
                                   );
                                 }
                               )
-                            : null}
+                            }
                         </div>
+                        ) : null }
                       </div>
                     );
                   })
                 : longTerm.map((collection: CollectionType, index: number) => {
                     if (collection.content.length === 0) {
-                      return;
+                      return <img style={{width: "80%",height: "80%"}} src={emptyFolder}/>;
                     }
                     return (
                       <div
@@ -209,9 +201,13 @@ export default function DashboardMain() {
                         key={index}
                       >
                         <div className="dashboard-main-todos-item-header">
-                          <h1>{collection.title}</h1>
+                          <Link to={"/todo/" + collection.id}>{collection.title}</Link>
                           <svg
                             ref={arrRef}
+                            onClick={() => {
+                              changeShown(collection.id, setLongTerm, longTerm);
+                            }}
+                            className={collection.shown ? "reverse" : ""}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                           >
@@ -222,6 +218,7 @@ export default function DashboardMain() {
                             />
                           </svg>
                         </div>
+                        {collection.shown ? (
                         <div className="dashboard-main-todos-item-body">
                           {collection.content.map((item: itemType, index) => {
                             return (
@@ -230,12 +227,13 @@ export default function DashboardMain() {
                                 className="dashboard-main-todos-item-body-todoContainer"
                               >
                                 <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
-                                <h3>{item.title}</h3>
+                                <h5>{item.title}</h5>
                                 <p>{item.date}</p>
                               </div>
                             );
                           })}
                         </div>
+                        ) : null}
                       </div>
                     );
                   })}

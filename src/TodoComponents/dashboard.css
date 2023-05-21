@@ -78,8 +78,6 @@
   background-color: var(--system-color);
   color: white;
   font-size: 1rem;
-  width: 100%;
-  height: 100%;
 }
 
 .dashboard-page-header a {
@@ -97,7 +95,6 @@
 }
 
 .dashboard-page-header-TodosControls > svg {
-  margin-left: 1rem;
   width: 30px;
   height: 30px;
 }
@@ -107,7 +104,6 @@
   display: flex;
   width: 30%;
   cursor: pointer;
-  height: 100%;
   color: darkgray;
   font-size: 1.5rem;
   align-items: center;
@@ -134,8 +130,11 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 100%;
-  height: 100%;
+}
+
+.dashboard-page-header-TodoControls-Dashboard svg,
+.dashboard-page-header-TodoControls-Collections svg{
+    margin-right: 10px;
 }
 
 .dashboard-page-header-TodoControls-Collections svg, .dashboard-page-header-TodoControls-Dashboard svg {
@@ -264,7 +263,7 @@
 .todo-page-dashboard-main-todos-item {
   margin-top: 3rem;
   width: 100%;
-  height: 60%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   color: white;
@@ -290,6 +289,12 @@
   background-color: var(--system-color-lighter);
 }
 
+.dashboard-main-todos-item-header a {
+    text-decoration: none;
+    color: inherit;
+    font-size: 1.5rem;
+}
+
 .dashboard-main-todos-item-header > svg {
   cursor: pointer;
   transition: all 0.5s ease;
@@ -298,5 +303,5 @@
 .dashboard-main-todos-item-body {
   padding: 20px;
   transition: all 0.5s ease;
-  height: 50%;
+  height: 100%;
 }
