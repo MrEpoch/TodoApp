@@ -31,6 +31,10 @@ export default function DashboardCollectionMain() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(false);
+  }, [setCurrentMain, setLoading, hiddenSidebar, userFolder, setUserFolder, readLocalStorage, updateStarred, navigate]);
+
+  useEffect(() => {
     setCurrentMain("collections");
   }, [readLocalStorage, setCurrentMain]);
 
@@ -69,6 +73,8 @@ export default function DashboardCollectionMain() {
   }
 
   return (
+  <>
+    {loading ? (<ClipLoader color="#3f51b5" loading={loading} size={150} />) : (
     <main className={styleCSS}>
       <div className="todo-page-main-collection-header">
         <h1>Collections</h1>
@@ -211,5 +217,7 @@ export default function DashboardCollectionMain() {
         </div>
       </div>
     </main>
+    )}
+    </>
   );
 }

@@ -59,7 +59,6 @@ export default function DashboardMain() {
     } catch (e) {
       console.log(e);
     }
-      console.log(today, longTerm);
     setCurrentMain("dashboard");
     setLoading(false);
   }, [userFolder, setCurrentMain, setLoading]);
@@ -141,9 +140,9 @@ export default function DashboardMain() {
             </div>
             <div className="todo-page-dashboard-main-todosContainer">
               {btnToday
-                ? today.map((collection: CollectionType, index: number) => {
+                ? today.length === 0 ? <img style={{width: "80%",height: "80%"}} src={emptyFolder}/> : today.map((collection: CollectionType, index: number) => {
                     if (collection.content.length === 0) {
-                      return <img style={{width: "80%",height: "80%"}} src={emptyFolder}/>;
+                      return;
                     }
                     return (
                       <div
@@ -191,9 +190,9 @@ export default function DashboardMain() {
                       </div>
                     );
                   })
-                : longTerm.map((collection: CollectionType, index: number) => {
+                : longTerm.length === 0 ? (<img  style={{width: "80%",height: "80%"}} src={emptyFolder}/>) : longTerm.map((collection: CollectionType, index: number) => {
                     if (collection.content.length === 0) {
-                      return <img style={{width: "80%",height: "80%"}} src={emptyFolder}/>;
+                      return;
                     }
                     return (
                       <div
