@@ -233,6 +233,78 @@
         transform: scale(1.1) rotate(360deg);
         transition: all 0.5s ease;
     }
+
+    /* Pop up Collection */
+    .todo-page-addCollection-popUp-container {
+      z-index: 1;
+      position: relative;
+      width: 50%!important;
+      box-shadow: 3px 2px 2px 20px var(--system-color-lighter);
+      height: 40%;
+      color: white;
+      background-color: var(--system-color);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .todo-page-addCollection-popUp-container-header {
+        font-size: 1.6rem;
+        padding: 10px;
+        font-weight: 700;
+        width: 100%;
+        text-align: center;
+    }
+
+    .todo-page-addCollection-popUp-container input {
+      height: 3rem;
+      outline: none;
+      color: white;
+      border: none;
+      background: transparent;
+      font-size: 1.5rem;
+    }
+    
+    /* Collection Page */
+
+    .todo-page-main-collection {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template: 30% 70% / 10% 80% 10%!important;
+      overflow-y: scroll;
+    }
+
+    .todo-page-main-collection-button-favourites {
+      color: white;
+      display: flex;
+      padding: 14px!important;
+      font-size: 1.1rem;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background-color: transparent;
+      border: 4px solid var(--system-color);
+      border-radius: 15px;
+      margin-right: 20px;
+      white-space: nowrap;
+    }
+
+    .todo-page-main-collection-button-all {
+      color: white;
+      white-space: nowrap;
+      border: 4px solid var(--system-color);
+      border-radius: 15px;
+      font-size: 1.1rem;
+      padding: 14px!important;
+      background-color: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
 }
 
 @media (max-width: 875px) {
@@ -245,10 +317,25 @@
         grid-area: 1 / 1 / 2 / 3;
         
         font-size: 0.8rem;
-        display: grid;
-        grid-template-rows: none;
-        grid-template-columns: none;
-        grid-template: 100% / 75% 25%; 
+    }
+ 
+    .todo-page-dashboard-main {
+      display: grid;
+      grid-template: 30% 70% / 10% 80% 10%!important;
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      background-color: var(--system-black-color);
+    }   
+    
+    .todo-page-dashboard-main-heading > h3 {
+      font-size: 1.8rem!important;
+      font-weight: 700;
+    }
+
+    .todo-page-dashboard-main-heading > h1 {
+      font-size: 1.5rem!important;
+      font-weight: 700;
     }
 
     .dashboard-page-header-TodosControls .dashboard-page-header-TodoControls-Collections > a,
@@ -262,8 +349,6 @@
        .dashboard-page-header-UserControls {
         height: 100%;
         width: 100%!important;
-        grid-row: 1 / 2;
-        grid-column: 2 / 3;
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -272,7 +357,16 @@
 
 
 @media (max-width: 768px) {
+    .todo-page-dashboard-main {
+
+    }
+
+    .todo-page-main-collection-header > .todo-page-main-collection-button-container {
+      display: flex;
+      padding: 10px;
+      gap: 20px;
+      flex-direction: column;
+      grid-area: 1 / 2 / 2 / 3;
+    }
 
 }
-
-

@@ -12,6 +12,7 @@
   grid-area: 2 / 2 / 3 / 3;
   display: flex;
   flex-direction: column;
+    
 }
 
 .todo-page-dashboard-main-todosOverview-filter {
@@ -219,9 +220,9 @@
   height: 100%;
   width: 100%;
   grid-area: 1 / 1 / 2 / 2;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  align-items: center;
   font-weight: bold;
-  margin-left: 27px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -268,7 +269,7 @@
   flex-direction: column;
   color: white;
   border: none;
-  font-size: 1rem;
+  font-size: 1.3rem;
   margin-bottom: 1rem;
   border-radius: 20px;
   color: white;

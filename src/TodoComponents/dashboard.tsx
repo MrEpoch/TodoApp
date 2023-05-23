@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTodo } from "./TodoPage";
 import { TodoContextType, itemType, CollectionType } from "../@types/todo";
 import { ClipLoader } from "react-spinners";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import emptyFolder from "./empty-folder.svg";
 
 export default function DashboardMain() {
@@ -16,6 +16,8 @@ export default function DashboardMain() {
   const [longTerm, setLongTerm] = useState<CollectionType[] | []>([]);
   const [today, setToday] = useState<CollectionType[] | []>([]);
   const [btnToday, setBtnToday] = useState<boolean>(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -108,6 +110,7 @@ export default function DashboardMain() {
               Good morning, <span>User Name</span>
             </h1>
             <svg
+              onClick={() => { navigate("/todo/collections") }}
               ref={dotRef}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

@@ -373,9 +373,10 @@
 
 .todo-page-addCollection-popUp-container {
   z-index: 1;
+  position: relative;
   width: 30%;
-  box-shadow: 0 0 2px 0;
-  height: 60%;
+  box-shadow: 3px 2px 2px 20px var(--system-color-lighter);
+  height: 40%;
   color: white;
   background-color: var(--system-color);
   border-radius: 10px;
@@ -383,6 +384,14 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+}
+
+.todo-page-addCollection-popUp-container-header {
+    font-size: 2rem;
+    padding: 10px;
+    font-weight: 700;
+    width: 100%;
+    text-align: center;
 }
 
 .todo-page-addCollection-popUp-container-buttons {
@@ -395,7 +404,6 @@
 .todo-page-addCollection-popUp-container input {
   height: 3rem;
   outline: none;
-  background-color: #1a1a1a;
   color: white;
   border: none;
   background: transparent;
@@ -403,14 +411,36 @@
 }
 
 .todo-page-addCollection-popUp-container button {
-  padding: 12px 17px;
-  background-color: #1a1a1a;
   color: white;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
   font-size: 1.5rem;
+  padding: .6rem;
   border: none;
+  border-radius: 10px;
+}
+
+.todo-page-addCollection-popUp-container-buttons-create {  
+  background-color: #00000055;
+}
+
+.todo-page-addCollection-popUp-container-buttons-create > svg {
+    height: 30px;
+    width: 30px;
+    color: var(--main-color);
+}
+
+.todo-page-addCollection-popUp-container-buttons-cancel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+}
+
+.todo-page-addCollection-popUp-container-buttons-cancel > svg {
+    height: 30px;
+    width: 30px;
+    color: var(--main-color);
 }

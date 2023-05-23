@@ -101,6 +101,7 @@ function DashboardHeader() {
           onClick={() => setHiddenSidebar((prev) => !prev)}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
+          tabIndex={0}
         >
           <title>menu</title>
           <path
@@ -142,6 +143,7 @@ function DashboardHeader() {
       <div className="dashboard-page-header-UserControls">
         <div className="dashboard-page-header-UserControls-addNew">
           <svg
+            tabIndex={0}
             ref={addReference}
             onClick={() => {
               setHiddenCreateCollection((prev) => !prev);
@@ -268,7 +270,7 @@ export function AddCollection() {
         />
         <div className="todo-page-addCollection-popUp-container-buttons">
           <button className="todo-page-addCollection-popUp-container-buttons-create">
-            Create
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus</title><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" /></svg>
           </button>
           <button
             onClick={() => {
@@ -276,7 +278,7 @@ export function AddCollection() {
             }}
             className="todo-page-addCollection-popUp-container-buttons-cancel"
           >
-            Cancel
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>window-close</title><path fill="currentColor" d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z" /></svg>
           </button>
         </div>
       </form>
