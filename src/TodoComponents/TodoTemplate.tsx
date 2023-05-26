@@ -9,6 +9,7 @@ import {
 } from "../@types/todo";
 import { useNavigate, useParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
+import "./Todo_template_collections.css";
 
 export default function TemplateTodoList() {
   const {
@@ -157,6 +158,9 @@ export default function TemplateTodoList() {
           style={{
             width: "100%",
             height: "100%",
+            position: "absolute",
+            top: "0",
+            right: "0",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

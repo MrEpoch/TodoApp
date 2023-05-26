@@ -27,17 +27,17 @@ export function useTodo() {
 export default function TodoApp({ children }: ChildrenProp) {
   const { readLocalStorage } = useStorage() as StorageContextType;
 
-  const [userFolder, setUserFolder] = useState<CollectionType[]>(
-    readLocalStorage(mainFolderName)
-  );
+  const [userFolder, setUserFolder] = useState<CollectionType[] | []>([]);
   const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(true);
   const [currentMain, setCurrentMain] = useState<string>("dashboard");
   const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);
   const [hiddenCreateCollection, setHiddenCreateCollection] =
     useState<boolean>(true);
-  const [collectionsId, setCollectionsId] = useState<string[]>(
-    userFolder.map((collection: CollectionType) => collection.id)
-  );
+  const [collectionsId, setCollectionsId] = useState<string[] | []>([]);
+
+  useEffect(() => { 
+    setUserFolder(readLocalStorage(mainFolderName));
+  }, [setUserFolder, readLocalStorage]);
 
   useEffect(() => {
     setUserFolder(readLocalStorage(mainFolderName));

@@ -74,7 +74,13 @@ export default function DashboardCollectionMain() {
 
   return (
   <>
-    {loading ? (<ClipLoader color="#3f51b5" loading={loading} size={150} />) : (
+    {loading ? (<div style={{
+            position: "absolute",
+            top: "0",
+            right: "0",
+            }}>
+                <ClipLoader color="#3f51b5" loading={loading} size={150} /> 
+            </div>) : (
     <main className={styleCSS}>
       <div className="todo-page-main-collection-header">
         <h1>Collections</h1>

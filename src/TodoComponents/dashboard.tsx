@@ -94,6 +94,9 @@ export default function DashboardMain() {
         <div
           style={{
             width: "100%",
+            position: "absolute",
+            top: "0",
+            right: "0",
             height: "100%",
             display: "flex",
             justifyContent: "center",

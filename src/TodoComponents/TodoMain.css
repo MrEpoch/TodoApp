@@ -375,7 +375,7 @@
   z-index: 1;
   position: relative;
   width: 30%;
-  box-shadow: 3px 2px 2px 20px var(--system-color-lighter);
+  border: 10px solid black;
   height: 40%;
   color: white;
   background-color: var(--system-color);
