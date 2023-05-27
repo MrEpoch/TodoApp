@@ -63,7 +63,7 @@ export default function DashboardMain() {
     }
     setCurrentMain("dashboard");
     setLoading(false);
-  }, [userFolder, setCurrentMain, setLoading]);
+  }, [setCurrentMain, setLoading]);
 
   const styleCSS = hiddenSidebar
     ? "todo-page-dashboard-main full-page"

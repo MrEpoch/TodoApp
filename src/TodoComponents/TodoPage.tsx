@@ -33,18 +33,18 @@ export default function TodoApp({ children }: ChildrenProp) {
   const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);
   const [hiddenCreateCollection, setHiddenCreateCollection] =
     useState<boolean>(true);
-  const [collectionsId, setCollectionsId] = useState<string[] | []>([]);
-
-  useEffect(() => { 
+  const [collectionsId, setCollectionsId] = useState<string[] | [] | boolean[]>([false]);
+  
+  useEffect(() => {
     setUserFolder(readLocalStorage(mainFolderName));
+
   }, [setUserFolder, readLocalStorage]);
 
   useEffect(() => {
-    setUserFolder(readLocalStorage(mainFolderName));
     setCollectionsId(
       userFolder.map((collection: CollectionType) => collection.id)
     );
-  }, [hiddenCreateCollection, setUserFolder, readLocalStorage]);
+  }, [setCollectionsId, userFolder]);
 
   const todoValue = {
     setHiddenSidebar,

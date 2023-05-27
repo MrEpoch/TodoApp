@@ -74,6 +74,7 @@
 .todo-page-main-collection-content {
   grid-area: 2 / 2 / 3 / 3;
   width: 100%;
+  justify-content: center;
   height: 100%;
   display: flex;
   flex-wrap: wrap;

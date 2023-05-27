@@ -39,8 +39,14 @@ export default function TemplateTodoList() {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
+     if (collectionsId[0] === false) {
+      navigate("/todo");
+      return;
+    }
+
     if (id === undefined || !collectionsId.includes(id)) {
       navigate("/error");
+      return;
     }
     setLoading(false);
   }, [id, collectionsId, navigate, setLoading]);
@@ -323,6 +329,7 @@ export default function TemplateTodoList() {
             onClick={() => {
               deleteCollectionHandler(collection);
             }}
+            style={{ cursor: "pointer" }}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
           >
