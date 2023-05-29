@@ -1,48 +1,43 @@
 @media (max-width: 1200px) {
+  .todo-page-main-collection-button-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
 
-    .todo-page-main-collection-button-container {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-    }
+  .todo-page-main-collection-button-favourites {
+    color: white;
+    display: flex;
+    width: 50%;
+    font-size: 1.1rem;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: transparent;
+    border: 4px solid var(--system-color);
+    border-radius: 15px;
+    margin-right: 20px;
+    white-space: nowrap;
+  }
 
-    .todo-page-main-collection-button-favourites {
-        color: white;
-        display: flex;
-        width: 50%;
-        font-size: 1.1rem;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        background-color: transparent;
-        border: 4px solid var(--system-color);
-        border-radius: 15px;
-        margin-right: 20px;
-        white-space: nowrap;
-    }
-
-    .todo-page-main-collection-button-all {
-        color: white;
-        border: 4px solid var(--system-color);
-        border-radius: 15px;
-        font-size: 1.1rem;
-        width: 50%;
-        white-space: nowrap;
-        background-color: transparent;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-    }
-
-
+  .todo-page-main-collection-button-all {
+    color: white;
+    border: 4px solid var(--system-color);
+    border-radius: 15px;
+    font-size: 1.1rem;
+    width: 50%;
+    white-space: nowrap;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
 }
 
-
 @media (max-width: 850px) {
-    .todo-page-main-collection-template {
-        grid-template: 25% 75% / 10% 80% 10%;
-    
-    } 
+  .todo-page-main-collection-template {
+    grid-template: 25% 75% / 10% 80% 10%;
+  }
 }

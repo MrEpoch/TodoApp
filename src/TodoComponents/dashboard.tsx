@@ -57,7 +57,6 @@ export default function DashboardMain() {
           return { ...collection, content: filteredItem, shown: false };
         })
       );
-
     } catch (e) {
       console.log(e);
     }
@@ -113,7 +112,9 @@ export default function DashboardMain() {
               Good morning, <span>User Name</span>
             </h1>
             <svg
-              onClick={() => { navigate("/todo/collections") }}
+              onClick={() => {
+                navigate("/todo/collections");
+              }}
               ref={dotRef}
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -131,7 +132,11 @@ export default function DashboardMain() {
                 onClick={() => {
                   setBtnToday(true);
                 }}
-                className={btnToday ? "todo-page-dashboard-main-todosOverview-filter-daily active-btn" : "todo-page-dashboard-main-todosOverview-filter-daily"}
+                className={
+                  btnToday
+                    ? "todo-page-dashboard-main-todosOverview-filter-daily active-btn"
+                    : "todo-page-dashboard-main-todosOverview-filter-daily"
+                }
               >
                 Today todos
               </button>
@@ -139,14 +144,24 @@ export default function DashboardMain() {
                 onClick={() => {
                   setBtnToday(false);
                 }}
-                className={btnToday ? "todo-page-dashboard-main-todosOverview-filter-longTerm" : "todo-page-dashboard-main-todosOverview-filter-longTerm active-btn" }
+                className={
+                  btnToday
+                    ? "todo-page-dashboard-main-todosOverview-filter-longTerm"
+                    : "todo-page-dashboard-main-todosOverview-filter-longTerm active-btn"
+                }
               >
                 Long-term tasks
               </button>
             </div>
             <div className="todo-page-dashboard-main-todosContainer">
-              {btnToday
-                ? today.length === 0 ? <img style={{width: "80%",height: "80%"}} src={emptyFolder}/> : today.map((collection: CollectionType, index: number) => {
+              {btnToday ? (
+                today.length === 0 ? (
+                  <img
+                    style={{ width: "80%", height: "80%" }}
+                    src={emptyFolder}
+                  />
+                ) : (
+                  today.map((collection: CollectionType, index: number) => {
                     if (collection.content.length === 0) {
                       return;
                     }
@@ -156,7 +171,9 @@ export default function DashboardMain() {
                         key={index}
                       >
                         <div className="dashboard-main-todos-item-header">
-                          <Link to={"/todo/" + collection.id}>{collection.title}</Link>
+                          <Link to={"/todo/" + collection.id}>
+                            {collection.title}
+                          </Link>
                           <svg
                             ref={arrRef}
                             onClick={() => {
@@ -173,57 +190,62 @@ export default function DashboardMain() {
                             />
                           </svg>
                         </div>
-                        { collection.shown ? (
-                        <div className="dashboard-main-todos-item-body">
-                          {
-                            collection.content.map(
-                                (item: itemType, index) => {
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="dashboard-main-todos-item-body-todoContainer"
-                                    >
-                                      <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
-                                      <h3>{item.title}</h3>
-                                      <p>{item.date}</p>
-                                    </div>
-                                  );
-                                }
-                              )
-                            }
-                        </div>
-                        ) : null }
+                        {collection.shown ? (
+                          <div className="dashboard-main-todos-item-body">
+                            {collection.content.map((item: itemType, index) => {
+                              return (
+                                <div
+                                  key={index}
+                                  className="dashboard-main-todos-item-body-todoContainer"
+                                >
+                                  <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
+                                  <h3>{item.title}</h3>
+                                  <p>{item.date}</p>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        ) : null}
                       </div>
                     );
                   })
-                : longTerm.length === 0 ? (<img  style={{width: "80%",height: "80%"}} src={emptyFolder}/>) : longTerm.map((collection: CollectionType, index: number) => {
-                    if (collection.content.length === 0) {
-                      return;
-                    }
-                    return (
-                      <div
-                        className="todo-page-dashboard-main-todos-item"
-                        key={index}
-                      >
-                        <div className="dashboard-main-todos-item-header">
-                          <Link to={"/todo/" + collection.id}>{collection.title}</Link>
-                          <svg
-                            ref={arrRef}
-                            onClick={() => {
-                              changeShown(collection.id, setLongTerm, longTerm);
-                            }}
-                            className={collection.shown ? "reverse" : ""}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                          >
-                            <title>chevron-down</title>
-                            <path
-                              fill="currentColor"
-                              d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-                            />
-                          </svg>
-                        </div>
-                        {collection.shown ? (
+                )
+              ) : longTerm.length === 0 ? (
+                <img
+                  style={{ width: "80%", height: "80%" }}
+                  src={emptyFolder}
+                />
+              ) : (
+                longTerm.map((collection: CollectionType, index: number) => {
+                  if (collection.content.length === 0) {
+                    return;
+                  }
+                  return (
+                    <div
+                      className="todo-page-dashboard-main-todos-item"
+                      key={index}
+                    >
+                      <div className="dashboard-main-todos-item-header">
+                        <Link to={"/todo/" + collection.id}>
+                          {collection.title}
+                        </Link>
+                        <svg
+                          ref={arrRef}
+                          onClick={() => {
+                            changeShown(collection.id, setLongTerm, longTerm);
+                          }}
+                          className={collection.shown ? "reverse" : ""}
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <title>chevron-down</title>
+                          <path
+                            fill="currentColor"
+                            d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                          />
+                        </svg>
+                      </div>
+                      {collection.shown ? (
                         <div className="dashboard-main-todos-item-body">
                           {collection.content.map((item: itemType, index) => {
                             return (
@@ -238,10 +260,11 @@ export default function DashboardMain() {
                             );
                           })}
                         </div>
-                        ) : null}
-                      </div>
-                    );
-                  })}
+                      ) : null}
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
         </>

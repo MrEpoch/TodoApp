@@ -39,7 +39,7 @@ export default function TemplateTodoList() {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-     if (collectionsId[0] === false) {
+    if (collectionsId[0] === false) {
       navigate("/todo");
       return;
     }

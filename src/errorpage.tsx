@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 export default function errorPaga() {
-    return (
-        <>
-        <h1>404</h1>
-        <h2>Page not found</h2>
-        </>
-    );
+  return (
+    <>
+      <h1>404</h1>
+      <h2>Page not found</h2>
+    </>
+  );
 }

@@ -1,4 +1,5 @@
 import "./App.css";
+import "./AppMobile.css";
 import { BrowserRouter } from "react-router-dom";
 import MyRouter from "./router";
 import StorageProvider from "./TodoComponents/tempLocalStorage";
