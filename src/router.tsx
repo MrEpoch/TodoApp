@@ -20,7 +20,6 @@ export default function Router() {
           path="/todo"
           element={
             <Dashboard>
-              {" "}
               <DashboardMain />
             </Dashboard>
           }
@@ -29,8 +28,7 @@ export default function Router() {
           path="/todo/collections"
           element={
             <Dashboard>
-              {" "}
-              <DashboardCollectionMain />{" "}
+              <DashboardCollectionMain />
             </Dashboard>
           }
         />
@@ -38,8 +36,7 @@ export default function Router() {
           path="/todo/:id"
           element={
             <Dashboard>
-              {" "}
-              <TemplateTodoList />{" "}
+              <TemplateTodoList />
             </Dashboard>
           }
         />

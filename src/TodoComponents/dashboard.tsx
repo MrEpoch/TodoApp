@@ -6,9 +6,13 @@ import { Link, useNavigate } from "react-router-dom";
 import emptyFolder from "./empty-folder.svg";
 
 export default function DashboardMain() {
+
+  const navigate = useNavigate();
+
+  if (useTodo() === null) navigate("/login");
+      
   const { hiddenSidebar, setCurrentMain, userFolder } =
     useTodo() as TodoContextType;
-
   const dotRef = useRef<SVGSVGElement>(null);
   const arrRef = useRef<SVGSVGElement>(null);
 
@@ -16,8 +20,6 @@ export default function DashboardMain() {
   const [longTerm, setLongTerm] = useState<CollectionType[] | []>([]);
   const [today, setToday] = useState<CollectionType[] | []>([]);
   const [btnToday, setBtnToday] = useState<boolean>(true);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     try {

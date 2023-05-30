@@ -1,6 +1,6 @@
 import "./dashboard.css";
 import "./mobileDashboard.css";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, createContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./TodoMain.css";
 import { useStorage } from "./tempLocalStorage";
@@ -18,7 +18,7 @@ import {
   itemType,
 } from "../@types/todo";
 
-const TodoContext = React.createContext<TodoContextType | null>(null);
+const TodoContext = createContext<TodoContextType | null>(null);
 
 export function useTodo() {
   return useContext(TodoContext);
@@ -78,6 +78,12 @@ function DashboardHeader() {
   const headerCollection = useRef<HTMLDivElement>(null);
   const headerDashboard = useRef<HTMLDivElement>(null);
   const addReference = useRef<SVGSVGElement>(null);
+
+
+  const navigate = useNavigate();
+
+  if (useTodo() === null) navigate("/login");
+
 
   const { setHiddenSidebar, currentMain, setHiddenCreateCollection } =
     useTodo() as TodoContextType;
@@ -174,6 +180,11 @@ function DashboardHeader() {
 }
 
 function DashboardSideBar() {
+
+  const navigate = useNavigate();
+
+  if (useTodo() === null) navigate("/login");
+
   const { hiddenSidebar, userFolder } = useTodo() as TodoContextType;
 
   const cssSidebar = hiddenSidebar
@@ -204,6 +215,12 @@ function DashboardSideBar() {
 }
 
 export function AddCollection() {
+  
+  const navigate = useNavigate();
+
+  if (useTodo() === null) navigate("/login");
+
+
   const { setHiddenCreateCollection, setUserFolder } =
     useTodo() as TodoContextType;
   const { addNewCollection, readLocalStorage } =
@@ -300,6 +317,12 @@ export function AddCollection() {
 }
 
 export function AddItem() {
+  
+  const navigate = useNavigate();
+
+  if (useTodo() === null) navigate("/login");
+
+
   const { setHiddenCreateItem, setUserFolder } = useTodo() as TodoContextType;
 
   const { insertIntoCollection, readLocalStorage } =
@@ -309,8 +332,6 @@ export function AddItem() {
   const [onChangeVal, setOnChange] = useState(new Date());
 
   const titleRef = useRef<HTMLInputElement>(null);
-
-  const navigate = useNavigate();
 
   const { id } = useParams<string>();
 

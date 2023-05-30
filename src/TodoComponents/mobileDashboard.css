@@ -243,12 +243,17 @@
 
   /* Pop up Collection */
 
+  .todo-page-addCollection-popUp-container {
+        width: 50%!important;
+  }
+
   .todo-page-addCollection-popUp-container-header {
     font-size: 1.6rem;
     padding: 10px;
     font-weight: 700;
     width: 100%;
     text-align: center;
+    white-space: nowrap;
   }
 
   .todo-page-addCollection-popUp-container input {
@@ -326,4 +331,20 @@
   .todo-page-addCollection-popUp-container {
     width: 65% !important;
   }
+}
+
+
+@media (max-width: 600px) {
+    .todo-page-addCollection-popUp-container-header {
+        font-size: 1.4rem!important;
+    }
+    
+    .todo-page-addCollection-popUp-container input {
+        font-size: 1.2rem!important;
+        width: 80%!important;
+    }
+
+    .todo-page-addCollection-popUp-container {
+        width: 90% !important;
+    }
 }

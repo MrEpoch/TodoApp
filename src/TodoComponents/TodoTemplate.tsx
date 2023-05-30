@@ -12,6 +12,10 @@ import { ClipLoader } from "react-spinners";
 import "./Todo_template_collections.css";
 
 export default function TemplateTodoList() {
+  const navigate = useNavigate();
+
+  if (useTodo() === null) navigate("/login");
+
   const {
     setHiddenCreateItem,
     setCurrentMain,
@@ -27,8 +31,6 @@ export default function TemplateTodoList() {
   const [loading, setLoading] = useState<boolean>(true);
   const [todos, setTodos] = useState<itemType[]>([]);
   const [completedTodos, setCompleteTodos] = useState<itemType[]>([]);
-
-  const navigate = useNavigate();
 
   function filteredCollection() {
     setUserFolder(readLocalStorage(mainFolderName));

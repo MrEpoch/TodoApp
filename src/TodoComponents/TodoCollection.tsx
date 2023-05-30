@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+
 import { useTodo } from "./TodoPage";
 import {
   StorageContextType,
@@ -12,6 +13,11 @@ import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 
 export default function DashboardCollectionMain() {
+  const navigate = useNavigate();
+
+  if (useTodo() === null) navigate("/login");
+
+
   const {
     setCurrentMain,
     hiddenSidebar,
@@ -27,8 +33,6 @@ export default function DashboardCollectionMain() {
 
   const favouritesRef = useRef<HTMLButtonElement>(null);
   const allRef = useRef<HTMLButtonElement>(null);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(false);
