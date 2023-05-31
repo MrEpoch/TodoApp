@@ -40,31 +40,36 @@ export default function DashboardMain() {
               !item.completed
             );
           });
-          return { ...collection, content: filteredItem, shown: false };
-        })
-      );
+        if (filteredItem.length !== 0) {
+            return { ...collection, content: filteredItem, shown: false };
+        } else {
+            return false;
+        }
+      }).filter((collection) => collection !== false))
 
       setLongTerm(
         userFolder.map((collection: any) => {
           const filteredItem = collection.content.filter((item: itemType) => {
             const itemDate = item.date.split(" ");
             const [monthItem, yearItem] = item.yearMonth.split(" ");
-            return (
-              parseInt(monthItem) >= month &&
-              parseInt(itemDate[1]) > today &&
-              parseInt(yearItem) >= year &&
-              !item.completed
-            );
+            console.log(monthItem, itemDate[1], yearItem, "nothing", month, today, year);
+
+            if (parseInt(yearItem) > year && !item.completed ? true : !item.completed && parseInt(monthItem) > month && parseInt(yearItem) === year ? true : parseInt(itemDate[1]) > today && parseInt(yearItem) === year && parseInt(monthItem) === month && !item.completed) {
+                return true;
+            }
           });
-          return { ...collection, content: filteredItem, shown: false };
-        })
-      );
+        if (filteredItem.length !== 0) {
+            return { ...collection, content: filteredItem, shown: false };
+        } else {
+            return false;
+        }
+        }).filter(collection => collection !== false));
     } catch (e) {
       console.log(e);
     }
     setCurrentMain("dashboard");
     setLoading(false);
-  }, [setCurrentMain, setLoading]);
+  }, [setCurrentMain, setLoading, userFolder]);
 
   const styleCSS = hiddenSidebar
     ? "todo-page-dashboard-main full-page"
@@ -274,3 +279,4 @@ export default function DashboardMain() {
     </main>
   );
 }
+

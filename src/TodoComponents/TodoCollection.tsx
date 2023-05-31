@@ -17,7 +17,6 @@ export default function DashboardCollectionMain() {
 
   if (useTodo() === null) navigate("/login");
 
-
   const {
     setCurrentMain,
     hiddenSidebar,
@@ -49,7 +48,7 @@ export default function DashboardCollectionMain() {
 
   useEffect(() => {
     setCurrentMain("collections");
-  }, [readLocalStorage, setCurrentMain]);
+  }, [setCurrentMain]);
 
   useEffect(() => {
     if (all) {
@@ -76,6 +75,7 @@ export default function DashboardCollectionMain() {
   }
 
   function navigateCollection(collectionId: string): void {
+    setLoading(true);
     try {
       navigate("/todo/" + collectionId);
     } catch (e) {
@@ -244,3 +244,4 @@ export default function DashboardCollectionMain() {
     </>
   );
 }
+
