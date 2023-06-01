@@ -102,6 +102,10 @@
   -o-user-select: none;
   user-select: none;
   cursor: pointer;
+      -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
 }
 
 .todo-page-main-collection-content-item > svg {

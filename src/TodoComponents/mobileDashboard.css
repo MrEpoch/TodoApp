@@ -46,7 +46,7 @@
     overflow-x: hidden;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 8% 92%;
+    grid-template-rows: 100px 1fr;
     height: 100%;
     width: 100%;
     background-color: var(--system-black-color);
