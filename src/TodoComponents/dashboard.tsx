@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useTodo } from "./TodoPage";
-import { TodoContextType, itemType, CollectionType } from "../@types/todo";
+import { TodoContextType, itemType, CollectionShownType } from "../@types/todo";
 import { Link, useNavigate } from "react-router-dom";
 import emptyFolder from "./empty-folder.svg";
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress, List, ListItem, ListItemText, Divider, ListItemButton, ListItemIcon } from "@mui/material";
+import { KeyboardArrowDown } from "@mui/icons-material";
+
 
 export default function DashboardMain() {
 
@@ -17,8 +19,8 @@ export default function DashboardMain() {
   const arrRef = useRef<SVGSVGElement>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [longTerm, setLongTerm] = useState<CollectionType[] | []>([]);
-  const [today, setToday] = useState<CollectionType[] | []>([]);
+  const [longTerm, setLongTerm] = useState<CollectionShownType[] | []>([]);
+  const [today, setToday] = useState<CollectionShownType[] | []>([]);
   const [btnToday, setBtnToday] = useState<boolean>(true);
 
   useEffect(() => {
@@ -77,11 +79,11 @@ export default function DashboardMain() {
 
   function changeShown(
     id: string,
-    setWhich: React.Dispatch<React.SetStateAction<CollectionType[] | []>>,
-    which: CollectionType[] | []
+    setWhich: React.Dispatch<React.SetStateAction<CollectionShownType[] | []>>,
+    which: CollectionShownType[] | []
   ) {
     try {
-      const newToday = which.map((collection: CollectionType) => {
+      const newToday = which.map((collection: CollectionShownType) => {
         if (collection.id === id) {
           collection = { ...collection, shown: !collection.shown };
         }
@@ -159,62 +161,40 @@ export default function DashboardMain() {
                     src={emptyFolder}
                   />
                 ) : (
-                  today.map((collection: CollectionType, index: number) => {
+                  today.map((collection: CollectionShownType, index: number) => {
                     if (collection.content.length === 0) {
                       return;
                     }
                     return (
-                      <div
-                        className="todo-page-dashboard-main-todos-item"
-                        key={index}
-                      >
-                        <div className="dashboard-main-todos-item-header">
-                          <Link to={"/todo/" + collection.id}>
-                            {collection.title}
-                          </Link>
-                          <svg
-                            ref={arrRef}
-                            onClick={() => {
-                              changeShown(collection.id, setToday, today);
-                            }}
-                            className={collection.shown ? "reverse" : ""}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                          >
-                            <title>chevron-down</title>
-                            <path
-                              fill="currentColor"
-                              d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-                            />
-                          </svg>
-                        </div>
-                        {collection.shown ? (
-                          <div className="dashboard-main-todos-item-body">
-                            {collection.content.map((item: itemType, index) => {
-                              return (
-                                <div
-                                  key={index}
-                                  className="dashboard-main-todos-item-body-todoContainer"
-                                >
-                                  <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
-                                  <h3>{item.title}</h3>
-                                  <p>{item.date}</p>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        ) : null}
-                      </div>
-                    );
-                  })
-                )
+                    <>
+                        <List key={index} className="todo-page-dashboard-main-todos-item" >
+                            <ListItemButton sx={{ pl: 4 }}>
+                                <ListItemIcon>
+                                    <KeyboardArrowDown ref={arrRef}  onClick={() => {changeShown(collection.id, setToday, today)}}  className={collection.shown ? "reverse" : ""} />
+                                </ListItemIcon>
+                            </ListItemButton>
+                            {collection.shown ? <>
+                                {collection.content.map((item: itemType) => {
+                                    return (
+                                        <ListItem key={item.id} disablePadding>
+                                            <ListItemText primary={item.title} />
+                                            <ListItemText primary={item.date} />
+                                        </ListItem>
+                                    )
+                                })}
+                            </> : null} 
+                        </List>
+                        <Divider variant="middle" component="li" />
+                    </>
+                    )})
+               ) 
               ) : longTerm.length === 0 ? (
                 <img
                   style={{ width: "80%", height: "80%" }}
                   src={emptyFolder}
                 />
               ) : (
-                longTerm.map((collection: CollectionType, index: number) => {
+                longTerm.map((collection: CollectionShownType, index: number) => {
                   if (collection.content.length === 0) {
                     return;
                   }
@@ -270,4 +250,49 @@ export default function DashboardMain() {
     </main>
   );
 }
+
+
+// return (
+//                    <div
+//                      className="todo-page-dashboard-main-todos-item"
+//                      key={index}
+//                    >
+//                      <div className="dashboard-main-todos-item-header">
+//                        <Link to={"/todo/" + collection.id}>
+//                          {collection.title}
+//                        </Link>
+//                        <svg
+//                          ref={arrRef}
+//                          onClick={() => {
+//                            changeShown(collection.id, setToday, today);
+//                          }}
+//                          className={collection.shown ? "reverse" : ""}
+//                          xmlns="http://www.w3.org/2000/svg"
+//                          viewBox="0 0 24 24"
+//                        >
+//                          <title>chevron-down</title>
+//                          <path
+//                            fill="currentColor"
+//                            d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+//                          />
+//                        </svg>
+//                      </div>
+//                      {collection.shown ? (
+//                        <div className="dashboard-main-todos-item-body">
+//                          {collection.content.map((item: itemType, index) => {
+//                            return (
+//                              <div
+//                                key={index}
+//                                className="dashboard-main-todos-item-body-todoContainer"
+//                              >
+//                                <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
+//                                <h3>{item.title}</h3>
+//                                <p>{item.date}</p>
+//                              </div>
+//                            );
+//                          })}
+//                        </div>
+//                      ) : null}
+//                    </div>
+//                  );
 

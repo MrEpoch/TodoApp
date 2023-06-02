@@ -46,6 +46,10 @@ export type CollectionType = {
   favourite: boolean;
 };
 
+export type CollectionShownType = CollectionType & {
+    shown: boolean;
+}
+
 export type itemType = {
   createdAt: string;
   title: string;
