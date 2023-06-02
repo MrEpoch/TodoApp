@@ -5,7 +5,6 @@
   min-height: 100%;
   background-color: black;
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
 }
 
@@ -30,7 +29,7 @@
   justify-content: unset;
   display: flex;
   align-items: center;
-  margin-left: 25%;
+  margin-left: 50px;
 }
 
 .landing-page-header > a:nth-child(2):hover {
@@ -73,6 +72,7 @@
   flex-basis: 90%;
   height: auto;
   flex: 1 1 100%;
+  padding: 50px;
 }
 
 .landing-page-main-text {
@@ -81,8 +81,6 @@
   flex-direction: column;
   justify-content: space-evenly;
   grid-column: 1 / 2;
-  margin-left: 10%;
-  padding: 3rem 0;
 }
 
 .landing-page-main-text > h1 {

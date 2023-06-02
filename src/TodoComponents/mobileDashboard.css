@@ -292,9 +292,6 @@
   .todo-page-dashboard-main {
     display: grid;
     grid-template: 30% 70% / 10% 80% 10% !important;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
     background-color: var(--system-black-color);
   }
 
@@ -347,5 +344,12 @@
 
     .todo-page-addCollection-popUp-container {
         width: 90% !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .todo-page-dashboard-main-heading > svg {
+        visibility: hidden;
+        display: none;
     }
 }

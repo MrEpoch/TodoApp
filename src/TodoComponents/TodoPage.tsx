@@ -19,12 +19,7 @@ import {
 } from "../@types/todo";
 import { Alert, AlertTitle } from "@mui/material";
 
-
-const TodoContext = createContext<TodoContextType | null>(null);
-
-export function useTodo() {
-  return useContext(TodoContext);
-}
+const TodoContext = createContext<TodoContextType | object>({});
 
 export default function TodoApp({ children }: ChildrenProp) {
   const { readLocalStorage } = useStorage() as StorageContextType;
@@ -74,6 +69,10 @@ export default function TodoApp({ children }: ChildrenProp) {
       </section>
     </TodoContext.Provider>
   );
+}
+
+export function useTodo() {
+  return useContext(TodoContext);
 }
 
 function DashboardHeader() {

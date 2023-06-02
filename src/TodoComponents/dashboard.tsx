@@ -107,6 +107,7 @@ export default function DashboardMain() {
       ) : (
         <>
           <div className="todo-page-dashboard-main-heading">
+
             <h3>Dashboard</h3>
             <h1>
               Good morning, <span>User Name</span>
@@ -126,7 +127,7 @@ export default function DashboardMain() {
               />
             </svg>
           </div>
-          <div className="todo-page-dashboard-main-todosOverview">
+          <div  className="todo-page-dashboard-main-todosOverview">
             <div className="todo-page-dashboard-main-todosOverview-filter">
               <button
                 onClick={() => {
@@ -153,30 +154,30 @@ export default function DashboardMain() {
                 Long-term tasks
               </button>
             </div>
-            <div className="todo-page-dashboard-main-todosContainer">
+            <div  className="todo-page-dashboard-main-todosContainer">
               {btnToday ? (
-                today.length === 0 ? (
-                  <img
-                    style={{ width: "80%", height: "80%" }}
-                    src={emptyFolder}
-                  />
-                ) : (
+                (
                   today.map((collection: CollectionShownType, index: number) => {
                     if (collection.content.length === 0) {
                       return;
                     }
                     return (
                     <>
-                        <List key={index} className="todo-page-dashboard-main-todos-item" >
-                            <ListItemButton sx={{ pl: 4 }}>
-                                <ListItemIcon>
-                                    <KeyboardArrowDown ref={arrRef}  onClick={() => {changeShown(collection.id, setToday, today)}}  className={collection.shown ? "reverse" : ""} />
-                                </ListItemIcon>
-                            </ListItemButton>
+                        <List key={index} style={{ marginTop: "3em" }} className="todo-page-dashboard-main-todos-item" >
+                            <div className="dashboard-main-todos-item-header">
+                                <ListItemButton onClick={() => { navigate("/todo/" + collection.id) }} disableRipple  sx={{ pl: 4 }}>
+                                    <ListItemText>{collection.title}</ListItemText>
+                                </ListItemButton>
+                                <ListItemButton style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }} disableRipple>
+                                    <ListItemIcon>
+                                        <KeyboardArrowDown ref={arrRef} style={{ color: "white" }}  onClick={() => {changeShown(collection.id, setToday, today)}}  className={collection.shown ? "reverse" : ""} />
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </div>
                             {collection.shown ? <>
                                 {collection.content.map((item: itemType) => {
                                     return (
-                                        <ListItem key={item.id} disablePadding>
+                                        <ListItem key={item.id} style={{ padding: "2em"}} >
                                             <ListItemText primary={item.title} />
                                             <ListItemText primary={item.date} />
                                         </ListItem>
@@ -188,59 +189,37 @@ export default function DashboardMain() {
                     </>
                     )})
                ) 
-              ) : longTerm.length === 0 ? (
-                <img
-                  style={{ width: "80%", height: "80%" }}
-                  src={emptyFolder}
-                />
               ) : (
                 longTerm.map((collection: CollectionShownType, index: number) => {
                   if (collection.content.length === 0) {
                     return;
                   }
                   return (
-                    <div
-                      className="todo-page-dashboard-main-todos-item"
-                      key={index}
-                    >
-                      <div className="dashboard-main-todos-item-header">
-                        <Link to={"/todo/" + collection.id}>
-                          {collection.title}
-                        </Link>
-                        <svg
-                          ref={arrRef}
-                          onClick={() => {
-                            changeShown(collection.id, setLongTerm, longTerm);
-                          }}
-                          className={collection.shown ? "reverse" : ""}
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                        >
-                          <title>chevron-down</title>
-                          <path
-                            fill="currentColor"
-                            d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-                          />
-                        </svg>
-                      </div>
-                      {collection.shown ? (
-                        <div className="dashboard-main-todos-item-body">
-                          {collection.content.map((item: itemType, index) => {
-                            return (
-                              <div
-                                key={index}
-                                className="dashboard-main-todos-item-body-todoContainer"
-                              >
-                                <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
-                                <h5>{item.title}</h5>
-                                <p>{item.date}</p>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      ) : null}
-                    </div>
-                  );
+                                          <>
+                        <List key={index} style={{ marginTop: "3em" }} className="todo-page-dashboard-main-todos-item" >
+                            <div className="dashboard-main-todos-item-header">
+                                <ListItemButton onClick={() => { navigate("/todo/" + collection.id) }} disableRipple  sx={{ pl: 4 }}>
+                                    <ListItemText>{collection.title}</ListItemText>
+                                </ListItemButton>
+                                <ListItemButton style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }} disableRipple>
+                                    <ListItemIcon>
+                                        <KeyboardArrowDown ref={arrRef} style={{ color: "white" }}  onClick={() => {changeShown(collection.id, setToday, today)}}  className={collection.shown ? "reverse" : ""} />
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </div>
+                            {collection.shown ? <>
+                                {collection.content.map((item: itemType) => {
+                                    return (
+                                        <ListItem key={item.id} style={{ padding: "2em"}} >
+                                            <ListItemText primary={item.title} />
+                                            <ListItemText primary={item.date} />
+                                        </ListItem>
+                                    )
+                                })}
+                            </> : null} 
+                        </List>
+                        <Divider variant="middle" component="li" />
+                    </>                );
                 })
               )}
             </div>

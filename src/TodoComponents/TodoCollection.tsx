@@ -15,7 +15,8 @@ import { Backdrop, CircularProgress } from "@mui/material";
 export default function DashboardCollectionMain() {
   const navigate = useNavigate();
 
-  if (useTodo() === null) navigate("/login");
+  console.log(useTodo)
+  if (useTodo() === null) console.log("FUCK");
 
   const {
     setCurrentMain,
@@ -23,7 +24,7 @@ export default function DashboardCollectionMain() {
     setHiddenCreateCollection,
     userFolder,
     setUserFolder,
-  } = useTodo() as TodoContextType;
+  } =  useTodo() as TodoContextType;
   const { readLocalStorage, updateStarred } =
     useStorage() as StorageContextType;
 
@@ -49,16 +50,6 @@ export default function DashboardCollectionMain() {
   useEffect(() => {
     setCurrentMain("collections");
   }, [setCurrentMain]);
-
-  useEffect(() => {
-    if (all) {
-      favouritesRef.current?.classList.remove("active-btn");
-      allRef.current?.classList.add("active-btn");
-    } else {
-      favouritesRef.current?.classList.add("active-btn");
-      allRef.current?.classList.remove("active-btn");
-    }
-  }, [all]);
 
   const styleCSS = hiddenSidebar
     ? "todo-page-main-collection full-page"
@@ -103,7 +94,7 @@ export default function DashboardCollectionMain() {
                 onClick={() => {
                   setAll(false);
                 }}
-                className="todo-page-main-collection-button-favourites"
+                className={ !all ? "todo-page-main-collection-button-favourites active-btn" : "todo-page-main-collection-button-favourites" }
               >
                 Favourites
               </button>
@@ -112,7 +103,7 @@ export default function DashboardCollectionMain() {
                 onClick={() => {
                   setAll(true);
                 }}
-                className="todo-page-main-collection-button-all"
+                className={ all ? "todo-page-main-collection-button-all active-btn" : "todo-page-main-collection-button-all" }
               >
                 All collections
               </button>
