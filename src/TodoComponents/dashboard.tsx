@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useTodo } from "./TodoPage";
 import { TodoContextType, itemType, CollectionType } from "../@types/todo";
-import { ClipLoader } from "react-spinners";
 import { Link, useNavigate } from "react-router-dom";
 import emptyFolder from "./empty-folder.svg";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 export default function DashboardMain() {
 
@@ -97,20 +97,11 @@ export default function DashboardMain() {
   return (
     <main className={styleCSS}>
       {loading ? (
-        <div
-          style={{
-            width: "100%",
-            position: "absolute",
-            top: "0",
-            right: "0",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        <Backdrop
+          open={true}
         >
-          <ClipLoader color="#DD2616" loading={loading} size={150} />{" "}
-        </div>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       ) : (
         <>
           <div className="todo-page-dashboard-main-heading">

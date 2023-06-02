@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useState, useRef } from "react";
-import { ClipLoader } from "react-spinners";
+import { Backdrop, CircularProgress, Alert, AlertTitle } from "@mui/material";
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -20,6 +20,8 @@ export default function Login() {
     if (usernameRef.current) {
       if (usernameRef.current.value.trim().length > 30) {
         setError("Your username is bigger than 30 characters");
+        setSubmitLoading(false);
+        return;
       }
     }
 
@@ -38,21 +40,21 @@ export default function Login() {
 
   return (
     <AuthPage>
+
       {submitLoading ? (
-        <div
-          style={{
-            width: "100svw",
-            height: "100svh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        <Backdrop
+          open={true}
         >
-          <ClipLoader color="#DD2616" loading={submitLoading} size={150} />{" "}
-        </div>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       ) : (
         <section className="signup-card">
-          {error && error}
+          {error && 
+            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: 33 }} severity="error">
+                <AlertTitle>Error</AlertTitle>
+                <strong>{error}</strong>
+            </Alert>
+          }
           <h1>Log In</h1>
           <form className="account-form" onSubmit={(e) => handleSubmit(e)}>
             <div className="input-container">

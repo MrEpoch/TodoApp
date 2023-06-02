@@ -17,6 +17,8 @@ import {
   CollectionType,
   itemType,
 } from "../@types/todo";
+import { Alert, AlertTitle } from "@mui/material";
+
 
 const TodoContext = createContext<TodoContextType | null>(null);
 
@@ -239,8 +241,11 @@ export function AddCollection() {
     collectionRef.current;
 
     if (!titleRef.current) return;
-    if (titleRef.current.value.trim().length === 0) return;
-    if (titleRef.current.value.length > 12) {
+    if (titleRef.current.value.trim().length === 0) {
+        setError("Choose collection name");
+        return;
+    }
+    else if (titleRef.current.value.length > 12) {
       setError("Collection max size is 12 characters");
       return;
     }
@@ -263,19 +268,18 @@ export function AddCollection() {
 
   return (
     <section className="todo-page-addCollection-popUp">
-      <form
+         {error && 
+            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: "20svh", zIndex: "10" }} severity="error">
+                <AlertTitle>Error</AlertTitle>
+                <strong>{error}</strong>
+            </Alert>
+        }     
+        <form
         onSubmit={(e) => {
           todoCollectionSubmitHandler(e);
         }}
         className="todo-page-addCollection-popUp-container"
       >
-        {error.length !== 0 ? (
-          <p className="todo-page-addCollection-popUp-container-error">
-            {error}
-          </p>
-        ) : (
-          ""
-        )}
         <h2 className="todo-page-addCollection-popUp-container-header">
           Create new collection
         </h2>
@@ -347,11 +351,18 @@ export function AddItem() {
     if (titleRef.current.value.length > 35) {
       setError("Todo cannot be longer than 35 characters");
       return;
+    } else if (titleRef.current.value.trim().length === 0) {
+        setError("Todo cannot be empty");
+        return;
     }
 
     if (onChangeVal === null) {
       setOnChange(new Date());
+    } else if (!(onChangeVal && Object.prototype.toString.call(onChangeVal) === "[object Date]")) {
+        setError("There is something wrong with date");
+        return;
     }
+
 
     const [, month, dayInMonth, , time] = onChangeVal.toString().split(" ");
     const [hourTime, minuteTime] = time.split(":");
@@ -377,6 +388,12 @@ export function AddItem() {
 
   return (
     <section className="todo-page-addItem-popUp">
+        {error && 
+            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: "20svh", zIndex: "10" }} severity="error">
+                <AlertTitle>Error</AlertTitle>
+                <strong>{error}</strong>
+            </Alert>
+        }     
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -384,11 +401,6 @@ export function AddItem() {
         }}
         className="todo-page-addItem-popUp-container"
       >
-        {error.length !== 0 ? (
-          <p className="todo-page-addItem-popUp-container-error">{error}</p>
-        ) : (
-          ""
-        )}
         <h2 className="todo-page-addItem-popUp-container-header">
           Add new todo
         </h2>

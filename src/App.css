@@ -4,15 +4,18 @@
   width: 100%;
   min-height: 100%;
   background-color: black;
-  display: grid;
-  grid-template-rows: 100px 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .landing-page-header {
   display: grid;
+  justify-self: center;
   grid-template-columns: 1fr 2fr 1fr 1fr;
   color: white;
   font-size: 2rem;
+  min-height: 100px;
 }
 
 .landing-page-header > a {
@@ -67,7 +70,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 100%;
+  flex-basis: 90%;
   height: auto;
+  flex: 1 1 100%;
 }
 
 .landing-page-main-text {
@@ -117,8 +122,6 @@
 .landing-page-main-design {
   grid-column: 2 / 3;
   position: relative;
-  height: 100%;
-  width: 100%;
   display: flex;
   justify-items: center;
   align-items: center;
@@ -137,10 +140,12 @@
   height: 200px;
   background-color: dodgerblue;
   position: absolute;
+  display: flex;
   border-radius: 50%;
   filter: blur(180px);
   overflow: hidden;
   animation: moving-shape-landingPage 15s infinite;
+  flex-shrink: 0;
 }
 
 @keyframes moving-shape-landingPage {

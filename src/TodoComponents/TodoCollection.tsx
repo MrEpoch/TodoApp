@@ -10,7 +10,7 @@ import {
 import { mainFolderName, useStorage } from "./tempLocalStorage";
 import "./TodoPage.css";
 import { useNavigate } from "react-router-dom";
-import { ClipLoader } from "react-spinners";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 export default function DashboardCollectionMain() {
   const navigate = useNavigate();
@@ -88,15 +88,11 @@ export default function DashboardCollectionMain() {
   return (
     <>
       {loading ? (
-        <div
-          style={{
-            position: "absolute",
-            top: "0",
-            right: "0",
-          }}
+        <Backdrop
+          open={true}
         >
-          <ClipLoader color="#3f51b5" loading={loading} size={150} />
-        </div>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       ) : (
         <main className={styleCSS}>
           <div className="todo-page-main-collection-header">

@@ -8,8 +8,8 @@ import {
   CollectionType,
 } from "../@types/todo";
 import { useNavigate, useParams } from "react-router-dom";
-import { ClipLoader } from "react-spinners";
 import "./Todo_template_collections.css";
+import { Backdrop, CircularProgress } from "@mui/material"; 
 
 export default function TemplateTodoList() {
   const navigate = useNavigate();
@@ -162,21 +162,12 @@ export default function TemplateTodoList() {
   return (
     <section className={styleCSS}>
       {loading ? (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            top: "0",
-            right: "0",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        <Backdrop
+          open={true}
         >
-          <ClipLoader color="#DD2616" loading={loading} size={150} />{" "}
-        </div>
-      ) : (
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        ) : (
         <>
           <div className="todo-page-main-collection-template-top">
             <div className="collection-template-top-Header">

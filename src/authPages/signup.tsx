@@ -1,14 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useRef, useState } from "react";
-import { ClipLoader } from "react-spinners";
 import {
-  StorageContextType,
   useStorage,
+  mainFolderName,
 } from "../TodoComponents/tempLocalStorage";
-import { mainFolderName } from "../TodoComponents/tempLocalStorage";
+import { StorageContextType } from "../@types/todo";
+import { Alert, AlertTitle, Backdrop, CircularProgress } from "@mui/material";
+
 
 export default function SignUp() {
+
   const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -39,6 +41,7 @@ export default function SignUp() {
       if (usernameRef.current.value.trim().length > 30) {
         setSubmitLoading(false);
         setError("Your username is bigger than 30 characters");
+        return;
       }
     }
 
@@ -57,20 +60,20 @@ export default function SignUp() {
   return (
     <AuthPage>
       {submitLoading ? (
-        <div
-          style={{
-            width: "100svw",
-            height: "100svh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
+        <Backdrop
+          open={true}
         >
-          <ClipLoader color="#DD2616" loading={submitLoading} size={150} />{" "}
-        </div>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       ) : (
         <section className="signup-card">
-          {error && error}
+        {error && 
+            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: 33 }} severity="error">
+                <AlertTitle>Error</AlertTitle>
+                <strong>{error}</strong>
+            </Alert>
+          }
+ 
           <h1>Sign Up</h1>
           <form className="account-form" onSubmit={(e) => handleSubmit(e)}>
             <div className="input-container">
