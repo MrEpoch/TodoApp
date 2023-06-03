@@ -50,11 +50,6 @@ export default function TemplateTodoList() {
         id = "error";
     } 
 
-    if (!collectionsId) {
-        navigate("/error");
-        return;
-    }
-
     if (id === undefined || !collectionsId.includes(id)) {
       navigate("/error");
       return;
