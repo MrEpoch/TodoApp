@@ -35,6 +35,12 @@
     cursor: pointer;
   }
 
+  .todo-page-main-collection-template-todos-todo-container-text {
+    font-size: 1.2rem;
+    width: 80%!important;
+    word-wrap: break-word;
+  }
+  
   .todo-page-addCollection-popUp-container {
     width: 45% !important;
     height: 40% !important;
@@ -43,13 +49,8 @@
 
 @media (max-width: 1100px) {
   .dashboard-page {
-    overflow-x: hidden;
     display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: 100px 1fr;
-    height: 100%;
-    width: 100%;
-    background-color: var(--system-black-color);
+    grid-template: 100px 1fr / 100%;
   }
 
   .hidden {
@@ -70,9 +71,10 @@
     background-color: var(--system-color);
     color: white;
     z-index: 4;
-    height: calc(100vh - 100px);
     max-width: 400px;
     bottom: 0;
+    height: 100%;
+    grid-area: unset;
     font-size: 1rem;
     display: flex;
     flex-direction: column;
@@ -84,16 +86,13 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    height: 100%;
   }
 
   .dashboard-collections-container-header {
     margin: 0;
     padding: 0;
-    align-items: center;
+    margin-top: 200px;
     font-size: 3rem;
-    width: unset;
-    height: unset;
   }
 
   .dashboard-collections-container-list {
@@ -101,7 +100,7 @@
     flex-direction: column;
     align-items: center;
     height: 100%;
-    width: 100%;
+    position: relative;
   }
 
   .dashboard-collections-container-header a {
@@ -110,6 +109,11 @@
     font-size: 2rem;
   }
 
+  .dashboard-page-sidebar a:nth-child(1) {
+    margin-top: 100px;
+  }
+
+  
   .dashboard-page-sidebar a {
     text-decoration: none;
     color: inherit;
@@ -329,6 +333,63 @@
   .todo-page-addCollection-popUp-container {
     width: 65% !important;
   }
+
+   .todo-page-main-collection-template-todos-todo-container-text {
+    font-size: 1rem!important;
+    width: 80%!important;
+    word-wrap: break-word;
+   }
+
+   .todo-page-main-collection-template {
+        grid-template: 25% 75% / 5% 90% 5%!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container-date {
+    font-size: 1rem!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container {
+        height: auto!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container-control {
+        display: flex;
+        flex-direction: column;
+    }
+
+   .todo-page-main-collection-template-todos-todo-container-control > svg {
+        width: 1.5rem!important;
+        height: 1.5rem!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container-checkbox {
+        width: 2rem!important;
+        height: 2rem!important;
+   }
+
+   .todo-page-main-collection-template-delete {
+        position: absolute;
+        top: 110px;
+   }
+
+   .collection-template-top-Header-h2 {
+        font-size: 2rem!important;
+        justify-self: center;
+   }
+
+    .collection-template-top-Header-ReturnButton {
+        width: 2.6rem!important;
+        height: 2.6rem!important;
+        padding: 8px;
+        justify-self: center;
+    }
+
+    .collection-template-top-TodoAdd-button {
+        width: 2.6rem!important;
+        height: 2.6rem!important;
+        padding: 8px;
+        justify-self: center;
+    }
 }
 
 
@@ -352,4 +413,32 @@
         visibility: hidden;
         display: none;
     }
+    
+    .todo-page-main-collection-template {
+        grid-template: 25% 75% / 0% 100% 0%!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container-date {
+    font-size: 1rem!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container {
+        height: auto!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container-control {
+        display: flex;
+        flex-direction: column;
+    }
+
+   .todo-page-main-collection-template-todos-todo-container-control > svg {
+        width: 1.5rem!important;
+        height: 1.5rem!important;
+   }
+
+   .todo-page-main-collection-template-todos-todo-container-checkbox {
+        width: 2rem!important;
+        height: 2rem!important;
+   }
+
 }
