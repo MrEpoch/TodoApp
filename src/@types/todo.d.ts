@@ -13,7 +13,7 @@ export type TodoContextType = {
   setHiddenCreateCollection: React.Dispatch<React.SetStateAction<boolean>>;
   userFolder: CollectionType[];
   setUserFolder: React.Dispatch<React.SetStateAction<CollectionType[]>>;
-  collectionsId: string[] | [] | boolean[];
+  collectionsId: string[] | [] | boolean[] | any;
   setCollectionsId: React.Dispatch<React.SetStateAction<string[]>>;
 };
 

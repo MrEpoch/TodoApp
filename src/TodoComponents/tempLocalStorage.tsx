@@ -59,7 +59,7 @@ export default function StorageProvider({ children }: ChildrenProp) {
   const insertIntoCollection = (
     folderName: string,
     collection: object,
-    collectionId: string
+    collectionId: string | undefined
   ) => {
     const mainFolder = readLocalStorage(folderName);
     const index = mainFolder.findIndex(

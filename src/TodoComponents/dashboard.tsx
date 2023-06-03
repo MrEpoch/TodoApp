@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTodo } from "./TodoPage";
 import { TodoContextType, itemType, CollectionShownType } from "../@types/todo";
-import { Link, useNavigate } from "react-router-dom";
-import emptyFolder from "./empty-folder.svg";
+import { useNavigate } from "react-router-dom";
 import { Backdrop, CircularProgress, List, ListItem, ListItemText, Divider, ListItemButton, ListItemIcon } from "@mui/material";
 import { KeyboardArrowDown } from "@mui/icons-material";
 

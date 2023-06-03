@@ -38,12 +38,21 @@ export default function TemplateTodoList() {
       (collection: CollectionType) => collection.id === id
     );
   }
-  const { id } = useParams<{ id: string }>();
+  let { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (collectionsId[0] === false) {
       navigate("/todo");
       return;
+    }
+
+    if (!id) {
+        id = "error";
+    } 
+
+    if (!collectionsId) {
+        navigate("/error");
+        return;
     }
 
     if (id === undefined || !collectionsId.includes(id)) {

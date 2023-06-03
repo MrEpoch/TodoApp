@@ -30,7 +30,7 @@ export default function TodoApp({ children }: ChildrenProp) {
   const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);
   const [hiddenCreateCollection, setHiddenCreateCollection] =
     useState<boolean>(true);
-  const [collectionsId, setCollectionsId] = useState<string[] | [] | boolean[]>(
+  const [collectionsId, setCollectionsId] = useState<string[] | [] | boolean[] | any>(
     [false]
   );
 
