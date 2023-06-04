@@ -119,6 +119,10 @@
     color: inherit;
   }
 
+  .todo-page-main-collection-template {
+        grid-column: 1 / 2!important;
+  }
+
   .dashboard-page-header {
     -webkit-user-select: none;
     -khtml-user-select: none;

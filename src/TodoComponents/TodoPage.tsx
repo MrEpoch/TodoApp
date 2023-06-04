@@ -423,7 +423,7 @@ export function AddItem() {
           }}
           className="todo-page-addItem-popUp-container-buttons-cancel"
         >
-          Cancel
+        x
         </button>
         <button
           className="todo-page-addItem-popUp-container-buttons-create"

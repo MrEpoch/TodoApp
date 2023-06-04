@@ -1,6 +1,6 @@
 .dashboard-page {
   display: grid;
-  grid-template-columns: 15% 85%;
+  grid-template-columns: 20% 80%;
   grid-template-rows: 100px 1fr;
   min-height: auto;
   width: 100%;
@@ -203,7 +203,7 @@
 
 @keyframes sidebar-animation {
   0% {
-    opacity: 0;
+    opacity:0;
     width: 0%;
   }
   100% {
