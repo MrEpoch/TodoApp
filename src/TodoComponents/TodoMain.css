@@ -26,7 +26,6 @@
 .todo-page-dashboard-main-heading {
   width: 100%;
   grid-area: 1 / 2 / 2 / 3;
-  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -63,10 +62,13 @@
   grid-column: 2 / 3;
   grid-row: 2 / 3;
   transition: all 0.5s ease;
-  display: grid;
-  grid-template: 25% 75% / 20% 60% 20%;
+  display: flex;
+  flex-direction: column;
   padding: 2rem;
   overflow-y: scroll;
+  padding-left: 20%;
+  padding-right: 20%;
+  position: relative;
 }
 
 .todo-page-main-collection-template::-webkit-scrollbar {
@@ -85,8 +87,8 @@
   width: 100%;
   align-self: center;
   justify-self: center;
-  height: 100%;
   display: flex;
+  min-height: 30%;
   flex-direction: row;
   justify-content: space-between;
   grid-area: 1 / 2 / 2 / 3;
@@ -109,6 +111,12 @@
 .todo-page-main-collection-template svg {
   width: 2rem;
   height: 2rem;
+}
+
+.todo-page-main-collection-template > svg {
+    position: absolute;
+    left: 20px;
+    top: 20px;
 }
 
 .collection-template-top-Header {
