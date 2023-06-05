@@ -143,6 +143,7 @@
   grid-area: 2 / 2 / 3 / 3;
   display: grid;
   grid-template-rows: 1fr 1fr;
+  margin-top: 20px;
 }
 
 .todo-page-main-collection-template-todos > div {

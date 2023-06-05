@@ -46,6 +46,5 @@
 
 @media (max-width: 850px) {
   .todo-page-main-collection-template {
-    grid-template: 25% 75% / 10% 80% 10%;
   }
 }

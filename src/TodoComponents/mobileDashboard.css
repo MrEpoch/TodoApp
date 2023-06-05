@@ -345,7 +345,8 @@
    }
 
    .todo-page-main-collection-template {
-        grid-template: 25% 75% / 5% 90% 5%!important;
+    padding-left: 10%!important;
+    padding-right: 10%!important;
    }
 
    .todo-page-main-collection-template-todos-todo-container-date {
@@ -418,10 +419,6 @@
         display: none;
     }
     
-    .todo-page-main-collection-template {
-        grid-template: 25% 75% / 0% 100% 0%!important;
-   }
-
    .todo-page-main-collection-template-todos-todo-container-date {
     font-size: 1rem!important;
    }
