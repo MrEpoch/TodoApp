@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useState, useRef } from "react";
 import { Backdrop, CircularProgress, Alert, AlertTitle } from "@mui/material";
+import { logIn } from "../apiFetching";
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -16,6 +17,7 @@ export default function Login() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitLoading(true);
+    setError("");
 
     if (usernameRef.current) {
       if (usernameRef.current.value.trim().length > 30) {
@@ -26,7 +28,21 @@ export default function Login() {
     }
 
     try {
-      console.log("hello");
+      if (!usernameRef.current?.value) {
+        setError("Please enter a username");
+        setSubmitLoading(false);
+        return;
+      } else if (!emailRef.current?.value) {
+        setError("Please enter an email");
+        setSubmitLoading(false);
+        return;
+      } else if (!passwordRef.current?.value) {
+        setError("Please enter a password");
+        setSubmitLoading(false);
+        return;
+      }
+
+      logIn(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value);
       navigate("/todo");
     } catch (e) {
       setSubmitLoading(false);
@@ -83,7 +99,7 @@ export default function Login() {
               <input
                 ref={emailRef}
                 className="input"
-                type="text"
+                type="email"
                 placeholder="Email"
               />
             </div>

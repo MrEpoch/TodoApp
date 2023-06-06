@@ -1,12 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useRef, useState } from "react";
-import {
-  useStorage,
-  mainFolderName,
-} from "../TodoComponents/tempLocalStorage";
-import { StorageContextType } from "../@types/todo";
 import { Alert, AlertTitle, Backdrop, CircularProgress } from "@mui/material";
+import { signUp } from "../apiFetching";
 
 
 export default function SignUp() {
@@ -18,8 +14,6 @@ export default function SignUp() {
 
   const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const { createLocalStorage } = useStorage() as StorageContextType;
 
   const navigate = useNavigate();
 
@@ -46,8 +40,22 @@ export default function SignUp() {
     }
 
     try {
-      createLocalStorage(mainFolderName, []);
-      navigate("/todo");
+        if (!usernameRef.current?.value) {
+            setSubmitLoading(false);
+            setError("Please enter a username");
+            return;
+        } else if (!emailRef.current?.value) {
+            setSubmitLoading(false);
+            setError("Please enter an email");
+            return;
+        } else if (!passwordRef.current?.value) {
+            setSubmitLoading(false);
+            setError("Please enter a password");
+            return;
+        } 
+
+        signUp(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value); 
+        navigate("/todo");
     } catch (e) {
       setSubmitLoading(false);
       setError("Error signing up. Please try again");

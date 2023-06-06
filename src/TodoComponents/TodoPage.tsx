@@ -3,12 +3,10 @@ import "./mobileDashboard.css";
 import React, { useContext, useEffect, useRef, useState, createContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./TodoMain.css";
-import { useStorage } from "./tempLocalStorage";
 import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import { mainFolderName } from "./tempLocalStorage";
 import { uid } from "uid";
 import {
   ChildrenProp,
@@ -18,11 +16,11 @@ import {
   itemType,
 } from "../@types/todo";
 import { Alert, AlertTitle } from "@mui/material";
+import { getCollections } from "../apiFetching"; 
 
 const TodoContext = createContext<TodoContextType | object>({});
 
 export default function TodoApp({ children }: ChildrenProp) {
-  const { readLocalStorage } = useStorage() as StorageContextType;
 
   const [userFolder, setUserFolder] = useState<CollectionType[] | []>([]);
   const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(true);
@@ -35,8 +33,12 @@ export default function TodoApp({ children }: ChildrenProp) {
   );
 
   useEffect(() => {
-    setUserFolder(readLocalStorage(mainFolderName));
-  }, [setUserFolder, readLocalStorage]);
+
+    (async() => { 
+        const collectionFolder = await getCollections();
+        console.log(collectionFolder);
+    })()
+  });
 
   useEffect(() => {
     setCollectionsId(
