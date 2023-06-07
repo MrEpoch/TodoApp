@@ -40,21 +40,22 @@ export default function SignUp() {
     }
 
     try {
-        if (!usernameRef.current?.value) {
-            setSubmitLoading(false);
+      (async () => {
+          if (!usernameRef.current?.value) {
             setError("Please enter a username");
-            return;
-        } else if (!emailRef.current?.value) {
             setSubmitLoading(false);
+            return;
+          } else if (!emailRef.current?.value) {
             setError("Please enter an email");
-            return;
-        } else if (!passwordRef.current?.value) {
             setSubmitLoading(false);
-            setError("Please enter a password");
             return;
-        } 
-
-        signUp(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value); 
+          } else if (!passwordRef.current?.value) {
+            setError("Please enter a password");
+            setSubmitLoading(false);
+            return;
+          }
+        await signUp(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
+        })();        
         navigate("/todo");
     } catch (e) {
       setSubmitLoading(false);

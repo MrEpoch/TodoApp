@@ -2,11 +2,13 @@ import axios from "axios";
 
 export const unsecure_JWT_token_storage_name = "unsecure_JWT_token";
 
+export const api_url = "http://localhost:3000";
+
 // AUTH LOGIC CODE
 
 export const logIn = async (username: string, email: string, password: string) => {
     try {
-        const response = await axios.post("http://stencukpage.com/login", {
+        const response = await axios.post( api_url + "/login", {
             username,
             email,
             password,
@@ -21,7 +23,7 @@ export const logIn = async (username: string, email: string, password: string) =
 
 export const signUp = async (email: string, username: string, password: string) => {
     try {
-        const response = await axios.post("http://stencukpage.com/signup", {
+        const response = await axios.post(api_url + "/signup", {
             email,
             username,
             password,
@@ -55,7 +57,7 @@ export const createCollection = async (title: string) => {
         return false;
     }
     try {
-        const collection = await axios.post("http://stencukpage.com/api/collection", {
+        const collection = await axios.post(api_url + "/api/collection", {
             title,
         }, {
             headers: {
@@ -74,13 +76,14 @@ export const getCollections = async () => {
         return false;
     } 
     try {
-        const collections = await axios.get("http://stencukpage.com/api/collections", {
+        const collections = await axios.get(api_url + "/api/collections", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         });
-        return collections;
+        return collections.data;
     } catch (e) {
+        console.log(e);
         return false;
     }
 };
@@ -91,7 +94,7 @@ export const getCollection = async (collectionId: string) => {
         return false;
     }
     try {
-        const collection = axios.get("https://stencukpage.com/api/collection/" + collectionId, {
+        const collection = axios.get(api_url + "/api/collection/" + collectionId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -108,7 +111,7 @@ export const deleteCollection = async (collectionId: string) => {
         return false;
     }
     try {
-        await axios.delete("http://stencukpage.com/api/collection/" + collectionId, {
+        await axios.delete(api_url + "/api/collection/" + collectionId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -125,7 +128,7 @@ export const updateCollection = async (collectionId: string, favourite: string, 
         return false;
     }
     try {
-        const updatedCollection = await axios.put("http://stencukpage.com/api/collection/" + collectionId, {
+        const updatedCollection = await axios.put(api_url + "/api/collection/" + collectionId, {
            title,
            favourite,
         }, 
@@ -150,7 +153,7 @@ export const getItem = async (todoId: string) => {
         return false;
     }
     try {
-        const item = await axios.get("http://stencukpage.com/api/todo/" + todoId, {
+        const item = await axios.get(api_url + "/api/todo/" + todoId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -167,7 +170,7 @@ export const getItems = async (collectionId: string) => {
         return false;
     }
     try {
-        const items = await axios.get("http://stencukpage.com/api/todos/" + collectionId, {
+        const items = await axios.get(api_url + "/api/todos/" + collectionId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -184,7 +187,7 @@ export const createItem = async (collectionId: string, title: string, dateVerify
         return false;
     }
     try {
-        const newItem = await axios.post("http://stencukpage.com/api/todo", {
+        const newItem = await axios.post(api_url + "/api/todo", {
             collectionId,
             title,
             dateVerify,
@@ -207,7 +210,7 @@ export const deleteItem = async (todoId: string) => {
         return false;
    }
    try {
-        await axios.delete("http://stencukpage.com/api/todo/" + todoId, {
+        await axios.delete(api_url + "/api/todo/" + todoId, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -224,7 +227,7 @@ export const updateItem = async (todoId: string, completed: boolean, title: stri
         return false;
     }
     try {
-        const updatedItem = await axios.post("http://stencukpage.com/api/todo/" + todoId, {
+        const updatedItem = await axios.post(api_url + "/api/todo/" + todoId, {
             title,
             completed,
             dateVerify,

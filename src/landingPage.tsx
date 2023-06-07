@@ -3,16 +3,8 @@ import { getCollections } from "./apiFetching";
 import { useEffect } from "react";
 
 export default function LandingPage() {
-  
-  useEffect(() => {
-        (async() => { 
-        const collectionFolder = await getCollections();
-        console.log(collectionFolder);
-    })()
 
-  });
-
-  return (
+    return (
     <section className="landing-page">
       <header className="landing-page-header">
         <Link to="/">

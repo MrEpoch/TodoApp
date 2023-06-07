@@ -28,21 +28,22 @@ export default function Login() {
     }
 
     try {
-      if (!usernameRef.current?.value) {
-        setError("Please enter a username");
-        setSubmitLoading(false);
-        return;
-      } else if (!emailRef.current?.value) {
-        setError("Please enter an email");
-        setSubmitLoading(false);
-        return;
-      } else if (!passwordRef.current?.value) {
-        setError("Please enter a password");
-        setSubmitLoading(false);
-        return;
-      }
-
-      logIn(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value);
+      (async () => {
+          if (!usernameRef.current?.value) {
+            setError("Please enter a username");
+            setSubmitLoading(false);
+            return;
+          } else if (!emailRef.current?.value) {
+            setError("Please enter an email");
+            setSubmitLoading(false);
+            return;
+          } else if (!passwordRef.current?.value) {
+            setError("Please enter a password");
+            setSubmitLoading(false);
+            return;
+          }
+        await logIn(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
+        })();
       navigate("/todo");
     } catch (e) {
       setSubmitLoading(false);

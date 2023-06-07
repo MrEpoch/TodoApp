@@ -7,16 +7,14 @@ import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import { uid } from "uid";
 import {
   ChildrenProp,
   TodoContextType,
-  StorageContextType,
   CollectionType,
-  itemType,
 } from "../@types/todo";
 import { Alert, AlertTitle } from "@mui/material";
-import { getCollections } from "../apiFetching"; 
+import { createCollection, createItem, getCollections } from "../apiFetching"; 
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const TodoContext = createContext<TodoContextType | object>({});
 
@@ -33,10 +31,9 @@ export default function TodoApp({ children }: ChildrenProp) {
   );
 
   useEffect(() => {
-
     (async() => { 
         const collectionFolder = await getCollections();
-        console.log(collectionFolder);
+        collectionFolder ? setUserFolder(collectionFolder) : null;
     })()
   });
 
@@ -189,12 +186,25 @@ function DashboardSideBar() {
   if (useTodo() === null) navigate("/login");
 
   const { hiddenSidebar, userFolder } = useTodo() as TodoContextType;
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [setLoading, userFolder]);
 
   const cssSidebar = hiddenSidebar
     ? "dashboard-page-sidebar hidden"
     : "dashboard-page-sidebar";
 
   return (
+    <>
+      {loading ? (
+        <Backdrop
+          open={true}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      ) : (
     <section className={cssSidebar}>
       <div className="dashboard-page-sidebar-container">
         <h3 className="dashboard-collections-container-header">Collections</h3>
@@ -214,6 +224,8 @@ function DashboardSideBar() {
         </div>
       </div>
     </section>
+   )}
+   </>
   );
 }
 
@@ -226,8 +238,6 @@ export function AddCollection() {
 
   const { setHiddenCreateCollection, setUserFolder } =
     useTodo() as TodoContextType;
-  const { addNewCollection, readLocalStorage } =
-    useStorage() as StorageContextType;
 
   const collectionRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -252,14 +262,19 @@ export function AddCollection() {
     }
 
     try {
-      addNewCollection(mainFolderName, {
-        title: titleRef.current.value,
-        createdAt: new Date(),
-        id: uid(),
-        content: [],
-        favourite: false,
-      });
-      setUserFolder(readLocalStorage(mainFolderName));
+      ( async () => {
+        if (titleRef.current?.value === undefined) { 
+            setError("Choose collection name");
+            return;
+        }
+        createCollection(titleRef.current?.value)
+        .then(() => {
+            getCollections()
+                .then((data) => {
+                    setUserFolder(data);
+                });
+       });
+      })();
       setHiddenCreateCollection((prev) => !prev);
     } catch (e) {
       setError("Collection creation failed");
@@ -330,9 +345,6 @@ export function AddItem() {
 
   const { setHiddenCreateItem, setUserFolder } = useTodo() as TodoContextType;
 
-  const { insertIntoCollection, readLocalStorage } =
-    useStorage() as StorageContextType;
-
   const [error, setError] = useState("");
   const [onChangeVal, setOnChange] = useState(new Date());
 
@@ -369,18 +381,29 @@ export function AddItem() {
     const [hourTime, minuteTime] = time.split(":");
 
     try {
-      const todoItem: itemType = {
-        createdAt: new Date().toString(),
-        title: titleRef.current.value,
-        yearMonth: `${onChangeVal.getMonth()} ${onChangeVal.getFullYear()}`,
-        date: `${month} ${dayInMonth} ${hourTime}:${minuteTime}`,
-        dateVerify: onChangeVal.getTime(),
-        id: uid(),
-        completed: false,
-      };
-      insertIntoCollection(mainFolderName, todoItem, id);
+      const dateVerify = JSON.stringify(onChangeVal.getTime());
+      const date = `${month} ${dayInMonth} ${hourTime}:${minuteTime}`;
+      const yearMonth = `${onChangeVal.getMonth()} ${onChangeVal.getFullYear()}`;
+     
+      
+      (async () => {
+        if (titleRef.current?.value === undefined) {
+            setError("Todo cannot be empty");
+            return;
+        }  else if (id === undefined) {
+            setError("Todo cannot be empty");
+            navigate("/error");
+            return;
+        }
+        createItem(id, titleRef.current?.value, dateVerify, yearMonth, date)
+            .then(() => {
+                getCollections()
+                    .then((collections) => {
+                        setUserFolder(collections);
+                    });
+            });
+      });
       setHiddenCreateItem((prev) => !prev);
-      setUserFolder(readLocalStorage(mainFolderName));
     } catch (e) {
       setError("Failed to add todo");
       return;
