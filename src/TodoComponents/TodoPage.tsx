@@ -381,7 +381,7 @@ export function AddItem() {
     const [hourTime, minuteTime] = time.split(":");
 
     try {
-      const dateVerify = JSON.stringify(onChangeVal.getTime());
+      const dateVerify = onChangeVal.getTime();
       const date = `${month} ${dayInMonth} ${hourTime}:${minuteTime}`;
       const yearMonth = `${onChangeVal.getMonth()} ${onChangeVal.getFullYear()}`;
      

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useState, useRef } from "react";
 import { Backdrop, CircularProgress, Alert, AlertTitle } from "@mui/material";
-import { logIn } from "../apiFetching";
+import { logIn, unsecure_JWT_token_storage_name } from "../apiFetching";
 
 export default function Login() {
   const [error, setError] = useState("");
@@ -24,11 +24,24 @@ export default function Login() {
         setError("Your username is bigger than 30 characters");
         setSubmitLoading(false);
         return;
+      } else if (usernameRef.current.value.trim().length < 3) {
+        setError("Your username is smaller than 3 characters");
+        setSubmitLoading(false);
+        return;
       }
+    } else {
+        setError("Some error happened, please restart page");
+        setSubmitLoading(false);
+        return;
+    }
+
+    if (passwordRef.current && passwordRef.current?.value.trim().length < 8) {
+        setError("Your password is smaller than 8 characters");
+        setSubmitLoading(false);
+        return;
     }
 
     try {
-      (async () => {
           if (!usernameRef.current?.value) {
             setError("Please enter a username");
             setSubmitLoading(false);
@@ -42,9 +55,19 @@ export default function Login() {
             setSubmitLoading(false);
             return;
           }
-        await logIn(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
-        })();
-      navigate("/todo");
+        try {
+            logIn(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
+                .then(() => localStorage.getItem(unsecure_JWT_token_storage_name) && navigate("/todo"))
+                .catch(() => {
+                    setSubmitLoading(false);
+                    setError("Error Logging In. Please try again");
+                    return;        
+                });
+        } catch (e) {
+            setSubmitLoading(false);
+            setError("Error Logging In. Please try again");
+            return;
+        }
     } catch (e) {
       setSubmitLoading(false);
       setError("Error Logging In. Please try again");

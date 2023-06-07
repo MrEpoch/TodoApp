@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import { getCollections } from "./apiFetching";
-import { useEffect } from "react";
 
 export default function LandingPage() {
 

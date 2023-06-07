@@ -16,8 +16,8 @@ export const logIn = async (username: string, email: string, password: string) =
 
         localStorage.setItem(unsecure_JWT_token_storage_name, response.data);
         return true;
-    } catch (error) {
-        return false;
+    } catch (error: any) {
+        throw new Error(error.response.data);
     }
 };
 
@@ -30,8 +30,9 @@ export const signUp = async (email: string, username: string, password: string) 
         });
         localStorage.setItem(unsecure_JWT_token_storage_name, response.data);
         return true;
-    } catch (e) {
-        return false;
+    } catch (e: any) {
+        console.log(e);
+        throw new Error(e.response.data);
     }
 };
 
@@ -122,7 +123,7 @@ export const deleteCollection = async (collectionId: string) => {
     }
 };
 
-export const updateCollection = async (collectionId: string, favourite: string, title: string) => {
+export const updateCollection = async (collectionId: string, favourite: boolean, title: string) => {
     const token = localStorage.getItem(unsecure_JWT_token_storage_name);
     if (token === null) {
         return false;
@@ -181,7 +182,7 @@ export const getItems = async (collectionId: string) => {
     }
 };
 
-export const createItem = async (collectionId: string, title: string, dateVerify: string, yearMonth: string, date: string) => { 
+export const createItem = async (collectionId: string, title: string, dateVerify: number, yearMonth: string, date: string) => { 
     const token = localStorage.getItem(unsecure_JWT_token_storage_name);
     if (token === null) {
         return false;
@@ -221,7 +222,7 @@ export const deleteItem = async (todoId: string) => {
     }
 };
 
-export const updateItem = async (todoId: string, completed: boolean, title: string, dateVerify: string, yearMonth: string, date: string) => {
+export const updateItem = async (todoId: string, completed: boolean, title: string, dateVerify: number, yearMonth: string, date: string) => {
     const token = localStorage.getItem(unsecure_JWT_token_storage_name);
     if (token === null) {
         return false;

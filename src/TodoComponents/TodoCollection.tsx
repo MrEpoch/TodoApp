@@ -2,21 +2,19 @@ import { useEffect, useState, useRef } from "react";
 
 import { useTodo } from "./TodoPage";
 import {
-  StorageContextType,
   TodoContextType,
   CollectionType,
   itemType,
 } from "../@types/todo";
-import { mainFolderName, useStorage } from "./tempLocalStorage";
 import "./TodoPage.css";
 import { useNavigate } from "react-router-dom";
 import { Backdrop, CircularProgress } from "@mui/material";
+import { updateCollection } from "../apiFetching";
 
 export default function DashboardCollectionMain() {
   const navigate = useNavigate();
 
-  console.log(useTodo)
-  if (useTodo() === null) console.log("FUCK");
+  if (useTodo() === null) navigate("/error");
 
   const {
     setCurrentMain,
@@ -25,8 +23,6 @@ export default function DashboardCollectionMain() {
     userFolder,
     setUserFolder,
   } =  useTodo() as TodoContextType;
-  const { readLocalStorage, updateStarred } =
-    useStorage() as StorageContextType;
 
   const [loading, setLoading] = useState<boolean>(true);
   const [all, setAll] = useState<boolean>(true);
@@ -42,8 +38,6 @@ export default function DashboardCollectionMain() {
     hiddenSidebar,
     userFolder,
     setUserFolder,
-    readLocalStorage,
-    updateStarred,
     navigate,
   ]);
 
@@ -57,8 +51,13 @@ export default function DashboardCollectionMain() {
 
   function star(collection: CollectionType): void {
     try {
-      updateStarred(mainFolderName, collection.id);
-      setUserFolder(readLocalStorage(mainFolderName));
+        updateCollection(collection.id, !collection.favourite, collection.title)
+        userFolder.map((collection: CollectionType) => {
+            if (collection.id === collection.id) {
+                collection.favourite = !collection.favourite;
+            }
+            return collection;
+        })
     } catch (e) {
       console.log(e);
     }

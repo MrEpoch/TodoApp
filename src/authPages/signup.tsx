@@ -30,6 +30,12 @@ export default function SignUp() {
         return;
       }
     }
+    
+    if (passwordRef.current && passwordRef.current?.value.trim().length < 8) {
+        setSubmitLoading(false);
+        setError("Your password is smaller than 8 characters");
+        return;
+    }
 
     if (usernameRef.current) {
       if (usernameRef.current.value.trim().length > 30) {
@@ -54,9 +60,11 @@ export default function SignUp() {
             setSubmitLoading(false);
             return;
           }
-        await signUp(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
+        signUp(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
+            .then(() => {
+                navigate("/todo");
+            })
         })();        
-        navigate("/todo");
     } catch (e) {
       setSubmitLoading(false);
       setError("Error signing up. Please try again");

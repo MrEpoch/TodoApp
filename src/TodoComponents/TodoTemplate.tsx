@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useTodo } from "./TodoPage";
-import { useStorage, mainFolderName } from "./tempLocalStorage";
 import {
   TodoContextType,
   itemType,
-  StorageContextType,
   CollectionType,
 } from "../@types/todo";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Todo_template_collections.css";
 import { Backdrop, CircularProgress } from "@mui/material"; 
+import { deleteCollection, deleteItem, updateItem } from "../apiFetching";
 
 export default function TemplateTodoList() {
   const navigate = useNavigate();
@@ -20,25 +19,32 @@ export default function TemplateTodoList() {
     setHiddenCreateItem,
     setCurrentMain,
     hiddenSidebar,
-    hiddenCreateItem,
     collectionsId,
     userFolder,
     setUserFolder,
   } = useTodo() as TodoContextType;
-  const { updateTodo, readLocalStorage, deleteTodo, deleteCollectionStorage } =
-    useStorage() as StorageContextType;
 
   const [loading, setLoading] = useState<boolean>(true);
   const [todos, setTodos] = useState<itemType[]>([]);
   const [completedTodos, setCompleteTodos] = useState<itemType[]>([]);
 
-  function filteredCollection() {
-    setUserFolder(readLocalStorage(mainFolderName));
+  function filteredCollection(todoStatus: boolean, collectionId: string, todoId: string) {
+    userFolder.map((collection: CollectionType) => {
+        if (collection.id === collectionId) {
+            collection.content = collection.content.map((todo: itemType) => {
+                if (todo.id === todoId) {
+                    todo.completed = todoStatus;
+                }
+                return todo;
+            });
+        }
+        return collection;
+    });
     return userFolder.find(
       (collection: CollectionType) => collection.id === id
     );
   }
-  let { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (collectionsId[0] === false) {
@@ -46,8 +52,9 @@ export default function TemplateTodoList() {
       return;
     }
 
-    if (!id) {
-        id = "error";
+    if (id === undefined) {
+        navigate("/error");
+        return;
     } 
 
     if (id === undefined || !collectionsId.includes(id)) {
@@ -85,30 +92,20 @@ export default function TemplateTodoList() {
     }
   }, [setCurrentMain, collection.content, setTodos, setCompleteTodos]);
 
-  useEffect(() => {
-    try {
-      hiddenCreateItem && setCollection(filteredCollection());
-    } catch (e) {
-      console.log(e);
-      navigate("/todo");
-    }
-  }, [hiddenCreateItem, navigate]);
-
   const styleCSS = hiddenSidebar
     ? "todo-page-main-collection-template full-page"
     : "todo-page-main-collection-template";
 
-  function changeTodoStatus(todo: itemType) {
+  function changeTodoStatus(todo: itemType, collectionId: string) {
     setLoading(true);
-    todo.completed = !todo.completed;
     try {
-      updateTodo(mainFolderName, todo, collection.id, todo.id);
-      setCollection(filteredCollection());
-      setLoading(false);
+      updateItem(todo.id, !todo.completed, todo.title, todo.dateVerify, todo.yearMonth, todo.date);  
+      setCollection(filteredCollection(!todo.completed, collectionId, todo.id));
     } catch (e) {
       console.log(e);
       navigate("/todo");
     }
+    setLoading(false);
     return;
   }
 
@@ -134,8 +131,10 @@ export default function TemplateTodoList() {
     if (confirmDelete) {
       setLoading(true);
       try {
-        deleteCollectionStorage(mainFolderName, collection.id);
-        setUserFolder(readLocalStorage(mainFolderName));
+        deleteCollection(collection.id)
+            .then(() => {
+                setUserFolder(userFolder.filter((collectionU: CollectionType) => collectionU.id !== collection.id));
+            });
         navigate("/todo/collections");
       } catch (e) {
         console.log(e);
@@ -146,15 +145,17 @@ export default function TemplateTodoList() {
     }
   }
 
-  function deleteTodoHandler(todo: itemType) {
+  function deleteTodoHandler(todo: itemType, collectionId: string) {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete ${todo.title}?`
     );
     if (confirmDelete) {
       setLoading(true);
       try {
-        deleteTodo(mainFolderName, collection.id, todo.id);
-        setCollection(filteredCollection());
+        deleteItem(todo.id)
+            .then(() => {
+                setCollection(filteredCollection(todo.completed, collectionId, todo.id));
+            });
       } catch (e) {
         console.log(e);
       }
@@ -229,7 +230,7 @@ export default function TemplateTodoList() {
                     >
                       <div
                         onClick={() => {
-                          changeTodoStatus(todo);
+                          changeTodoStatus(todo, collection.id);
                         }}
                         className="todo-page-main-collection-template-todos-todo-container-checkbox"
                       ></div>
@@ -243,7 +244,7 @@ export default function TemplateTodoList() {
                         {todo.dateVerify < currentTime.getTime() ? warning : ""}
                         <svg
                           onClick={() => {
-                            deleteTodoHandler(todo);
+                            deleteTodoHandler(todo, collection.id);
                           }}
                           className="delete-todo-svg"
                           xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +275,7 @@ export default function TemplateTodoList() {
                     >
                       <div
                         onClick={() => {
-                          changeTodoStatus(todo);
+                          changeTodoStatus(todo, collection.id);
                         }}
                         className="todo-page-main-collection-template-todos-todo-container-checkbox completed-checkbox"
                       >
@@ -303,7 +304,7 @@ export default function TemplateTodoList() {
                       <div className="todo-page-main-collection-template-todos-todo-container-control">
                         <svg
                           onClick={() => {
-                            deleteTodoHandler(todo);
+                            deleteTodoHandler(todo, collection.id);
                           }}
                           className="delete-todo-svg"
                           xmlns="http://www.w3.org/2000/svg"

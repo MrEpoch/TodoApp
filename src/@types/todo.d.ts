@@ -40,7 +40,7 @@ export type StorageContextType = {
 
 export type CollectionType = {
   title: string;
-  content: [];
+  content: itemType[] | [];
   createdAt: string;
   id: string;
   favourite: boolean;
