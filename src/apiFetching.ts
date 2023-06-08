@@ -13,8 +13,7 @@ export const logIn = async (username: string, email: string, password: string) =
             email,
             password,
         });
-
-        localStorage.setItem(unsecure_JWT_token_storage_name, response.data);
+        localStorage.setItem(unsecure_JWT_token_storage_name, response.data.token);
         return true;
     } catch (error: any) {
         throw new Error(error.response.data);
@@ -28,7 +27,7 @@ export const signUp = async (email: string, username: string, password: string) 
             username,
             password,
         });
-        localStorage.setItem(unsecure_JWT_token_storage_name, response.data);
+        localStorage.setItem(unsecure_JWT_token_storage_name, response.data.token);
         return true;
     } catch (e: any) {
         console.log(e);

@@ -1,6 +1,6 @@
 import "./dashboard.css";
 import "./mobileDashboard.css";
-import React, { useContext, useEffect, useRef, useState, createContext } from "react";
+import React, { useContext, useEffect, useRef, useState, createContext, useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./TodoMain.css";
 import DateTimePicker from "react-datetime-picker";
@@ -30,17 +30,29 @@ export default function TodoApp({ children }: ChildrenProp) {
     [false]
   );
 
-  useEffect(() => {
-    (async() => { 
-        const collectionFolder = await getCollections();
-        collectionFolder ? setUserFolder(collectionFolder) : null;
-    })()
-  });
+  const navigate = useNavigate();
+
+  useMemo(() => {
+        getCollections()
+            .then((res) => { 
+                console.log(res.userFolder);
+                res && setUserFolder(res.userFolder);
+            })
+            .catch(() => {
+                navigate("/error");
+            });
+        return () => {
+            setUserFolder([]);
+        }
+  }, [setUserFolder, navigate]);
 
   useEffect(() => {
     setCollectionsId(
       userFolder.map((collection: CollectionType) => collection.id)
     );
+    return () => {
+        setCollectionsId([]);
+    }
   }, [setCollectionsId, userFolder]);
 
   const todoValue = {
@@ -190,6 +202,7 @@ function DashboardSideBar() {
 
   useEffect(() => {
     setLoading(false);
+    return () => setLoading(true)
   }, [setLoading, userFolder]);
 
   const cssSidebar = hiddenSidebar
@@ -271,7 +284,7 @@ export function AddCollection() {
         .then(() => {
             getCollections()
                 .then((data) => {
-                    setUserFolder(data);
+                    setUserFolder(data.data.userFolder);
                 });
        });
       })();
@@ -352,11 +365,11 @@ export function AddItem() {
 
   const { id } = useParams<string>();
 
-  useEffect(() => {
+  useMemo(() => {
     if (id === undefined) {
       navigate("/error");
     }
-  });
+  }, [id, navigate]);
 
   function todoItemSubmitHandler() {
     setError("");

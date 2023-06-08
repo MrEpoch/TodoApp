@@ -126,7 +126,7 @@ export default function DashboardCollectionMain() {
                         <p>
                           {" "}
                           {
-                            collection.content.filter(
+                            collection.collectionTodos.filter(
                               (todo: itemType) => todo.completed
                             ).length
                           }

@@ -60,11 +60,11 @@ export default function SignUp() {
             setSubmitLoading(false);
             return;
           }
-        signUp(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
+        signUp(emailRef.current?.value, usernameRef.current?.value, passwordRef.current?.value)
             .then(() => {
                 navigate("/todo");
             })
-        })();        
+        })();
     } catch (e) {
       setSubmitLoading(false);
       setError("Error signing up. Please try again");
