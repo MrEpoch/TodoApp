@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTodo } from "./TodoPage";
-import { TodoContextType, itemType, CollectionShownType } from "../@types/todo";
+import { TodoContextType, itemType, CollectionShownType, CollectionType } from "../@types/todo";
 import { useNavigate } from "react-router-dom";
 import { Backdrop, CircularProgress, List, ListItem, ListItemText, Divider, ListItemButton, ListItemIcon } from "@mui/material";
 import { KeyboardArrowDown } from "@mui/icons-material";
@@ -31,7 +31,7 @@ export default function DashboardMain() {
 
       setToday(
         userFolder.map((collection: any) => {
-          const filteredItem = collection.content.filter((item: itemType) => {
+          const filteredItem = collection.collectionTodos.filter((item: itemType) => {
             const itemDate = item.date.split(" ");
             const [monthItem, yearItem] = item.yearMonth.split(" ");
             return (
@@ -42,7 +42,7 @@ export default function DashboardMain() {
             );
           });
         if (filteredItem.length !== 0) {
-            return { ...collection, content: filteredItem, shown: false };
+            return { ...collection, collectionTodos: filteredItem, shown: false };
         } else {
             return false;
         }
@@ -50,7 +50,7 @@ export default function DashboardMain() {
 
       setLongTerm(
         userFolder.map((collection: any) => {
-          const filteredItem = collection.content.filter((item: itemType) => {
+          const filteredItem = collection.collectionTodos.filter((item: itemType) => {
             const itemDate = item.date.split(" ");
             const [monthItem, yearItem] = item.yearMonth.split(" ");
             console.log(monthItem, itemDate[1], yearItem, "nothing", month, today, year);
@@ -60,7 +60,7 @@ export default function DashboardMain() {
             }
           });
         if (filteredItem.length !== 0) {
-            return { ...collection, content: filteredItem, shown: false };
+            return { ...collection, collectionTodos: filteredItem, shown: false };
         } else {
             return false;
         }
@@ -157,7 +157,7 @@ export default function DashboardMain() {
               {btnToday ? (
                 (
                   today.map((collection: CollectionShownType, index: number) => {
-                    if (collection.content.length === 0) {
+                    if (collection.collectionTodos.length === 0) {
                       return;
                     }
                     return (
@@ -174,7 +174,7 @@ export default function DashboardMain() {
                                 </ListItemButton>
                             </div>
                             {collection.shown ? <>
-                                {collection.content.map((item: itemType) => {
+                                {collection.collectionTodos.map((item: itemType) => {
                                     return (
                                         <ListItem key={item.id} style={{ padding: "2em"}} >
                                             <ListItemText primary={item.title} />
@@ -190,7 +190,7 @@ export default function DashboardMain() {
                ) 
               ) : (
                 longTerm.map((collection: CollectionShownType, index: number) => {
-                  if (collection.content.length === 0) {
+                  if (collection.collectionTodos.length === 0) {
                     return;
                   }
                   return (
@@ -207,7 +207,7 @@ export default function DashboardMain() {
                                 </ListItemButton>
                             </div>
                             {collection.shown ? <>
-                                {collection.content.map((item: itemType) => {
+                                {collection.collectionTodos.map((item: itemType) => {
                                     return (
                                         <ListItem key={item.id} style={{ padding: "2em"}} >
                                             <ListItemText primary={item.title} />
@@ -228,49 +228,4 @@ export default function DashboardMain() {
     </main>
   );
 }
-
-
-// return (
-//                    <div
-//                      className="todo-page-dashboard-main-todos-item"
-//                      key={index}
-//                    >
-//                      <div className="dashboard-main-todos-item-header">
-//                        <Link to={"/todo/" + collection.id}>
-//                          {collection.title}
-//                        </Link>
-//                        <svg
-//                          ref={arrRef}
-//                          onClick={() => {
-//                            changeShown(collection.id, setToday, today);
-//                          }}
-//                          className={collection.shown ? "reverse" : ""}
-//                          xmlns="http://www.w3.org/2000/svg"
-//                          viewBox="0 0 24 24"
-//                        >
-//                          <title>chevron-down</title>
-//                          <path
-//                            fill="currentColor"
-//                            d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-//                          />
-//                        </svg>
-//                      </div>
-//                      {collection.shown ? (
-//                        <div className="dashboard-main-todos-item-body">
-//                          {collection.content.map((item: itemType, index) => {
-//                            return (
-//                              <div
-//                                key={index}
-//                                className="dashboard-main-todos-item-body-todoContainer"
-//                              >
-//                                <div className="dashboard-main-todos-item-body-todo-checkBox"></div>
-//                                <h3>{item.title}</h3>
-//                                <p>{item.date}</p>
-//                              </div>
-//                            );
-//                          })}
-//                        </div>
-//                      ) : null}
-//                    </div>
-//                  );
 

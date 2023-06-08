@@ -31,7 +31,7 @@ export default function TemplateTodoList() {
   function filteredCollection(todoStatus: boolean, collectionId: string, todoId: string) {
     userFolder.map((collection: CollectionType) => {
         if (collection.id === collectionId) {
-            collection.content = collection.content.map((todo: itemType) => {
+            collection.collectionTodos = collection.collectionTodos.map((todo: itemType) => {
                 if (todo.id === todoId) {
                     todo.completed = todoStatus;
                 }
@@ -77,20 +77,20 @@ export default function TemplateTodoList() {
   }, [id, setCollection, userFolder]);
 
   useEffect(() => {
-    if (collection.content) {
+    if (collection.collectionTodos) {
       try {
         setCurrentMain("none");
         setTodos(
-          collection.content.filter((todo: itemType) => !todo.completed)
+          collection.collectionTodos.filter((todo: itemType) => !todo.completed)
         );
         setCompleteTodos(
-          collection.content.filter((todo: itemType) => todo.completed)
+          collection.collectionTodos.filter((todo: itemType) => todo.completed)
         );
       } catch (e) {
         console.log(e);
       }
     }
-  }, [setCurrentMain, collection.content, setTodos, setCompleteTodos]);
+  }, [setCurrentMain, collection, setTodos, setCompleteTodos]);
 
   const styleCSS = hiddenSidebar
     ? "todo-page-main-collection-template full-page"
@@ -216,7 +216,7 @@ export default function TemplateTodoList() {
               <h5 className="todo-page-main-collection-template-todos-header">
                 Tasks - {todos && todos.length}
               </h5>
-              {collection.content
+              {collection.collectionTodos
                 .filter((todo: itemType) => todo.completed === false)
                 .map((todo: itemType, index: number) => {
                   return (
@@ -265,7 +265,7 @@ export default function TemplateTodoList() {
               <h5 className="todo-page-main-collection-template-todos-header">
                 Completed - {completedTodos && completedTodos.length}
               </h5>
-              {collection.content
+              {collection.collectionTodos
                 .filter((todo: itemType) => todo.completed === true)
                 .map((todo: itemType, index: number) => {
                   return (

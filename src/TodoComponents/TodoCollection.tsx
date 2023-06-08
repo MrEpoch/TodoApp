@@ -130,7 +130,7 @@ export default function DashboardCollectionMain() {
                               (todo: itemType) => todo.completed
                             ).length
                           }
-                          /{collection.content.length} done
+                          /{collection.collectionTodos.length} done
                         </p>
                       </div>
                       <div className="todo-page-main-collection-content-item-starContainer">
@@ -185,11 +185,11 @@ export default function DashboardCollectionMain() {
                           <p>
                             {" "}
                             {
-                              collection.content.filter(
+                              collection.collectionTodos.filter(
                                 (todo: itemType) => todo.completed
                               ).length
                             }
-                            /{collection.content.length} done
+                            /{collection.collectionTodos.length} done
                           </p>
                         </div>
                         <div className="todo-page-main-collection-content-item-starContainer">
