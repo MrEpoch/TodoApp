@@ -1,10 +1,8 @@
 @media (max-width: 1650px) {
-    .todo-page-main-collection-template-todos-todo-container-text {
-        font-size: 1.5rem;
-    }
+  .todo-page-main-collection-template-todos-todo-container-text {
+    font-size: 1.5rem;
+  }
 }
-
-
 
 @media (max-width: 1200px) {
   .todo-page-main-collection-button-container {

@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
-import { useTodo } from "./TodoPage";
-import {
-  TodoContextType,
-  itemType,
-  CollectionType,
-} from "../@types/todo";
+import { useTodo } from "./wrapper.tsx";
+import { TodoContextType, itemType, CollectionType } from "../@types/todo";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Todo_template_collections.css";
-import { Backdrop, CircularProgress } from "@mui/material"; 
+import { Backdrop, CircularProgress } from "@mui/material";
 import { deleteCollection, deleteItem, updateItem } from "../apiFetching";
 
 export default function TemplateTodoList() {
@@ -28,17 +24,23 @@ export default function TemplateTodoList() {
   const [todos, setTodos] = useState<itemType[]>([]);
   const [completedTodos, setCompleteTodos] = useState<itemType[]>([]);
 
-  function filteredCollection(todoStatus: boolean, collectionId: string, todoId: string) {
+  function filteredCollection(
+    todoStatus: boolean,
+    collectionId: string,
+    todoId: string
+  ) {
     userFolder.map((collection: CollectionType) => {
-        if (collection.id === collectionId) {
-            collection.collectionTodos = collection.collectionTodos.map((todo: itemType) => {
-                if (todo.id === todoId) {
-                    todo.completed = todoStatus;
-                }
-                return todo;
-            });
-        }
-        return collection;
+      if (collection.id === collectionId) {
+        collection.collectionTodos = collection.collectionTodos.map(
+          (todo: itemType) => {
+            if (todo.id === todoId) {
+              todo.completed = todoStatus;
+            }
+            return todo;
+          }
+        );
+      }
+      return collection;
     });
     return userFolder.find(
       (collection: CollectionType) => collection.id === id
@@ -53,9 +55,9 @@ export default function TemplateTodoList() {
     }
 
     if (id === undefined) {
-        navigate("/error");
-        return;
-    } 
+      navigate("/error");
+      return;
+    }
 
     if (id === undefined || !collectionsId.includes(id)) {
       navigate("/error");
@@ -99,7 +101,14 @@ export default function TemplateTodoList() {
   function changeTodoStatus(todo: itemType, collectionId: string) {
     setLoading(true);
     try {
-      updateItem(todo.id, !todo.completed, todo.title, todo.dateVerify, todo.yearMonth, todo.date);  
+      updateItem(
+        todo.id,
+        !todo.completed,
+        todo.title,
+        todo.dateVerify,
+        todo.yearMonth,
+        todo.date
+      );
       setCollection(filteredCollection(!todo.completed, collectionId, todo.id));
     } catch (e) {
       console.log(e);
@@ -131,10 +140,13 @@ export default function TemplateTodoList() {
     if (confirmDelete) {
       setLoading(true);
       try {
-        deleteCollection(collection.id)
-            .then(() => {
-                setUserFolder(userFolder.filter((collectionU: CollectionType) => collectionU.id !== collection.id));
-            });
+        deleteCollection(collection.id).then(() => {
+          setUserFolder(
+            userFolder.filter(
+              (collectionU: CollectionType) => collectionU.id !== collection.id
+            )
+          );
+        });
         navigate("/todo/collections");
       } catch (e) {
         console.log(e);
@@ -152,10 +164,11 @@ export default function TemplateTodoList() {
     if (confirmDelete) {
       setLoading(true);
       try {
-        deleteItem(todo.id)
-            .then(() => {
-                setCollection(filteredCollection(todo.completed, collectionId, todo.id));
-            });
+        deleteItem(todo.id).then(() => {
+          setCollection(
+            filteredCollection(todo.completed, collectionId, todo.id)
+          );
+        });
       } catch (e) {
         console.log(e);
       }
@@ -167,12 +180,10 @@ export default function TemplateTodoList() {
   return (
     <section className={styleCSS}>
       {loading ? (
-        <Backdrop
-          open={true}
-        >
+        <Backdrop open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
-        ) : (
+      ) : (
         <>
           <div className="todo-page-main-collection-template-top">
             <div className="collection-template-top-Header">
@@ -191,7 +202,7 @@ export default function TemplateTodoList() {
                 </svg>
               </button>
               <h2 className="collection-template-top-Header-h2">
-                {collection.title}
+                {collection && collection.title}
               </h2>
             </div>
             <div className="collection-template-top-TodoAdd">
@@ -216,7 +227,7 @@ export default function TemplateTodoList() {
               <h5 className="todo-page-main-collection-template-todos-header">
                 Tasks - {todos && todos.length}
               </h5>
-              {collection.collectionTodos
+              {collection.collectionTodos && collection.collectionTodos
                 .filter((todo: itemType) => todo.completed === false)
                 .map((todo: itemType, index: number) => {
                   return (

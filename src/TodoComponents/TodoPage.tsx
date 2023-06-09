@@ -1,76 +1,29 @@
 import "./dashboard.css";
 import "./mobileDashboard.css";
-import React, { useContext, useEffect, useRef, useState, createContext, useMemo } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./TodoMain.css";
 import DateTimePicker from "react-datetime-picker";
 import "react-datetime-picker/dist/DateTimePicker.css";
 import "react-calendar/dist/Calendar.css";
 import "react-clock/dist/Clock.css";
-import {
-  ChildrenProp,
-  TodoContextType,
-  CollectionType,
-} from "../@types/todo";
+import { ChildrenProp, TodoContextType, CollectionType } from "../@types/todo";
 import { Alert, AlertTitle } from "@mui/material";
-import { createCollection, createItem, getCollections } from "../apiFetching"; 
+import { createCollection, createItem, getCollections } from "../apiFetching";
 import { Backdrop, CircularProgress } from "@mui/material";
-
-const TodoContext = createContext<TodoContextType | object>({});
+import { useTodo } from "./wrapper";
 
 export default function TodoApp({ children }: ChildrenProp) {
+    
+  const { hiddenCreateItem, hiddenCreateCollection } = useTodo();
 
-  const [userFolder, setUserFolder] = useState<CollectionType[] | []>([]);
-  const [hiddenSidebar, setHiddenSidebar] = useState<boolean>(true);
-  const [currentMain, setCurrentMain] = useState<string>("dashboard");
-  const [hiddenCreateItem, setHiddenCreateItem] = useState<boolean>(true);
-  const [hiddenCreateCollection, setHiddenCreateCollection] =
-    useState<boolean>(true);
-  const [collectionsId, setCollectionsId] = useState<string[] | [] | boolean[] | any>(
-    [false]
-  );
-
-  const navigate = useNavigate();
-
-  useMemo(() => {
-        getCollections()
-            .then((res) => { 
-                console.log(res.userFolder);
-                res && setUserFolder(res.userFolder);
-            })
-            .catch(() => {
-                navigate("/error");
-            });
-        return () => {
-            setUserFolder([]);
-        }
-  }, [setUserFolder, navigate]);
-
-  useEffect(() => {
-    setCollectionsId(
-      userFolder.map((collection: CollectionType) => collection.id)
-    );
-    return () => {
-        setCollectionsId([]);
-    }
-  }, [setCollectionsId, userFolder]);
-
-  const todoValue = {
-    setHiddenSidebar,
-    hiddenSidebar,
-    currentMain,
-    setCurrentMain,
-    setHiddenCreateCollection,
-    setHiddenCreateItem,
-    hiddenCreateCollection,
-    hiddenCreateItem,
-    userFolder,
-    setUserFolder,
-    collectionsId,
-    setCollectionsId,
-  };
   return (
-    <TodoContext.Provider value={todoValue}>
+    <>
       <section className="dashboard-page">
         <DashboardHeader />
         <DashboardSideBar />
@@ -78,29 +31,25 @@ export default function TodoApp({ children }: ChildrenProp) {
         {hiddenCreateCollection ? "" : <AddCollection />}
         {children}
       </section>
-    </TodoContext.Provider>
+    </>
   );
 }
 
-export function useTodo() {
-  return useContext(TodoContext);
-}
+
 
 function DashboardHeader() {
   const headerCollection = useRef<HTMLDivElement>(null);
   const headerDashboard = useRef<HTMLDivElement>(null);
   const addReference = useRef<SVGSVGElement>(null);
 
-
   const navigate = useNavigate();
 
   if (useTodo() === null) navigate("/login");
 
-
   const { setHiddenSidebar, currentMain, setHiddenCreateCollection } =
     useTodo() as TodoContextType;
 
-  useEffect(() => {
+  useMemo(() => {
     if (currentMain === "dashboard") {
       headerDashboard.current?.style.setProperty("color", "white");
       headerCollection.current?.style.setProperty("color", "darkgray");
@@ -192,7 +141,6 @@ function DashboardHeader() {
 }
 
 function DashboardSideBar() {
-
   const navigate = useNavigate();
 
   if (useTodo() === null) navigate("/login");
@@ -202,7 +150,7 @@ function DashboardSideBar() {
 
   useEffect(() => {
     setLoading(false);
-    return () => setLoading(true)
+    return () => setLoading(true);
   }, [setLoading, userFolder]);
 
   const cssSidebar = hiddenSidebar
@@ -212,42 +160,40 @@ function DashboardSideBar() {
   return (
     <>
       {loading ? (
-        <Backdrop
-          open={true}
-        >
+        <Backdrop open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (
-    <section className={cssSidebar}>
-      <div className="dashboard-page-sidebar-container">
-        <h3 className="dashboard-collections-container-header">Collections</h3>
-        <div className="dashboard-collections-container-list">
-          {userFolder.map((collection: CollectionType, index) => {
-            const location = `/todo/${collection.id}`;
-            return (
-              <Link
-                to={location}
-                className="dashboard-collections-container-list-item"
-                key={index}
-              >
-                {collection.title}
-              </Link>
-            );
-          }, [])}
-        </div>
-      </div>
-    </section>
-   )}
-   </>
+        <section className={cssSidebar}>
+          <div className="dashboard-page-sidebar-container">
+            <h3 className="dashboard-collections-container-header">
+              Collections
+            </h3>
+            <div className="dashboard-collections-container-list">
+              {userFolder.map((collection: CollectionType, index) => {
+                const location = `/todo/${collection.id}`;
+                return (
+                  <Link
+                    to={location}
+                    className="dashboard-collections-container-list-item"
+                    key={index}
+                  >
+                    {collection.title}
+                  </Link>
+                );
+              }, [])}
+            </div>
+          </div>
+        </section>
+      )}
+    </>
   );
 }
 
 export function AddCollection() {
-  
   const navigate = useNavigate();
 
   if (useTodo() === null) navigate("/login");
-
 
   const { setHiddenCreateCollection, setUserFolder } =
     useTodo() as TodoContextType;
@@ -266,27 +212,24 @@ export function AddCollection() {
 
     if (!titleRef.current) return;
     if (titleRef.current.value.trim().length === 0) {
-        setError("Choose collection name");
-        return;
-    }
-    else if (titleRef.current.value.length > 12) {
+      setError("Choose collection name");
+      return;
+    } else if (titleRef.current.value.length > 12) {
       setError("Collection max size is 12 characters");
       return;
     }
 
     try {
-      ( async () => {
-        if (titleRef.current?.value === undefined) { 
-            setError("Choose collection name");
-            return;
+      (async () => {
+        if (titleRef.current?.value === undefined) {
+          setError("Choose collection name");
+          return;
         }
-        createCollection(titleRef.current?.value)
-        .then(() => {
-            getCollections()
-                .then((data) => {
-                    setUserFolder(data.data.userFolder);
-                });
-       });
+        createCollection(titleRef.current?.value).then(() => {
+          getCollections().then((data) => {
+            setUserFolder(data.data.userFolder);
+          });
+        });
       })();
       setHiddenCreateCollection((prev) => !prev);
     } catch (e) {
@@ -297,13 +240,19 @@ export function AddCollection() {
 
   return (
     <section className="todo-page-addCollection-popUp">
-         {error && 
-            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: "20svh", zIndex: "10" }} severity="error">
-                <AlertTitle>Error</AlertTitle>
-                <strong>{error}</strong>
-            </Alert>
-        }     
-        <form
+      {error && (
+        <Alert
+          onClose={() => {
+            setError("");
+          }}
+          style={{ position: "absolute", top: "20svh", zIndex: "10" }}
+          severity="error"
+        >
+          <AlertTitle>Error</AlertTitle>
+          <strong>{error}</strong>
+        </Alert>
+      )}
+      <form
         onSubmit={(e) => {
           todoCollectionSubmitHandler(e);
         }}
@@ -350,11 +299,9 @@ export function AddCollection() {
 }
 
 export function AddItem() {
-  
   const navigate = useNavigate();
 
   if (useTodo() === null) navigate("/login");
-
 
   const { setHiddenCreateItem, setUserFolder } = useTodo() as TodoContextType;
 
@@ -378,17 +325,21 @@ export function AddItem() {
       setError("Todo cannot be longer than 35 characters");
       return;
     } else if (titleRef.current.value.trim().length === 0) {
-        setError("Todo cannot be empty");
-        return;
+      setError("Todo cannot be empty");
+      return;
     }
 
     if (onChangeVal === null) {
       setOnChange(new Date());
-    } else if (!(onChangeVal && Object.prototype.toString.call(onChangeVal) === "[object Date]")) {
-        setError("There is something wrong with date");
-        return;
+    } else if (
+      !(
+        onChangeVal &&
+        Object.prototype.toString.call(onChangeVal) === "[object Date]"
+      )
+    ) {
+      setError("There is something wrong with date");
+      return;
     }
-
 
     const [, month, dayInMonth, , time] = onChangeVal.toString().split(" ");
     const [hourTime, minuteTime] = time.split(":");
@@ -397,27 +348,32 @@ export function AddItem() {
       const dateVerify = onChangeVal.getTime();
       const date = `${month} ${dayInMonth} ${hourTime}:${minuteTime}`;
       const yearMonth = `${onChangeVal.getMonth()} ${onChangeVal.getFullYear()}`;
-     
-      
-      (async () => {
-        if (titleRef.current?.value === undefined) {
-            setError("Todo cannot be empty");
-            return;
-        }  else if (id === undefined) {
-            setError("Todo cannot be empty");
-            navigate("/error");
-            return;
-        }
-        createItem(id, titleRef.current?.value, dateVerify, yearMonth, date)
-            .then(() => {
+
+      if (titleRef.current?.value === undefined) {
+        setError("Todo cannot be empty");
+        return;
+      } else if (id === undefined) {
+        setError("Todo cannot be empty");
+        navigate("/error");
+        return;
+      }
+      createItem(id, titleRef.current?.value, dateVerify, yearMonth, date)
+        .then(
+            () => {
                 getCollections()
-                    .then((collections) => {
-                        setUserFolder(collections);
-                    });
+                    .then((data) => {
+                        setUserFolder(data.userFolder);
+                    })
+            }
+        )
+        .catch(
+            () => {
+               throw new Error("Failed to create item"); 
             });
-      });
       setHiddenCreateItem((prev) => !prev);
+      return;
     } catch (e) {
+      console.log(e);
       setError("Failed to add todo");
       return;
     }
@@ -425,12 +381,18 @@ export function AddItem() {
 
   return (
     <section className="todo-page-addItem-popUp">
-        {error && 
-            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: "20svh", zIndex: "10" }} severity="error">
-                <AlertTitle>Error</AlertTitle>
-                <strong>{error}</strong>
-            </Alert>
-        }     
+      {error && (
+        <Alert
+          onClose={() => {
+            setError("");
+          }}
+          style={{ position: "absolute", top: "20svh", zIndex: "10" }}
+          severity="error"
+        >
+          <AlertTitle>Error</AlertTitle>
+          <strong>{error}</strong>
+        </Alert>
+      )}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -461,7 +423,7 @@ export function AddItem() {
           }}
           className="todo-page-addItem-popUp-container-buttons-cancel"
         >
-        x
+          x
         </button>
         <button
           className="todo-page-addItem-popUp-container-buttons-create"
@@ -473,4 +435,3 @@ export function AddItem() {
     </section>
   );
 }
-

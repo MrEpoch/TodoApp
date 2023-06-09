@@ -10,19 +10,14 @@ import ErrorPage from "./errorpage";
 import { unsecure_JWT_token_storage_name } from "./apiFetching";
 
 export function ProtectRoutes({ children }: any) {
-    
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    if (!localStorage.getItem(unsecure_JWT_token_storage_name)) {
-        navigate('/login')
-    }
+  if (!localStorage.getItem(unsecure_JWT_token_storage_name)) {
+    navigate("/login");
+  }
 
-    return (
-        <>
-            {children}
-        </>
-    )    
-} 
+  return <>{children}</>;
+}
 
 export default function Router() {
   return (
@@ -36,9 +31,9 @@ export default function Router() {
           path="/todo"
           element={
             <ProtectRoutes>
-                <Dashboard>
-                    <DashboardMain />
-                </Dashboard>
+              <Dashboard>
+                <DashboardMain />
+              </Dashboard>
             </ProtectRoutes>
           }
         />
@@ -46,9 +41,9 @@ export default function Router() {
           path="/todo/collections"
           element={
             <ProtectRoutes>
-                <Dashboard>
+              <Dashboard>
                 <DashboardCollectionMain />
-                </Dashboard>
+              </Dashboard>
             </ProtectRoutes>
           }
         />
@@ -56,9 +51,9 @@ export default function Router() {
           path="/todo/:id"
           element={
             <ProtectRoutes>
-                <Dashboard>
-                    <TemplateTodoList />
-                </Dashboard>
+              <Dashboard>
+                <TemplateTodoList />
+              </Dashboard>
             </ProtectRoutes>
           }
         />

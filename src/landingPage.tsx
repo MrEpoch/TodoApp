@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 
 export default function LandingPage() {
-
-    return (
+  return (
     <section className="landing-page">
       <header className="landing-page-header">
         <Link to="/">

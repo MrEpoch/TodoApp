@@ -30,44 +30,52 @@ export default function Login() {
         return;
       }
     } else {
-        setError("Some error happened, please restart page");
-        setSubmitLoading(false);
-        return;
+      setError("Some error happened, please restart page");
+      setSubmitLoading(false);
+      return;
     }
 
     if (passwordRef.current && passwordRef.current?.value.trim().length < 8) {
-        setError("Your password is smaller than 8 characters");
-        setSubmitLoading(false);
-        return;
+      setError("Your password is smaller than 8 characters");
+      setSubmitLoading(false);
+      return;
     }
 
     try {
-          if (!usernameRef.current?.value) {
-            setError("Please enter a username");
-            setSubmitLoading(false);
-            return;
-          } else if (!emailRef.current?.value) {
-            setError("Please enter an email");
-            setSubmitLoading(false);
-            return;
-          } else if (!passwordRef.current?.value) {
-            setError("Please enter a password");
-            setSubmitLoading(false);
-            return;
-          }
-        try {
-            logIn(usernameRef.current?.value, emailRef.current?.value, passwordRef.current?.value)
-                .then(() => localStorage.getItem(unsecure_JWT_token_storage_name) && navigate("/todo"))
-                .catch(() => {
-                    setSubmitLoading(false);
-                    setError("Error Logging In. Please try again");
-                    return;        
-                });
-        } catch (e) {
+      if (!usernameRef.current?.value) {
+        setError("Please enter a username");
+        setSubmitLoading(false);
+        return;
+      } else if (!emailRef.current?.value) {
+        setError("Please enter an email");
+        setSubmitLoading(false);
+        return;
+      } else if (!passwordRef.current?.value) {
+        setError("Please enter a password");
+        setSubmitLoading(false);
+        return;
+      }
+      try {
+        logIn(
+          usernameRef.current?.value,
+          emailRef.current?.value,
+          passwordRef.current?.value
+        )
+          .then(
+            () =>
+              localStorage.getItem(unsecure_JWT_token_storage_name) &&
+              navigate("/todo")
+          )
+          .catch(() => {
             setSubmitLoading(false);
             setError("Error Logging In. Please try again");
             return;
-        }
+          });
+      } catch (e) {
+        setSubmitLoading(false);
+        setError("Error Logging In. Please try again");
+        return;
+      }
     } catch (e) {
       setSubmitLoading(false);
       setError("Error Logging In. Please try again");
@@ -80,21 +88,24 @@ export default function Login() {
 
   return (
     <AuthPage>
-
       {submitLoading ? (
-        <Backdrop
-          open={true}
-        >
+        <Backdrop open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (
         <section className="signup-card">
-          {error && 
-            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: 33 }} severity="error">
-                <AlertTitle>Error</AlertTitle>
-                <strong>{error}</strong>
+          {error && (
+            <Alert
+              onClose={() => {
+                setError("");
+              }}
+              style={{ position: "absolute", top: 33 }}
+              severity="error"
+            >
+              <AlertTitle>Error</AlertTitle>
+              <strong>{error}</strong>
             </Alert>
-          }
+          )}
           <h1>Log In</h1>
           <form className="account-form" onSubmit={(e) => handleSubmit(e)}>
             <div className="input-container">

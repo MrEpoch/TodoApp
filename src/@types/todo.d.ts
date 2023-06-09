@@ -47,8 +47,8 @@ export type CollectionType = {
 };
 
 export type CollectionShownType = CollectionType & {
-    shown: boolean;
-}
+  shown: boolean;
+};
 
 export type itemType = {
   createdAt: string;

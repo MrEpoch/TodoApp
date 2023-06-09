@@ -4,9 +4,7 @@ import { useRef, useState } from "react";
 import { Alert, AlertTitle, Backdrop, CircularProgress } from "@mui/material";
 import { signUp } from "../apiFetching";
 
-
 export default function SignUp() {
-
   const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -30,11 +28,11 @@ export default function SignUp() {
         return;
       }
     }
-    
+
     if (passwordRef.current && passwordRef.current?.value.trim().length < 8) {
-        setSubmitLoading(false);
-        setError("Your password is smaller than 8 characters");
-        return;
+      setSubmitLoading(false);
+      setError("Your password is smaller than 8 characters");
+      return;
     }
 
     if (usernameRef.current) {
@@ -47,24 +45,27 @@ export default function SignUp() {
 
     try {
       (async () => {
-          if (!usernameRef.current?.value) {
-            setError("Please enter a username");
-            setSubmitLoading(false);
-            return;
-          } else if (!emailRef.current?.value) {
-            setError("Please enter an email");
-            setSubmitLoading(false);
-            return;
-          } else if (!passwordRef.current?.value) {
-            setError("Please enter a password");
-            setSubmitLoading(false);
-            return;
-          }
-        signUp(emailRef.current?.value, usernameRef.current?.value, passwordRef.current?.value)
-            .then(() => {
-                navigate("/todo");
-            })
-        })();
+        if (!usernameRef.current?.value) {
+          setError("Please enter a username");
+          setSubmitLoading(false);
+          return;
+        } else if (!emailRef.current?.value) {
+          setError("Please enter an email");
+          setSubmitLoading(false);
+          return;
+        } else if (!passwordRef.current?.value) {
+          setError("Please enter a password");
+          setSubmitLoading(false);
+          return;
+        }
+        signUp(
+          emailRef.current?.value,
+          usernameRef.current?.value,
+          passwordRef.current?.value
+        ).then(() => {
+          navigate("/todo");
+        });
+      })();
     } catch (e) {
       setSubmitLoading(false);
       setError("Error signing up. Please try again");
@@ -77,20 +78,24 @@ export default function SignUp() {
   return (
     <AuthPage>
       {submitLoading ? (
-        <Backdrop
-          open={true}
-        >
+        <Backdrop open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (
         <section className="signup-card">
-        {error && 
-            <Alert onClose={() => {setError("")}} style={{ position: "absolute", top: 33 }} severity="error">
-                <AlertTitle>Error</AlertTitle>
-                <strong>{error}</strong>
+          {error && (
+            <Alert
+              onClose={() => {
+                setError("");
+              }}
+              style={{ position: "absolute", top: 33 }}
+              severity="error"
+            >
+              <AlertTitle>Error</AlertTitle>
+              <strong>{error}</strong>
             </Alert>
-          }
- 
+          )}
+
           <h1>Sign Up</h1>
           <form className="account-form" onSubmit={(e) => handleSubmit(e)}>
             <div className="input-container">

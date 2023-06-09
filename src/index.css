@@ -1,7 +1,7 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 *::-webkit-scrollbar {
@@ -17,11 +17,11 @@
 }
 
 :root {
-    --main-color: #df2935;
-    --secondary-color: #fff;
-    --system-color: #0F1319;
-    --system-black-color: #040608;
-    --system-color-lighter:#0B0E13;
+  --main-color: #df2935;
+  --secondary-color: #fff;
+  --system-color: #0f1319;
+  --system-black-color: #040608;
+  --system-color-lighter: #0b0e13;
 }
 
 html,
@@ -45,4 +45,3 @@ body {
   height: 100svh;
   display: flex;
 }
-

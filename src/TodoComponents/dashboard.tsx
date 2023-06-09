@@ -1,17 +1,29 @@
 import { useEffect, useRef, useState } from "react";
-import { useTodo } from "./TodoPage";
-import { TodoContextType, itemType, CollectionShownType, CollectionType } from "../@types/todo";
+import { useTodo } from "./wrapper.tsx";
+import {
+  TodoContextType,
+  itemType,
+  CollectionShownType,
+  CollectionType,
+} from "../@types/todo";
 import { useNavigate } from "react-router-dom";
-import { Backdrop, CircularProgress, List, ListItem, ListItemText, Divider, ListItemButton, ListItemIcon } from "@mui/material";
+import {
+  Backdrop,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  ListItemButton,
+  ListItemIcon,
+} from "@mui/material";
 import { KeyboardArrowDown } from "@mui/icons-material";
 
-
 export default function DashboardMain() {
-
   const navigate = useNavigate();
 
   if (useTodo() === null) navigate("/login");
-      
+
   const { hiddenSidebar, setCurrentMain, userFolder } =
     useTodo() as TodoContextType;
   const dotRef = useRef<SVGSVGElement>(null);
@@ -30,41 +42,69 @@ export default function DashboardMain() {
       const year = date.getFullYear();
 
       setToday(
-        userFolder.map((collection: any) => {
-          const filteredItem = collection.collectionTodos.filter((item: itemType) => {
-            const itemDate = item.date.split(" ");
-            const [monthItem, yearItem] = item.yearMonth.split(" ");
-            return (
-              parseInt(monthItem) === month &&
-              parseInt(itemDate[1]) === today &&
-              parseInt(yearItem) === year &&
-              !item.completed
+        userFolder
+          .map((collection: any) => {
+            const filteredItem = collection.collectionTodos.filter(
+              (item: itemType) => {
+                const itemDate = item.date.split(" ");
+                const [monthItem, yearItem] = item.yearMonth.split(" ");
+                return (
+                  parseInt(monthItem) === month &&
+                  parseInt(itemDate[1]) === today &&
+                  parseInt(yearItem) === year &&
+                  !item.completed
+                );
+              }
             );
-          });
-        if (filteredItem.length !== 0) {
-            return { ...collection, collectionTodos: filteredItem, shown: false };
-        } else {
-            return false;
-        }
-      }).filter((collection) => collection !== false))
+            if (filteredItem.length !== 0) {
+              return {
+                ...collection,
+                collectionTodos: filteredItem,
+                shown: false,
+              };
+            } else {
+              return false;
+            }
+          })
+          .filter((collection) => collection !== false)
+      );
 
       setLongTerm(
-        userFolder.map((collection: any) => {
-          const filteredItem = collection.collectionTodos.filter((item: itemType) => {
-            const itemDate = item.date.split(" ");
-            const [monthItem, yearItem] = item.yearMonth.split(" ");
-            console.log(monthItem, itemDate[1], yearItem, "nothing", month, today, year);
+        userFolder
+          .map((collection: any) => {
+            const filteredItem = collection.collectionTodos.filter(
+              (item: itemType) => {
+                const itemDate = item.date.split(" ");
+                const [monthItem, yearItem] = item.yearMonth.split(" ");
 
-            if (parseInt(yearItem) > year && !item.completed ? true : !item.completed && parseInt(monthItem) > month && parseInt(yearItem) === year ? true : parseInt(itemDate[1]) > today && parseInt(yearItem) === year && parseInt(monthItem) === month && !item.completed) {
-                return true;
+                if (
+                  parseInt(yearItem) > year && !item.completed
+                    ? true
+                    : !item.completed &&
+                      parseInt(monthItem) > month &&
+                      parseInt(yearItem) === year
+                    ? true
+                    : parseInt(itemDate[1]) > today &&
+                      parseInt(yearItem) === year &&
+                      parseInt(monthItem) === month &&
+                      !item.completed
+                ) {
+                  return true;
+                }
+              }
+            );
+            if (filteredItem.length !== 0) {
+              return {
+                ...collection,
+                collectionTodos: filteredItem,
+                shown: false,
+              };
+            } else {
+              return false;
             }
-          });
-        if (filteredItem.length !== 0) {
-            return { ...collection, collectionTodos: filteredItem, shown: false };
-        } else {
-            return false;
-        }
-        }).filter(collection => collection !== false));
+          })
+          .filter((collection) => collection !== false)
+      );
     } catch (e) {
       console.log(e);
     }
@@ -98,15 +138,12 @@ export default function DashboardMain() {
   return (
     <main className={styleCSS}>
       {loading ? (
-        <Backdrop
-          open={true}
-        >
+        <Backdrop open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (
         <>
           <div className="todo-page-dashboard-main-heading">
-
             <h3>Dashboard</h3>
             <h1>
               Good morning, <span>User Name</span>
@@ -126,7 +163,7 @@ export default function DashboardMain() {
               />
             </svg>
           </div>
-          <div  className="todo-page-dashboard-main-todosOverview">
+          <div className="todo-page-dashboard-main-todosOverview">
             <div className="todo-page-dashboard-main-todosOverview-filter">
               <button
                 onClick={() => {
@@ -153,74 +190,144 @@ export default function DashboardMain() {
                 Long-term tasks
               </button>
             </div>
-            <div  className="todo-page-dashboard-main-todosContainer">
-              {btnToday ? (
-                (
-                  today.map((collection: CollectionShownType, index: number) => {
-                    if (collection.collectionTodos.length === 0) {
-                      return;
+            <div className="todo-page-dashboard-main-todosContainer">
+              {btnToday
+                ? today.map(
+                    (collection: CollectionShownType, index: number) => {
+                      return (
+                          <List 
+                            key={index}
+                            style={{ marginTop: "3em" }}
+                            className="todo-page-dashboard-main-todos-item"
+                          >
+                            <div className="dashboard-main-todos-item-header">
+                              <ListItemButton
+                                onClick={() => {
+                                  navigate("/todo/" + collection.id);
+                                }}
+                                disableRipple
+                                sx={{ pl: 4 }}
+                              >
+                                <ListItemText>{collection.title}</ListItemText>
+                              </ListItemButton>
+                              <ListItemButton
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                  padding: "1rem",
+                                }}
+                                disableRipple
+                              >
+                                <ListItemIcon>
+                                  <KeyboardArrowDown
+                                    ref={arrRef}
+                                    style={{ color: "white" }}
+                                    onClick={() => {
+                                      changeShown(
+                                        collection.id,
+                                        setToday,
+                                        today
+                                      );
+                                    }}
+                                    className={
+                                      collection.shown ? "reverse" : ""
+                                    }
+                                  />
+                                </ListItemIcon>
+                              </ListItemButton>
+                            </div>
+                            {collection.shown ? (
+                              <>
+                                {collection.collectionTodos.map(
+                                  (item: itemType) => {
+                                    return (
+                                      <ListItem
+                                        key={item.id}
+                                        style={{ padding: "2em" }}
+                                      >
+                                        <ListItemText primary={item.title} />
+                                        <ListItemText primary={item.date} />
+                                      </ListItem>
+                                    );
+                                  }
+                                )}
+                              </>
+                            ) : null}
+                          </List>
+                      );
                     }
-                    return (
-                    <>
-                        <List key={index} style={{ marginTop: "3em" }} className="todo-page-dashboard-main-todos-item" >
+                  )
+                : longTerm.map(
+                    (collection: CollectionShownType, index: number) => {
+                      if (collection.collectionTodos.length === 0) {
+                        return;
+                      }
+                      return (
+                        <>
+                          <List
+                            key={index}
+                            style={{ marginTop: "3em" }}
+                            className="todo-page-dashboard-main-todos-item"
+                          >
                             <div className="dashboard-main-todos-item-header">
-                                <ListItemButton onClick={() => { navigate("/todo/" + collection.id) }} disableRipple  sx={{ pl: 4 }}>
-                                    <ListItemText>{collection.title}</ListItemText>
-                                </ListItemButton>
-                                <ListItemButton style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }} disableRipple>
-                                    <ListItemIcon>
-                                        <KeyboardArrowDown ref={arrRef} style={{ color: "white" }}  onClick={() => {changeShown(collection.id, setToday, today)}}  className={collection.shown ? "reverse" : ""} />
-                                    </ListItemIcon>
-                                </ListItemButton>
+                              <ListItemButton
+                                onClick={() => {
+                                  navigate("/todo/" + collection.id);
+                                }}
+                                disableRipple
+                                sx={{ pl: 4 }}
+                              >
+                                <ListItemText>{collection.title}</ListItemText>
+                              </ListItemButton>
+                              <ListItemButton
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "flex-end",
+                                  padding: "1rem",
+                                }}
+                                disableRipple
+                              >
+                                <ListItemIcon>
+                                  <KeyboardArrowDown
+                                    ref={arrRef}
+                                    style={{ color: "white" }}
+                                    onClick={() => {
+                                      changeShown(
+                                        collection.id,
+                                        setToday,
+                                        today
+                                      );
+                                    }}
+                                    className={
+                                      collection.shown ? "reverse" : ""
+                                    }
+                                  />
+                                </ListItemIcon>
+                              </ListItemButton>
                             </div>
-                            {collection.shown ? <>
-                                {collection.collectionTodos.map((item: itemType) => {
+                            {collection.shown ? (
+                              <>
+                                {collection.collectionTodos.map(
+                                  (item: itemType) => {
                                     return (
-                                        <ListItem key={item.id} style={{ padding: "2em"}} >
-                                            <ListItemText primary={item.title} />
-                                            <ListItemText primary={item.date} />
-                                        </ListItem>
-                                    )
-                                })}
-                            </> : null} 
-                        </List>
-                        <Divider variant="middle" component="li" />
-                    </>
-                    )})
-               ) 
-              ) : (
-                longTerm.map((collection: CollectionShownType, index: number) => {
-                  if (collection.collectionTodos.length === 0) {
-                    return;
-                  }
-                  return (
-                                          <>
-                        <List key={index} style={{ marginTop: "3em" }} className="todo-page-dashboard-main-todos-item" >
-                            <div className="dashboard-main-todos-item-header">
-                                <ListItemButton onClick={() => { navigate("/todo/" + collection.id) }} disableRipple  sx={{ pl: 4 }}>
-                                    <ListItemText>{collection.title}</ListItemText>
-                                </ListItemButton>
-                                <ListItemButton style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }} disableRipple>
-                                    <ListItemIcon>
-                                        <KeyboardArrowDown ref={arrRef} style={{ color: "white" }}  onClick={() => {changeShown(collection.id, setToday, today)}}  className={collection.shown ? "reverse" : ""} />
-                                    </ListItemIcon>
-                                </ListItemButton>
-                            </div>
-                            {collection.shown ? <>
-                                {collection.collectionTodos.map((item: itemType) => {
-                                    return (
-                                        <ListItem key={item.id} style={{ padding: "2em"}} >
-                                            <ListItemText primary={item.title} />
-                                            <ListItemText primary={item.date} />
-                                        </ListItem>
-                                    )
-                                })}
-                            </> : null} 
-                        </List>
-                        <Divider variant="middle" component="li" />
-                    </>                );
-                })
-              )}
+                                      <ListItem
+                                        key={item.id}
+                                        style={{ padding: "2em" }}
+                                      >
+                                        <ListItemText primary={item.title} />
+                                        <ListItemText primary={item.date} />
+                                      </ListItem>
+                                    );
+                                  }
+                                )}
+                              </>
+                            ) : null}
+                          </List>
+                          <Divider variant="middle" component="li" />
+                        </>
+                      );
+                    }
+                  )}
             </div>
           </div>
         </>
@@ -228,4 +335,3 @@ export default function DashboardMain() {
     </main>
   );
 }
-

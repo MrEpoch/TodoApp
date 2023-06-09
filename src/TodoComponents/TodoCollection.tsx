@@ -1,11 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 
-import { useTodo } from "./TodoPage";
-import {
-  TodoContextType,
-  CollectionType,
-  itemType,
-} from "../@types/todo";
+import { useTodo } from "./wrapper.tsx";
+import { TodoContextType, CollectionType, itemType } from "../@types/todo";
 import "./TodoPage.css";
 import { useNavigate } from "react-router-dom";
 import { Backdrop, CircularProgress } from "@mui/material";
@@ -22,7 +18,7 @@ export default function DashboardCollectionMain() {
     setHiddenCreateCollection,
     userFolder,
     setUserFolder,
-  } =  useTodo() as TodoContextType;
+  } = useTodo() as TodoContextType;
 
   const [loading, setLoading] = useState<boolean>(true);
   const [all, setAll] = useState<boolean>(true);
@@ -51,13 +47,14 @@ export default function DashboardCollectionMain() {
 
   function star(collection: CollectionType): void {
     try {
-        updateCollection(collection.id, !collection.favourite, collection.title)
-        userFolder.map((collection: CollectionType) => {
-            if (collection.id === collection.id) {
-                collection.favourite = !collection.favourite;
-            }
-            return collection;
-        })
+      updateCollection(collection.id, !collection.favourite, collection.title);
+      setUserFolder(userFolder.map((collectionW: CollectionType) => {
+        if (collection.id === collectionW.id) {
+            console.log("read");
+          collectionW.favourite = !collectionW.favourite;
+        }
+        return collectionW;
+      }));
     } catch (e) {
       console.log(e);
     }
@@ -78,9 +75,7 @@ export default function DashboardCollectionMain() {
   return (
     <>
       {loading ? (
-        <Backdrop
-          open={true}
-        >
+        <Backdrop open={true}>
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (
@@ -93,7 +88,11 @@ export default function DashboardCollectionMain() {
                 onClick={() => {
                   setAll(false);
                 }}
-                className={ !all ? "todo-page-main-collection-button-favourites active-btn" : "todo-page-main-collection-button-favourites" }
+                className={
+                  !all
+                    ? "todo-page-main-collection-button-favourites active-btn"
+                    : "todo-page-main-collection-button-favourites"
+                }
               >
                 Favourites
               </button>
@@ -102,7 +101,11 @@ export default function DashboardCollectionMain() {
                 onClick={() => {
                   setAll(true);
                 }}
-                className={ all ? "todo-page-main-collection-button-all active-btn" : "todo-page-main-collection-button-all" }
+                className={
+                  all
+                    ? "todo-page-main-collection-button-all active-btn"
+                    : "todo-page-main-collection-button-all"
+                }
               >
                 All collections
               </button>
@@ -230,4 +233,3 @@ export default function DashboardCollectionMain() {
     </>
   );
 }
-
