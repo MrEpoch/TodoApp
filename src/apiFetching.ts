@@ -239,12 +239,12 @@ export const deleteItem = async (todoId: string) => {
     return false;
   }
   try {
-    await axios.delete(api_url + "/api/todo/" + todoId, {
+    const deleted = await axios.delete(api_url + "/api/todo/" + todoId, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return;
+    return deleted.data;
   } catch (e) {
     return false;
   }
@@ -263,7 +263,7 @@ export const updateItem = async (
     return false;
   }
   try {
-    const updatedItem = await axios.post(
+    const updatedItem = await axios.put(
       api_url + "/api/todo/" + todoId,
       {
         title,

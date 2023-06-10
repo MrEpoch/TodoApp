@@ -4,7 +4,7 @@ import { TodoContextType, itemType, CollectionType } from "../@types/todo";
 import { useNavigate, useParams } from "react-router-dom";
 import "./Todo_template_collections.css";
 import { Backdrop, CircularProgress } from "@mui/material";
-import { deleteCollection, deleteItem, updateItem } from "../apiFetching";
+import { deleteCollection, deleteItem, getCollections, updateItem } from "../apiFetching";
 
 export default function TemplateTodoList() {
   const navigate = useNavigate();
@@ -108,8 +108,16 @@ export default function TemplateTodoList() {
         todo.dateVerify,
         todo.yearMonth,
         todo.date
-      );
-      setCollection(filteredCollection(!todo.completed, collectionId, todo.id));
+      ).then(() => {
+        getCollections()
+            .then((data) => {
+                setUserFolder(data.userFolder);
+                setCollection(data.userFolder.filter((collection: CollectionType) => collection.id === collectionId)[0]);
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+        });
     } catch (e) {
       console.log(e);
       navigate("/todo");
@@ -147,6 +155,7 @@ export default function TemplateTodoList() {
             )
           );
         });
+        setCollection(userFolder.filter((collectionW: CollectionType) => collectionW.id === collection.id)[0]);
         navigate("/todo/collections");
       } catch (e) {
         console.log(e);
@@ -157,7 +166,7 @@ export default function TemplateTodoList() {
     }
   }
 
-  function deleteTodoHandler(todo: itemType, collectionId: string) {
+  function deleteTodoHandler(todo: itemType) {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete ${todo.title}?`
     );
@@ -165,9 +174,11 @@ export default function TemplateTodoList() {
       setLoading(true);
       try {
         deleteItem(todo.id).then(() => {
-          setCollection(
-            filteredCollection(todo.completed, collectionId, todo.id)
-          );
+          getCollections()
+            .then((data) => {
+                setUserFolder(data.userFolder);
+                setCollection(data.userFolder.filter((collection: CollectionType) => collection.id === id)[0]);
+            })
         });
       } catch (e) {
         console.log(e);

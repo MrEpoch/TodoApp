@@ -20,7 +20,7 @@ import { useTodo } from "./wrapper";
 
 export default function TodoApp({ children }: ChildrenProp) {
     
-  const { hiddenCreateItem, hiddenCreateCollection } = useTodo();
+  const { hiddenCreateItem, hiddenCreateCollection } = useTodo() as TodoContextType;
 
   return (
     <>
@@ -227,7 +227,7 @@ export function AddCollection() {
         }
         createCollection(titleRef.current?.value).then(() => {
           getCollections().then((data) => {
-            setUserFolder(data.data.userFolder);
+            setUserFolder(data.userFolder);
           });
         });
       })();
