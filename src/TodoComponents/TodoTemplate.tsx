@@ -24,28 +24,6 @@ export default function TemplateTodoList() {
   const [todos, setTodos] = useState<itemType[]>([]);
   const [completedTodos, setCompleteTodos] = useState<itemType[]>([]);
 
-  function filteredCollection(
-    todoStatus: boolean,
-    collectionId: string,
-    todoId: string
-  ) {
-    userFolder.map((collection: CollectionType) => {
-      if (collection.id === collectionId) {
-        collection.collectionTodos = collection.collectionTodos.map(
-          (todo: itemType) => {
-            if (todo.id === todoId) {
-              todo.completed = todoStatus;
-            }
-            return todo;
-          }
-        );
-      }
-      return collection;
-    });
-    return userFolder.find(
-      (collection: CollectionType) => collection.id === id
-    );
-  }
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -266,7 +244,7 @@ export default function TemplateTodoList() {
                         {todo.dateVerify < currentTime.getTime() ? warning : ""}
                         <svg
                           onClick={() => {
-                            deleteTodoHandler(todo, collection.id);
+                            deleteTodoHandler(todo);
                           }}
                           className="delete-todo-svg"
                           xmlns="http://www.w3.org/2000/svg"
@@ -326,7 +304,7 @@ export default function TemplateTodoList() {
                       <div className="todo-page-main-collection-template-todos-todo-container-control">
                         <svg
                           onClick={() => {
-                            deleteTodoHandler(todo, collection.id);
+                            deleteTodoHandler(todo);
                           }}
                           className="delete-todo-svg"
                           xmlns="http://www.w3.org/2000/svg"

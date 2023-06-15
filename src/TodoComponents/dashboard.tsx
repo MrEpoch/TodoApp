@@ -4,7 +4,6 @@ import {
   TodoContextType,
   itemType,
   CollectionShownType,
-  CollectionType,
 } from "../@types/todo";
 import { useNavigate } from "react-router-dom";
 import {
