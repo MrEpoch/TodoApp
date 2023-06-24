@@ -62,19 +62,15 @@ export default function Login() {
           passwordRef.current?.value
         )
           .then(
-            () =>
-              localStorage.getItem(unsecure_JWT_token_storage_name) &&
+            (res) =>
+              res === localStorage.getItem(unsecure_JWT_token_storage_name) &&
               navigate("/todo")
           )
           .catch(() => {
-            setSubmitLoading(false);
-            setError("Error Logging In. Please try again");
-            return;
+            throw new Error;
           });
       } catch (e) {
-        setSubmitLoading(false);
-        setError("Error Logging In. Please try again");
-        return;
+        throw new Error;
       }
     } catch (e) {
       setSubmitLoading(false);

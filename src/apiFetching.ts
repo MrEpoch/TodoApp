@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const unsecure_JWT_token_storage_name = "unsecure_JWT_token";
 
-export const api_url = "http://localhost:3000";
+export const api_url = "http://localhost:3244";
 
 // AUTH LOGIC CODE
 
@@ -18,7 +18,7 @@ export const logIn = async (
       password,
     });
     localStorage.setItem(unsecure_JWT_token_storage_name, response.data.token);
-    return true;
+    return response.data.token;
   } catch (error: any) {
     throw new Error(error.response.data);
   }
@@ -36,7 +36,7 @@ export const signUp = async (
       password,
     });
     localStorage.setItem(unsecure_JWT_token_storage_name, response.data.token);
-    return true;
+    return response.data.token;
   } catch (e: any) {
     console.log(e);
     throw new Error(e.response.data);

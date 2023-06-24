@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthPage from "./authPage";
 import { useRef, useState } from "react";
 import { Alert, AlertTitle, Backdrop, CircularProgress } from "@mui/material";
-import { signUp } from "../apiFetching";
+import { signUp, unsecure_JWT_token_storage_name } from "../apiFetching";
 
 export default function SignUp() {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -58,13 +58,21 @@ export default function SignUp() {
           setSubmitLoading(false);
           return;
         }
+        try {
         signUp(
           emailRef.current?.value,
           usernameRef.current?.value,
           passwordRef.current?.value
-        ).then(() => {
-          navigate("/todo");
-        });
+        )
+            .then((res) => {
+                res === localStorage.getItem(unsecure_JWT_token_storage_name) && navigate("/todo");
+            })
+            .catch(() => {
+                throw new Error;
+            })
+        } catch (e) {
+            throw new Error;
+        }
       })();
     } catch (e) {
       setSubmitLoading(false);
