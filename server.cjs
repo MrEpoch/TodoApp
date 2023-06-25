@@ -9,6 +9,6 @@ app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
-app.listen(9000, () => {
-    console.log("Server running on port 9000");
+app.listen(9002, () => {
+    console.log("Server running on port 9002");
 });
