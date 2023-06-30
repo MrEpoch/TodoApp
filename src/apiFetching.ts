@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const unsecure_JWT_token_storage_name = "unsecure_JWT_token";
 
-export const api_url = "http://localhost:3244";
+export const api_url = "http://localhost:3244/server";
 
 // AUTH LOGIC CODE
 
@@ -12,7 +12,7 @@ export const logIn = async (
   password: string
 ) => {
   try {
-    const response = await axios.post(api_url + "/public/login", {
+    const response = await axios.post(api_url + "/login", {
       username,
       email,
       password,
@@ -30,7 +30,7 @@ export const signUp = async (
   password: string
 ) => {
   try {
-    const response = await axios.post(api_url + "/public/signup", {
+    const response = await axios.post(api_url + "/signup", {
       email,
       username,
       password,

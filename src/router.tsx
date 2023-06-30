@@ -6,7 +6,6 @@ import TemplateTodoList from "./TodoComponents/TodoTemplate";
 import LandingPage from "./landingPage";
 import DashboardMain from "./TodoComponents/dashboard";
 import DashboardCollectionMain from "./TodoComponents/TodoCollection";
-import ErrorPage from "./errorpage";
 import { unsecure_JWT_token_storage_name } from "./apiFetching";
 
 export function ProtectRoutes({ children }: any) {
@@ -24,7 +23,6 @@ export default function Router() {
     <>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="*" element={<ErrorPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route
