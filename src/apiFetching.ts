@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const unsecure_JWT_token_storage_name = "unsecure_JWT_token";
 
-export const api_url = "http://localhost:3244/server";
+export const api_url = "http://167.172.167.152/server";
 
 // AUTH LOGIC CODE
 
